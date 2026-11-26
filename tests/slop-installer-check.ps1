@@ -99,6 +99,14 @@ Describe 'Slop installer contracts' {
         $cmd | Should -Match 'wscript "%~dp0run\.vbs"'
     }
 
+    It 'bootstraps with Windows PowerShell when pwsh is absent' {
+        $cmd = Get-Content (Join-Path $root 'install.cmd') -Raw
+        $cmd | Should -Match 'where pwsh'
+        $cmd | Should -Match 'set "SLOP_PS=powershell"'
+        $cmd | Should -Match '%SLOP_PS% -NoProfile'
+        $cmd | Should -Match 'scriptblock\]::Create'
+    }
+
     It 'builds and publishes the installer from a tag' {
         $wf = Get-Content (Join-Path $root '.github/workflows/release.yml') -Raw
         $wf | Should -Match 'on:'
