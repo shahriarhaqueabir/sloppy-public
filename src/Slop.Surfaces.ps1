@@ -5,7 +5,7 @@ function Get-SlopDestinationMap {
     return @{
         Settings  = @('Startup behaviour','Data location','About and version','Advanced / developer')
         Customize = @('Name','Colour','Personality','Persona text')
-        Brain     = @('Local vs remote','Provider','Endpoint','Model','Agent','Capability profile','Effective model')
+        Brain     = @('Tier','Provider','Model','Agent','Capability profile','Effective model')
         Privacy   = @('Active data route','Provider terms','Deletion scopes','Deletion actions')
     }
 }
@@ -30,7 +30,7 @@ function Get-SlopDestinationContract {
         'Brain' {
             return @{
                 Status   = 'BrainStatusText'
-                Editable = @('BrainTypeCombo','BrainProviderBox','BrainLocalityCombo','BrainTierCombo','BrainEndpointBox','BrainModelBox','BrainAgentIdBox','BrainProfileCombo')
+                Editable = @('BrainTypeCombo','BrainProviderBox','BrainEndpointBox','BrainModelBox','BrainAgentIdBox','BrainProfileCombo')
                 Actions  = @('BrainSaveButton','BrainBack')
             }
         }
@@ -57,6 +57,6 @@ function Get-SlopDeletionScope {
     switch ($Action) {
         'conversation' { return @{ Scope='Sloppy transcript'; Copy=(Get-SlopDeletionCopy -Action 'conversation') } }
         'session'      { return @{ Scope='OpenCode session plus children'; Copy=(Get-SlopDeletionCopy -Action 'session') } }
-        'local-data'   { return @{ Scope='%LOCALAPPDATA%\Sloppy config and persona'; Copy=(Get-SlopDeletionCopy -Action 'local-data') } }
+        'local-data'   { return @{ Scope='{app}\data\config.json and persona.md'; Copy=(Get-SlopDeletionCopy -Action 'local-data') } }
     }
 }

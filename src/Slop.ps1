@@ -175,7 +175,7 @@ $xaml = @'
                   <TextBlock Text="Startup behaviour" Foreground="#B8B8C0" FontSize="11" Margin="6,0,6,2"/>
                   <Button x:Name="AutostartButton" Content="Autostart: Off" HorizontalAlignment="Left"
                           Style="{StaticResource SlopButton}" FontSize="10" Margin="6,0,6,8"/>
-                  <TextBlock Text="Data location: %LOCALAPPDATA%\Sloppy" Foreground="#8A8A96" FontSize="10"
+                  <TextBlock Text="Data location: {app}\data (inside the folder you chose during setup)" Foreground="#8A8A96" FontSize="10"
                              TextWrapping="Wrap" Margin="6,0,6,10"/>
                   <TextBlock x:Name="AboutText" Text="About and version - Sloppy companion v1" Foreground="#8A8A96"
                              FontSize="10" TextWrapping="Wrap" Margin="6,0,6,8"/>
@@ -219,7 +219,7 @@ $xaml = @'
                   <TextBlock Text="Brain" FontSize="14" FontWeight="SemiBold" Foreground="#EAEAEA" Margin="6,6,6,10"/>
                   <TextBlock x:Name="BrainRouteText" Foreground="#DADAE2" FontSize="11" Margin="6,0,6,6"/>
                   <TextBlock x:Name="BrainEffectiveText" Foreground="#8A8A96" FontSize="10" TextWrapping="Wrap" Margin="6,0,6,8"/>
-                  <TextBlock Text="Tier (1=built-in, 2=OpenCode, 3=custom)" Foreground="#B8B8C0" FontSize="10" Margin="6,0,6,2"/>
+                  <TextBlock Text="Brain tier - 1 = built-in local, 2 = OpenCode" Foreground="#B8B8C0" FontSize="10" Margin="6,0,6,2"/>
                   <ComboBox x:Name="BrainTypeCombo" Height="26" FontSize="11" Width="180" HorizontalAlignment="Left" Margin="6,0,6,8"/>
                   <TextBlock Text="Provider" Foreground="#B8B8C0" FontSize="10" Margin="6,0,6,2"/>
                   <TextBox x:Name="BrainProviderBox" Height="26" FontSize="11" Margin="6,0,6,8" Padding="6,3"/>
@@ -1108,7 +1108,6 @@ function Save-SlopBrain {
         -Brain ([string]$BrainTypeCombo.Text) `
         -Provider ([string]$BrainProviderBox.Text) `
         -ProviderLocality 'remote' `
-        -ProviderTier 'free' `
         -EndpointUrl ([string]$BrainEndpointBox.Text) `
         -Model ([string]$BrainModelBox.Text) `
         -AgentId ([string]$BrainAgentIdBox.Text) `
@@ -1205,21 +1204,20 @@ function Initialize-SlopDestinationPanels {
     $persona = if (Test-Path -LiteralPath $personaPath) { Get-Content -LiteralPath $personaPath -Raw } else { '' }
     $CustomizePersonaBox.Text = $persona
 
-    Set-SlopComboItems -Combo $BrainTypeCombo -Items @( Get-SlopBrains ) -Selected ([string]$cfg.brain)
+    Set-SlopComboItems -Combo $BrainTypeCombo -Items @( Get-SlopBrainOrder ) -Selected ([string]$cfg.brain)
     Set-SlopComboItems -Combo $BrainProfileCombo -Items @( Get-SlopCapabilityProfiles ) -Selected ([string]$cfg.capabilityProfile)
     # Populate model choices for the selected tier.
     $BrainModelBox.Items.Clear()
-    switch ([string]$cfg.brain) {
-        'builtin' { [void]$BrainModelBox.Items.Add('Qwen3.5-2B Q4_K_M') }
-        'opencode' { foreach ($m in @('big-pickle','beam-free')) { [void]$BrainModelBox.Items.Add($m) } }
-        'custom' { }
-    }
-    if ($BrainModelBox.Items.Count -gt 0 -and -not $BrainModelBox.Items.Contains([string]$cfg.model)) {
-        [void]$BrainModelBox.Items.Add([string]$cfg.model)
+    foreach ($m in @( Get-SlopBrainModelOptions -Brain ([string]$cfg.brain) )) {
+        [void]$BrainModelBox.Items.Add($m)
     }
     $BrainProviderBox.Text = [string]$cfg.provider
     $BrainEndpointBox.Text = [string]$cfg.endpointUrl
-    $BrainModelBox.Text = if ([string]::IsNullOrWhiteSpace([string]$cfg.model)) { [string]$cfg.modelName } else { [string]$cfg.model }
+    $modelItems = @($BrainModelBox.Items)
+    $selectedModel = [string]$cfg.model
+    if ($modelItems -notcontains $selectedModel) { $selectedModel = [string]$cfg.modelName }
+    if ($modelItems -contains $selectedModel) { $BrainModelBox.Text = $selectedModel }
+    elseif ($modelItems.Count -gt 0) { $BrainModelBox.SelectedIndex = 0 }
     $BrainAgentIdBox.Text = [string]$cfg.agentId
     $BrainRouteText.Text = "Local vs remote: $kind / $(if ($locality) { $locality } else { 'n/a' })"
     $BrainEffectiveText.Text = "Effective model: $effective"
@@ -1386,10 +1384,8 @@ $BrainSaveButton.Add_Click({ param($s,$e) Save-SlopBrain | Out-Null })
 $BrainTypeCombo.Add_SelectionChanged({
     param($s,$e)
     $BrainModelBox.Items.Clear()
-    switch ([string]$BrainTypeCombo.SelectedItem) {
-        'builtin'  { [void]$BrainModelBox.Items.Add('Qwen3.5-2B Q4_K_M') }
-        'opencode' { foreach ($m in @('big-pickle','beam-free')) { [void]$BrainModelBox.Items.Add($m) } }
-        'custom'   { }
+    foreach ($m in @( Get-SlopBrainModelOptions -Brain ([string]$BrainTypeCombo.SelectedItem) )) {
+        [void]$BrainModelBox.Items.Add($m)
     }
     if ($BrainModelBox.Items.Count -gt 0) { $BrainModelBox.SelectedIndex = 0 }
 })
@@ -2079,7 +2075,7 @@ function Save-SlopOnboardingResult {
 
 function Sync-SlopAutostart {
     param([Parameter(Mandatory)][bool]$Enabled)
-    $launcher = Join-Path (Split-Path $PSScriptRoot -Parent) 'launch.cmd'
+    $launcher = Join-Path (Split-Path $PSScriptRoot -Parent) 'run.vbs'
     if (-not (Test-Path -LiteralPath $launcher)) { return }  # developer run, not installed
     $runKey = 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Run'
     if ($Enabled) {

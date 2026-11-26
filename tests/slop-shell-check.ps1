@@ -231,6 +231,12 @@ Assert-True ($src -match 'Remove-Item -LiteralPath \$Wav -Force -ErrorAction Sil
 Assert-True ($src -match '\$SendBtn\.IsEnabled = -not \[bool\]\$script:IsStreaming') 'voice idle state never re-enables Send during a stream'
 Assert-True ($src -match "tok\.StartsWith\('__VOICE__'\)") 'voice success marker is handled before plain text'
 
+Assert-True ($src -match 'Get-SlopBrainOrder') 'Brain combo uses the ordered tier list'
+Assert-True ($src -match 'Get-SlopBrainModelOptions -Brain') 'model options come from the shared catalog'
+Assert-True ($src -notmatch '\$BrainModelBox\.Text = if \(\[string\]::IsNullOrWhiteSpace') 'Brain model box no longer accepts an off-tier saved model'
+Assert-True ($src -notmatch 'Tier \(1=built-in, 2=OpenCode, 3=custom\)') 'no tier-3 label remains'
+Assert-True ($src -match 'Join-Path \(Split-Path \$PSScriptRoot -Parent\) ''run\.vbs''') 'autostart targets the VBS launcher'
+
 $gitattributes = Get-Content (Join-Path $PSScriptRoot '../.gitattributes') -Raw
 $noticesPath = Join-Path $PSScriptRoot '../docs/third-party-notices.md'
 $readme = Get-Content (Join-Path $PSScriptRoot '../README.md') -Raw

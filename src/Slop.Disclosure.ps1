@@ -45,6 +45,6 @@ function Get-SlopDeletionCopy {
     switch ($Action) {
         'conversation' { return 'Clear conversation removes the Sloppy transcript only. The OpenCode session and its stored messages remain.' }
         'session'      { return 'Delete OpenCode session removes that session and its child sessions from OpenCode''s local store. It does not mean the provider deleted its copy of a prompt or transcript.' }
-        'local-data'   { return 'Clear Sloppy local data removes config.json and persona.md from %LOCALAPPDATA%\Sloppy. It does not delete OpenCode sessions or provider data.' }
+        'local-data'   { return 'Clear Sloppy local data removes config.json and persona.md from the data folder inside your Sloppy install. It does not delete OpenCode sessions or provider data.' }
     }
 }

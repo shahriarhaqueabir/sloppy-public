@@ -47,7 +47,8 @@ Describe 'Slop.Onboarding' {
         $src | Should -Match 'Get-SlopIdentityColors'
         $src | Should -Match 'Get-SlopIdentityColor -ColorKey'
         $src | Should -Match 'foreach \(\$entry in \(Get-SlopIdentityColors\)'
-        $src | Should -Match 'Full CLI brains arrive in the next release\. For now, enter any OpenAI-compatible local server URL\.'
+        $src | Should -Not -Match 'BrainNote'
+        $src | Should -Match 'Tier 1 - built-in local Qwen; Tier 2 - OpenCode'
         $src | Should -Match 'BrainCustom'
         $src | Should -Match 'BrainOpenCodeLocal'
         $src | Should -Match 'BrainOpenCodeRemote'
@@ -80,5 +81,17 @@ Describe 'Slop.Onboarding' {
         $fallback.version | Should -Be 3
         $fallback.voiceEnabled | Should -BeTrue
         $fallback.whisperLanguage | Should -Be 'auto'
+    }
+
+    It 'does not offer a paid-provider checkbox' {
+        $src = Get-Content (Join-Path $PSScriptRoot '../src/Slop.Onboarding.ps1') -Raw
+        $src | Should -Not -Match 'PaidProvider'
+        $src | Should -Not -Match 'providerTier'
+        $src | Should -Not -Match 'opencode-paid'
+    }
+
+    It 'pre-fills the OpenCode model from the shared tier catalog' {
+        $opts = @(Get-SlopBrainModelOptions -Brain 'opencode')
+        $opts | Should -Be @('big-pickle','beam-free')
     }
 }

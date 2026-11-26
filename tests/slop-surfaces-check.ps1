@@ -27,7 +27,7 @@ Describe 'Slop.Surfaces' {
         $expected = @{
             Settings  = @{ Status='SettingsStatusText';  Editable=@('SettingsInstructionsBox','SettingsModelBox','SettingsBaseUrlBox','SettingsAgentIdBox','VoiceEnabledCheck','VoiceLanguageCombo','VoiceMaxSecondsBox'); Actions=@('SettingsSaveButton','AutostartButton','VoiceRepairButton','SettingsBack') }
             Customize = @{ Status='CustomizeStatusText'; Editable=@('CustomizeNameBox','CustomizeColourCombo','CustomizePersonalityCombo','CustomizePersonaBox'); Actions=@('CustomizeSaveButton','CustomizeBack') }
-            Brain     = @{ Status='BrainStatusText';     Editable=@('BrainTypeCombo','BrainProviderBox','BrainLocalityCombo','BrainTierCombo','BrainEndpointBox','BrainModelBox','BrainAgentIdBox','BrainProfileCombo'); Actions=@('BrainSaveButton','BrainBack') }
+            Brain     = @{ Status='BrainStatusText';     Editable=@('BrainTypeCombo','BrainProviderBox','BrainEndpointBox','BrainModelBox','BrainAgentIdBox','BrainProfileCombo'); Actions=@('BrainSaveButton','BrainBack') }
             Privacy   = @{ Status='PrivacyStatusText';   Editable=@(); Actions=@('DeleteConversationButton','DeleteSessionButton','DeleteLocalDataButton','PrivacyBack') }
         }
         foreach ($name in $expected.Keys) {
@@ -47,5 +47,19 @@ Describe 'Slop.Surfaces' {
         }
         (Get-SlopDestinationMap).Settings -join ',' | Should -Not -Match 'delete'
         (Get-SlopDestinationMap).Privacy -join ',' | Should -Match 'Deletion actions'
+    }
+
+    It 'names destinations by tier instead of free or paid' {
+        $map = Get-SlopDestinationMap
+        $map.Brain | Should -Contain 'Tier'
+        $map.Brain | Should -Not -Contain 'Local vs remote'
+        ($map.Values -join ' ') | Should -Not -Match '(?i)\bfree\b|\bpaid\b'
+    }
+
+    It 'points deletion copy at the in-app data folder' {
+        $pattern = [regex]::Escape('data\config.json')
+        Get-SlopDeletionScope -Action 'local-data' | ForEach-Object { $_.Scope } |
+            Should -Match $pattern
+        Get-SlopDeletionCopy -Action 'local-data' | Should -Not -Match 'LOCALAPPDATA'
     }
 }

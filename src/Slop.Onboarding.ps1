@@ -120,7 +120,7 @@ function Show-SlopOnboarding {
         <ScrollViewer x:Name="Screen4" Visibility="Collapsed" VerticalScrollBarVisibility="Auto">
           <StackPanel Margin="0,0,8,0">
             <TextBlock Foreground="#B8B8C0" FontSize="11" TextWrapping="Wrap" Margin="0,0,0,8"
-                       Text="Choose where answers come from. Local by default; nothing is sent anywhere until you opt in."/>
+                       Text="Choose where answers come from. Tier 1 - built-in local Qwen; Tier 2 - OpenCode. Custom is an advanced local endpoint, not a tier. Nothing is sent anywhere until you opt in."/>
             <RadioButton x:Name="BrainBuiltIn" GroupName="SlopBrain" IsChecked="True"
                          Foreground="#EAEAEA" FontSize="11" Margin="0,2"
                          Content="Built-in — works offline (recommended)"/>
@@ -142,8 +142,6 @@ function Show-SlopOnboarding {
             <RadioButton x:Name="BrainOpenCodeRemote" GroupName="SlopBrain"
                          Foreground="#EAEAEA" FontSize="11" Margin="0,2"
                          Content="OpenCode — use a remote provider (disclosure first)"/>
-            <CheckBox x:Name="PaidProvider" Foreground="#B8B8C0" FontSize="10" Margin="20,2,0,4"
-                      Content="Add a paid provider — account, billing and API key are handled in OpenCode. Sloppy stores no credential."/>
             <StackPanel x:Name="OpenCodeRow" Visibility="Collapsed" Margin="20,4,0,8">
               <TextBox x:Name="ProviderBox" Height="27" FontSize="11" MaxLength="80"
                        Background="#18FFFFFF" Foreground="#EAEAEA" BorderBrush="#44FFFFFF"
@@ -163,9 +161,6 @@ function Show-SlopOnboarding {
                       Foreground="#EAEAEA" FontSize="10" HorizontalAlignment="Left"
                       Padding="8,3" Margin="0,8,0,0"/>
             </StackPanel>
-            <TextBlock x:Name="BrainNote" Foreground="#8A8A96" FontSize="10" TextWrapping="Wrap"
-                       Margin="0,8,0,0"
-                       Text="Full CLI brains arrive in the next release. For now, enter any OpenAI-compatible local server URL."/>
             <TextBlock Text="Voice input" Foreground="#93A4BD" FontSize="10" FontWeight="SemiBold" Margin="0,8,0,4"/>
             <CheckBox x:Name="VoiceEnabledCheck" Foreground="#B8B8C0" FontSize="10" Margin="0,2,0,4"
                       Content="Enable voice input (local Whisper small; off by default)"/>
@@ -237,7 +232,7 @@ function Show-SlopOnboarding {
     $EndpointBox.Text = if ($Config.endpointUrl) { [string]$Config.endpointUrl } else { [string]$defaults.endpointUrl }
     $ModelBox.Text = if ($Config.modelName) { [string]$Config.modelName } elseif ($Config.model) { [string]$Config.model } else { [string]$defaults.modelName }
     $ProviderBox.Text = if ($Config.provider) { [string]$Config.provider } else { [string]$defaults.provider }
-    $RouteModelBox.Text = if ($Config.model) { [string]$Config.model } else { [string]$defaults.model }
+    $RouteModelBox.Text = if ($Config.model) { [string]$Config.model } else { @(Get-SlopBrainModelOptions -Brain 'opencode')[0] }
     $AgentBox.Text = if ($Config.agentId) { [string]$Config.agentId } else { 'sloppy' }
     foreach ($preset in Get-SlopPersonalities) { $ProfileCombo.Items.Add($preset) | Out-Null }
     foreach ($profile in Get-SlopCapabilityProfiles) { $ProfileCombo.Items.Add($profile) | Out-Null }
@@ -325,19 +320,12 @@ function Show-SlopOnboarding {
     foreach ($r in @($BrainBuiltIn,$BrainCustom,$BrainOpenCodeLocal,$BrainOpenCodeRemote)) {
         $r.Add_Checked({ param($s,$e) Update-SlopBrainFields })
     }
-    $PaidProvider = $dlg.FindName('PaidProvider')
-    # A paid provider is still an OpenCode remote route. Selecting it forces that
-    # radio so the disclosure and the route catalog stay in agreement.
-    $PaidProvider.Add_Checked({ param($s,$e) $BrainOpenCodeRemote.IsChecked = $true; Update-SlopBrainFields })
-    $PaidProvider.Add_Unchecked({ param($s,$e) Update-SlopBrainFields })
     Update-SlopBrainFields
 
     $TermsButton = $dlg.FindName('TermsButton')
     $TermsButton.Add_Click({ param($s,$e)
         if (Get-Command Show-SlopDisclosure -ErrorAction SilentlyContinue) {
-            $kind = if ($PaidProvider.IsChecked) { 'opencode-paid' }
-                    elseif ($BrainOpenCodeRemote.IsChecked) { 'opencode-remote' }
-                    else { 'opencode-local' }
+            $kind = if ($BrainOpenCodeRemote.IsChecked) { 'opencode-remote' } else { 'opencode-local' }
             # No verified provider terms URL is bundled. An empty value makes the
             # disclosure state plainly that retention/training terms are unknown.
             Show-SlopDisclosure -Route @{ Kind=$kind; Provider=[string]$ProviderBox.Text; Model=[string]$RouteModelBox.Text } | Out-Null
@@ -361,12 +349,9 @@ function Show-SlopOnboarding {
             $result.model = $ModelBox.Text.Trim()
             $result.modelName = $ModelBox.Text.Trim()
         }
-        elseif ($BrainOpenCodeLocal.IsChecked -or $BrainOpenCodeRemote.IsChecked -or $PaidProvider.IsChecked) {
+        elseif ($BrainOpenCodeLocal.IsChecked -or $BrainOpenCodeRemote.IsChecked) {
             $result.brain = 'opencode'
-            $result.providerLocality = if ($BrainOpenCodeLocal.IsChecked -and -not $PaidProvider.IsChecked) { 'local' } else { 'remote' }
-            $result.providerTier = if ($PaidProvider.IsChecked) { 'paid' } else { 'free' }
-            # No key, token or password field exists in this wizard; the paid
-            # account is connected by the user through OpenCode's /connect flow.
+            $result.providerLocality = if ($BrainOpenCodeLocal.IsChecked) { 'local' } else { 'remote' }
             $result.termsUrl = ''
             $result.provider = $ProviderBox.Text.Trim()
             $result.model = $RouteModelBox.Text.Trim()
