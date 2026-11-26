@@ -62,4 +62,21 @@ Describe 'Slop preflight' {
         $after = [IO.File]::ReadAllBytes($script:ConfigPath)
         ($before -join ',') | Should -Be ($after -join ',')
     }
+
+    It 'resolves the app root from the hidden override when no root is passed' {
+        $previous = $env:SLOP_TEST_INSTALL_ROOT
+        try {
+            $env:SLOP_TEST_INSTALL_ROOT = $TestDrive
+            $report = Invoke-SlopPreflight -ConfigPath (Join-Path $TestDrive 'config.json')
+            $report.InstallRoot | Should -Be ([IO.Path]::GetFullPath($TestDrive))
+        }
+        finally { $env:SLOP_TEST_INSTALL_ROOT = $previous }
+    }
+
+    It 'does not read SLOP_TEST_APPDATA anywhere in tools' {
+        $files = Get-ChildItem (Join-Path $PSScriptRoot '../tools') -Filter '*.ps1'
+        foreach ($f in $files) {
+            (Get-Content $f.FullName -Raw) | Should -Not -Match 'SLOP_TEST_APPDATA'
+        }
+    }
 }

@@ -270,10 +270,11 @@ $svcProc = Start-Process -FilePath $ocExe `
     -ArgumentList @('serve','--port',[string]$port) `
     -PassThru -RedirectStandardOutput $svcOut -RedirectStandardError $svcErr
 
-# Isolated Sloppy user data. LOCALAPPDATA is left alone on purpose: the bundled
-# runtime resolves from there, and only config.json/persona.md need isolating.
+# Isolated Sloppy install root. LOCALAPPDATA is left alone on purpose.
 . (Join-Path $repo 'src/Slop.Config.ps1')
-$userData = Join-Path $dir 'appdata'
+$script:OriginalTestInstallRoot = $env:SLOP_TEST_INSTALL_ROOT
+$installRoot = Join-Path $dir 'install'
+$userData = Join-Path $installRoot 'data'
 Remove-Item $userData -Recurse -Force -ErrorAction SilentlyContinue
 New-Item -ItemType Directory -Force -Path $userData | Out-Null
 $testCfg = New-SlopDefaultConfig
@@ -281,22 +282,19 @@ $testCfg.autostart = $false
 $testCfg.openCodeBaseUrl = "http://127.0.0.1:$port"
 $testCfg.serviceConfigPath = $svcConfig
 $testCfg | ConvertTo-Json -Depth 8 | Set-Content -LiteralPath (Join-Path $userData 'config.json') -Encoding utf8
-$env:SLOP_TEST_APPDATA = $userData
+$env:SLOP_TEST_INSTALL_ROOT = $installRoot
 $env:OPENCODE_BASE_URL = "http://127.0.0.1:$port"
 $env:OPENCODE_PASSWORD = $password
 
-# A developer checkout usually has no installed bundled brain at
-# %LOCALAPPDATA%\Programs\Sloppy. When that install is absent, SLOP_LIVE_RUNTIME_DIR
-# (a llama.cpp bin folder), SLOP_LIVE_MODEL_FILE (a chat-capable GGUF), and
-# optionally SLOP_LIVE_MMPROJ_FILE let the live probe exercise the same
-# local-bundled route without copying gigabytes. Values are caller-supplied so
-# no machine-specific paths live in this repo.
-$script:OriginalLocalAppData = $env:LOCALAPPDATA
+# A developer checkout has no bundled brain in the isolated install root. When it
+# is absent, SLOP_LIVE_RUNTIME_DIR (a llama.cpp bin folder), SLOP_LIVE_MODEL_FILE
+# (a chat-capable GGUF), and optionally SLOP_LIVE_MMPROJ_FILE let the live probe
+# exercise the same local-bundled route without copying gigabytes. Values are
+# caller-supplied, and stand-ins live under the same root as data\config.json.
 $script:StandInModelPath = $null
 $script:StandInMmprojPath = $null
-$installRoot = Join-Path $env:LOCALAPPDATA 'Programs\Sloppy'
 $bundledServer = Join-Path $installRoot 'runtime\llama-b12676-bin-win-cuda-13.5-x64\llama-server.exe'
-$bundledModel = Join-Path $installRoot 'models\Qwen3.5-2B-Q4_K_M.gguf'
+$bundledModel = Join-Path $installRoot 'runtime\models\Qwen3.5-2B-Q4_K_M.gguf'
 if (-not (Test-Path -LiteralPath $bundledServer) -or
     -not (Test-Path -LiteralPath $bundledModel)) {
     $runtimeBin = $env:SLOP_LIVE_RUNTIME_DIR
@@ -311,20 +309,25 @@ if (-not (Test-Path -LiteralPath $bundledServer) -or
     if (-not [string]::IsNullOrWhiteSpace($mmprojFile) -and -not (Test-Path -LiteralPath $mmprojFile)) {
         throw 'SLOP_LIVE_MMPROJ_FILE points to a missing file'
     }
-    $runtimeEnv = Join-Path $dir 'runtime-env'
-    Remove-Item $runtimeEnv -Recurse -Force -ErrorAction SilentlyContinue
-    $standInRoot = Join-Path $runtimeEnv 'Programs\Sloppy'
+    $standInRoot = $installRoot
     $standInRuntime = Join-Path $standInRoot 'runtime\llama-b12676-bin-win-cuda-13.5-x64'
     New-Item -ItemType Directory -Force -Path (Split-Path -Parent $standInRuntime) | Out-Null
+    $oldLink = Get-Item -LiteralPath $standInRuntime -Force -ErrorAction SilentlyContinue
+    if ($oldLink) {
+        if ($oldLink.LinkType -eq 'Junction') { [IO.Directory]::Delete($standInRuntime) }
+        else { Remove-Item -LiteralPath $standInRuntime -Recurse -Force }
+    }
     New-Item -ItemType Junction -Path $standInRuntime -Target $runtimeBin -ErrorAction Stop | Out-Null
-    New-Item -ItemType Directory -Force -Path (Join-Path $standInRoot 'models') | Out-Null
-    $script:StandInModelPath = Join-Path $standInRoot 'models\Qwen3.5-2B-Q4_K_M.gguf'
+    $modelDir = Join-Path $standInRoot 'runtime\models'
+    New-Item -ItemType Directory -Force -Path $modelDir | Out-Null
+    $script:StandInModelPath = Join-Path $modelDir 'Qwen3.5-2B-Q4_K_M.gguf'
+    Remove-Item -LiteralPath $script:StandInModelPath -Force -ErrorAction SilentlyContinue
     New-Item -ItemType SymbolicLink -Path $script:StandInModelPath -Target $modelFile -ErrorAction Stop | Out-Null
     if (-not [string]::IsNullOrWhiteSpace($mmprojFile)) {
-        $script:StandInMmprojPath = Join-Path $standInRoot 'models\Qwen3.5-2B-mmproj.gguf'
+        $script:StandInMmprojPath = Join-Path $modelDir 'Qwen3.5-2B-mmproj.gguf'
+        Remove-Item -LiteralPath $script:StandInMmprojPath -Force -ErrorAction SilentlyContinue
         New-Item -ItemType SymbolicLink -Path $script:StandInMmprojPath -Target $mmprojFile -ErrorAction Stop | Out-Null
     }
-    $env:LOCALAPPDATA = $runtimeEnv
     "STANDIN runtime=$runtimeBin model=$modelFile mmproj=$mmprojFile"
 }
 
@@ -441,7 +444,7 @@ foreach ($n in $destinations) {
         }
     }
     if ($n -eq 'Brain') {
-        foreach ($ctl in @('BrainTypeCombo','BrainProviderBox','BrainLocalityCombo','BrainTierCombo','BrainEndpointBox','BrainModelBox','BrainAgentIdBox','BrainProfileCombo','BrainSaveButton','BrainStatusText')) {
+        foreach ($ctl in @('BrainTypeCombo','BrainProviderBox','BrainEndpointBox','BrainModelBox','BrainAgentIdBox','BrainProfileCombo','BrainSaveButton','BrainStatusText')) {
             if (-not (Find-Uia $ctl)) { throw "brain control $ctl missing" }
         }
     }
@@ -505,8 +508,6 @@ Invoke-UiaButton 'Brain'
 Start-Sleep -Milliseconds 350
 Set-UiaCombo 'BrainTypeCombo' 'opencode'
 Set-UiaValue 'BrainProviderBox' 'Probe'
-Set-UiaCombo 'BrainLocalityCombo' 'local'
-Set-UiaCombo 'BrainTierCombo' 'free'
 Set-UiaValue 'BrainEndpointBox' ''
 Set-UiaValue 'BrainModelBox' 'probe-model'
 Set-UiaValue 'BrainAgentIdBox' 'probe-agent'
@@ -699,7 +700,8 @@ if (-not $moved) { throw 'drag never moved the window' }
             Where-Object { $_.CommandLine -like "*$($script:StandInModelPath)*" } |
             ForEach-Object { Stop-Process -Id $_.ProcessId -Force -ErrorAction SilentlyContinue }
     }
-    if ($script:OriginalLocalAppData) { $env:LOCALAPPDATA = $script:OriginalLocalAppData }
+    if ($null -ne $script:OriginalTestInstallRoot) { $env:SLOP_TEST_INSTALL_ROOT = $script:OriginalTestInstallRoot }
+    else { Remove-Item Env:SLOP_TEST_INSTALL_ROOT -ErrorAction SilentlyContinue }
     Start-Sleep -Milliseconds 300
     'TEARDOWN complete'
 }

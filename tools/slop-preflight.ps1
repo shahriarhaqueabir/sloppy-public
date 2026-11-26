@@ -17,7 +17,7 @@ function Invoke-SlopPreflight {
         [string]$ConfigPath,
         [string]$ExpectedModelSha1
     )
-    $root = if ([string]::IsNullOrWhiteSpace($InstallRoot)) { Get-SlopVoiceInstallRoot } else { [IO.Path]::GetFullPath($InstallRoot) }
+    $root = if ([string]::IsNullOrWhiteSpace($InstallRoot)) { Get-SlopAppRoot } else { [IO.Path]::GetFullPath($InstallRoot) }
     $cfgPath = if ([string]::IsNullOrWhiteSpace($ConfigPath)) { Get-SlopConfigPath } else { $ConfigPath }
     $lines = [Collections.Generic.List[string]]::new()
     $errors = [Collections.Generic.List[string]]::new()
@@ -75,7 +75,7 @@ function Invoke-SlopPreflight {
         }
     }
 
-    return @{ Ok = ($errors.Count -eq 0); Lines = $lines.ToArray(); Errors = $errors.ToArray() }
+    return @{ Ok = ($errors.Count -eq 0); InstallRoot = $root; Lines = $lines.ToArray(); Errors = $errors.ToArray() }
 }
 
 if ($MyInvocation.InvocationName -ne '.') {
