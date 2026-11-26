@@ -4,7 +4,7 @@ Describe 'Slop.OpenCodeCompat' {
         . (Join-Path $PSScriptRoot '../src/Slop.OpenCodeCompat.ps1')
     }
     It 'pins the supported OpenCode version' {
-        (Get-SlopOpenCodeCompatContract).PinnedVersion | Should -Be '2.3.2'
+        (Get-SlopOpenCodeCompatContract).PinnedVersion | Should -Be '2.4.2'
     }
     It 'declares every route the Tier 2 bridge actually calls' {
         $paths = (Get-SlopOpenCodeCompatContract).RequiredRoutes | ForEach-Object { $_.Method + ' ' + $_.Path }

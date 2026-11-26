@@ -3,7 +3,7 @@ $ErrorActionPreference = 'Stop'
 
 function Get-SlopOpenCodeCompatContract {
     return @{
-        PinnedVersion  = '2.3.2'
+        PinnedVersion  = '2.4.2'
         RequiredRoutes = @(
             @{ Method='GET';    Path='/api/config' }
             @{ Method='GET';    Path='/api/agent' }
