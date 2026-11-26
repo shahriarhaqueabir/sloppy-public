@@ -1068,7 +1068,7 @@ Append to `tests/slop-installer-check.ps1` inside the `Describe` block:
             $rel = $m.Groups[1].Value
             if (-not (Test-Path -LiteralPath (Join-Path $root $rel))) { $missing += $rel }
         }
-        $missing | Should -BeEmpty
+        @($missing).Count | Should -Be 0
     }
 ```
 
@@ -1165,7 +1165,7 @@ var
   Candidate: String;
 begin
   Result := '';
-  { FileOrCmdExists is not an Inno support function; FileSearch is. }
+  { FileSearch is an Inno support function. }
   Candidate := FileSearch('pwsh.exe', GetEnv('Path'));
   if Candidate <> '' then
   begin
