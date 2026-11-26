@@ -1,9 +1,9 @@
 # Single-Folder Installer — Design Spec
 
 **Date:** 2026-11-26  
-**Status:** Approved design; implementation plan pending  
+**Status:** Approved design; execution in progress against the approved implementation plan
 **Scope:** Public Sloppy repo (`<repo-root>`) — installer, launchers, path helpers, CI release artifacts  
-**Working tree constraint:** `main` is clean and pushed; `origin/main...HEAD` is `0/0`. Do not force-push, deploy, or change remote visibility. Preserve all existing LFS assets and user data.
+**Working tree constraint:** Never infer current git state from this document. Verify with `git status` and `git rev-list --left-right --count origin/main...HEAD` before any remote action. Do not force-push, deploy, or change remote visibility. Preserve all existing LFS assets and user data.
 
 ## Context
 
@@ -36,8 +36,9 @@ Make a fresh Windows install a single guided operation:
 
 - No user-visible test or debug mode. CI isolation stays a hidden environment override.
 - No under-the-hood AI activity view in this change stream; it is deferred.
-- No Tier 3 custom provider work.
+- No Tier 3 work. Tier 3 remains reserved and undecided; the existing `custom` brain is an opt-in local endpoint, not Tier 3.
 - No bundling of OpenCode. Tier 2 remains a separate service Sloppy talks to.
+- No user-visible free/paid framing. The old `providerTier` field and `opencode-paid` route kind are removed, not relabelled.
 - No automatic migration of config/persona from old `%LOCALAPPDATA%\Sloppy` locations.
 - No desktop shortcut unless the user selects it.
 - No force-push, deploy, visibility change, or subagent use.
@@ -55,6 +56,7 @@ Make a fresh Windows install a single guided operation:
 | Re-runs | Detect previous `{app}` from Inno Setup AppId, upgrade in place | User chose update-in-place; no migration from old locations. |
 | Upgrade safety | `data\` excluded from uninstall | Config and persona must survive reinstall. |
 | CLI entry | `install.ps1` downloads/runs the same EXE | One behavior for GUI and CLI. |
+| Tier model | 1 = built-in local Qwen, 2 = OpenCode, 3 reserved/undecided | Only released tiers get UI and model catalogs. `custom` is not Tier 3 and resolves to `0` ("no released tier"). |
 
 ## Design
 
@@ -177,7 +179,21 @@ A Windows CI job:
 
 Downgrade to Inno Setup disk spanning only if EXE startup becomes unacceptable; the current payload is within the single-EXE limit.
 
-### 7. Acceptance criteria
+### 7. Tier model
+
+Only two tiers are released in this change:
+
+| Tier | Brain | LLM options | Notes |
+|---|---|---|---|
+| 1 | `builtin` | `Qwen3.5-2B Q4_K_M` | Bundled local brain. |
+| 2 | `opencode` | `big-pickle`, `beam-free` | Talks to an external OpenCode service; OpenCode itself is not bundled. |
+| 3 | none | none | Reserved and undecided. No UI, catalog, installer payload, or behavior is added for it. |
+
+The existing `custom` brain remains an opt-in local OpenAI-compatible endpoint for advanced users. It is **not** Tier 3. `Resolve-SlopTier -Brain 'custom'` returns `0`, meaning "no released tier," never a hidden Tier 3 assignment.
+
+Tier is derived from `brain`, not from `providerTier`. `providerTier` is removed from config v3, validation, route taxonomy, and UI copy. `providerLocality` remains a bounded preference; disclosure is driven by observed endpoint evidence rather than a stored price label.
+
+### 8. Acceptance criteria
 
 - A fresh machine sees one folder picker and an unchecked desktop shortcut checkbox.
 - Selecting the desktop checkbox creates both Start Menu and desktop shortcuts; leaving it unchecked creates only Start Menu.
@@ -186,6 +202,7 @@ Downgrade to Inno Setup disk spanning only if EXE startup becomes unacceptable; 
 - The one-liner with `-InstallDir` and `-DesktopShortcut` produces the same layout without a picker.
 - Re-running the installer upgrades in place and preserves `data\config.json` and `data\persona.md`.
 - `Get-SlopRuntimePaths`, `Get-SlopVoiceInstallRoot`, `Get-SlopUserDataPath`, preflight and disclosure copy all agree on the app root.
+- Brain choice drives tier and model options: Tier 1 offers only Qwen, Tier 2 offers OpenCode models, and no UI or config field claims Tier 3 or free/paid.
 - Full Pester gate, CI, and CodeQL are green.
 
 ## Risks and trade-offs
@@ -200,6 +217,7 @@ Downgrade to Inno Setup disk spanning only if EXE startup becomes unacceptable; 
 
 - Add `tests/slop-installer-check.ps1` for `.iss` structure, optional desktop task, headless shortcut target, `/DIR` mapping, and absence of hard-coded production roots.
 - Extend config, audio, route and shell checks for the single app-root contract.
+- Check config, onboarding and shell contracts against the tier table above: `builtin` → Tier 1/Qwen, `opencode` → Tier 2/OpenCode models, `custom` → no released tier, and no Tier 3 or free/paid labels.
 - Run the canonical CI-equivalent Pester gate locally before commit.
 - After push, confirm CI and CodeQL on the pushed SHA.
 - Live user verification remains required for console suppression, visible styling, tier switching, and model readiness; this spec does not claim those were verified by the agent.

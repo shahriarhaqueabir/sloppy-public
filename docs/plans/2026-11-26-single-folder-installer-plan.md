@@ -4,7 +4,7 @@
 
 **Goal:** Replace Sloppy's split install with one user-chosen folder holding app code, runtimes, models, voice artifacts and Sloppy's own data, delivered through one Inno Setup wizard shared by the GUI double-click and the PowerShell one-liner.
 
-**Architecture:** Inno Setup compiles a single-EXE installer containing code and small binaries, then runs a headless `pwsh` post-install helper that downloads and checksum-verifies the two large models. All runtime path helpers derive from one `Get-SlopAppRoot`, with a hidden `SLOP_TEST_INSTALL_ROOT` override for CI only. Tier is derived from `brain` (1 = built-in local, 2 = OpenCode); the free/paid field and `opencode-paid` route kind are removed rather than relabelled.
+**Architecture:** Inno Setup compiles a single-EXE installer containing code and small binaries, then runs a headless `pwsh` post-install helper that downloads and checksum-verifies the two large models. All runtime path helpers derive from one `Get-SlopAppRoot`, with a hidden `SLOP_TEST_INSTALL_ROOT` override for CI only. Tier is derived from `brain`: Tier 1 is built-in local Qwen, Tier 2 is OpenCode, and Tier 3 is reserved/undecided. The existing `custom` brain is not Tier 3; it resolves to `0`, meaning "no released tier." The free/paid field and `opencode-paid` route kind are removed rather than relabelled.
 
 **Tech Stack:** Windows PowerShell 7.6+, Pester 6, Inno Setup 6.5.4 (Chocolatey `InnoSetup` pin), WPF/VBScript headless launcher, GitHub Actions, Git LFS release assets.
 
@@ -18,7 +18,7 @@
 - Commit only explicit paths. Never `git add -A`. Local commits only until the user approves a push.
 - `docs/superpowers/` is gitignored; this plan lives in tracked `docs/plans/`.
 
-**Spec line 6 is stale:** it says `origin/main...HEAD` is `0/0`, but the approved spec commit is ahead by one. Verify divergence before any future push; do not rely on that line.
+**Git state is a snapshot:** do not infer current divergence from the spec or plan. Verify with `git status` and `git rev-list --left-right --count origin/main...HEAD` before any future push.
 
 ---
 
@@ -267,7 +267,7 @@ git commit -m "feat: derive all Sloppy paths from one canonical app root"
 
 - [ ] **Step 1: Write failing v3 tests**
 
-Append to `tests/slop-config-check.ps1`:
+Append to `tests/slop-config-check.ps1`. Tier 3 is reserved and undecided; `Resolve-SlopTier -Brain 'custom'` returning `0` means "no released tier," not a hidden Tier 3 assignment.
 
 ```powershell
     It 'has no free or paid tier field in the default config' {
@@ -413,10 +413,10 @@ In `tests/slop-config-check.ps1`:
 
 In `tests/slop-provider-check.ps1` line 116: delete `providerTier='free'` from the hashtable (keep the surrounding `brain` and `providerLocality` entries on that line).
 
-After the edits, this command must print no matches:
+After the edits, `providerTier` must remain only in the intentional v2-migration test and migration code. `tests/slop-provider-check.ps1` must have no matches, and `tests/slop-config-check.ps1` may match only the v2 migration case and its two `ContainsKey('providerTier')` assertions. A blanket "no matches" check would contradict the required migration test.
 
 ```powershell
-Select-String -Path tests/slop-config-check.ps1,tests/slop-provider-check.ps1 -Pattern 'providerTier|ProviderTier'
+Select-String -Path tests/slop-provider-check.ps1 -Pattern 'providerTier|ProviderTier'
 ```
 
 - [ ] **Step 5: Confirm GREEN**
@@ -580,7 +580,7 @@ Append to `tests/slop-onboarding-check.ps1`:
     }
 ```
 
-Append to `tests/slop-shell-check.ps1`:
+Append to `tests/slop-shell-check.ps1`. The removed label is the old `3=custom` claim; Tier 3 stays reserved and must not be given a brain or model catalog in this change.
 
 ```powershell
 Assert-True ($src -match 'Get-SlopBrainOrder') 'Brain combo uses the ordered tier list'
