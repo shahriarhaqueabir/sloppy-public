@@ -35,4 +35,46 @@ Describe 'Slop installer contracts' {
         $src | Should -Match '\.part'
         $src | Should -Match 'exit 1'
     }
+
+    It 'uses Inno Setup with a user-chosen folder and an unchecked desktop task' {
+        $iss = Get-Content (Join-Path $root 'installer/Sloppy.iss') -Raw
+        $iss | Should -Match 'DefaultDirName=\{autopf\}\\Sloppy'
+        $iss | Should -Match 'PrivilegesRequired=lowest'
+        $iss | Should -Match 'Name: desktopicon;.*Flags: unchecked'
+        $iss | Should -Match '\{autodesktop\}\\Sloppy'
+        $iss | Should -Match '\{group\}\\Sloppy'
+        $iss | Should -Match '/DIR=' # documented in the installer comment header
+    }
+
+    It 'launches headlessly and protects user data on uninstall' {
+        $iss = Get-Content (Join-Path $root 'installer/Sloppy.iss') -Raw
+        $iss | Should -Match '\{sys\}\\wscript\.exe'
+        $iss | Should -Match 'run\.vbs'
+        $iss | Should -Match 'Name: "?\{app\}\\data"?; Flags: uninsneveruninstall'
+        $iss | Should -Match 'CurStepChanged'
+        $iss | Should -Match 'SW_HIDE'
+        $iss | Should -Not -Match 'pwsh\.exe""' # no direct PowerShell shortcut
+    }
+
+    It 'boots PowerShell before the post-install helper' {
+        $iss = Get-Content (Join-Path $root 'installer/Sloppy.iss') -Raw
+        $iss | Should -Match 'Ensure-SlopPowerShell'
+        $iss | Should -Match 'Microsoft\.PowerShell'
+        $iss | Should -Match 'slop-fetch-assets\.ps1'
+        $iss | Should -Match 'Get-PreviousSlopInstallRoot'
+        $iss | Should -Match '\.sloppy-install\.json'
+        $iss | Should -Match 'Key := ExpandConstant'
+        $iss | Should -Match "FileSearch\('pwsh\.exe'"
+        $iss | Should -Not -Match 'FileOrCmdExists|ACS_Quote'
+    }
+
+    It 'bundles only runtime source directories that exist in the repo' {
+        $iss = Get-Content (Join-Path $root 'installer/Sloppy.iss') -Raw
+        $missing = @()
+        foreach ($m in [regex]::Matches($iss, '(?m)^Source: "\.\.\\([^"*]+)\\\*"')) {
+            $rel = $m.Groups[1].Value
+            if (-not (Test-Path -LiteralPath (Join-Path $root $rel))) { $missing += $rel }
+        }
+        @($missing).Count | Should -Be 0
+    }
 }
