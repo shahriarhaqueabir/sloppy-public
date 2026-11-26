@@ -508,10 +508,11 @@ The catalog no longer has the `opencode-paid` key, so three more test lines must
 - `tests/slop-route-check.ps1:42`: change `Get-SlopRouteBadge -Kind 'opencode-paid'` to `Get-SlopRouteBadge -Kind 'opencode-remote'`; the expected badge string is unchanged.
 - `tests/slop-route-check.ps1:52`: delete the whole line `(Get-SlopRouteCatalog)['opencode-paid'].TermsRequired | Should -BeTrue`.
 
-After the edits, this command must print no matches:
+After the edits, `src/Slop.Route.ps1` must have no `opencode-paid` or `providerTier` matches, and `tests/slop-route-check.ps1` must have no `providerTier` matches. The string `opencode-paid` intentionally remains only in the new catalog-absence assertion; a blanket "no matches" check would contradict that assertion.
 
 ```powershell
-Select-String -Path tests/slop-route-check.ps1 -Pattern 'opencode-paid|providerTier'
+Select-String -Path src/Slop.Route.ps1 -Pattern 'opencode-paid|providerTier'
+Select-String -Path tests/slop-route-check.ps1 -Pattern 'providerTier'
 ```
 
 - [ ] **Step 4: Confirm GREEN**
