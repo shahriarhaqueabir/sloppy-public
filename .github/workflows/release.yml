@@ -1,0 +1,90 @@
+name: Release installer
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: true
+
+      - name: Pull LFS assets
+        shell: pwsh
+        run: git lfs pull
+
+      - name: Pin Inno Setup 6.5.4
+        shell: pwsh
+        run: choco install InnoSetup --version 6.5.4 --yes --no-progress
+
+      - name: Verify pinned asset hashes
+        shell: pwsh
+        run: |
+          $manifest = Get-Content tools/slop-assets.json -Raw | ConvertFrom-Json
+          foreach ($a in $manifest.assets) {
+            $p = Join-Path $pwd $a.destination
+            if (-not (Test-Path -LiteralPath $p)) { throw "missing LFS asset: $($a.name)" }
+            $actual = (Get-FileHash -LiteralPath $p -Algorithm SHA256).Hash.ToUpperInvariant()
+            if ($actual -ne $a.sha256.ToUpperInvariant()) { throw "hash mismatch: $($a.name)" }
+            "$($a.sha256)  $($a.name)" | Add-Content SHA256SUMS.txt
+          }
+
+      - name: Compile installer
+        shell: pwsh
+        run: |
+          $iscc = "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe"
+          if (-not (Test-Path $iscc)) { $iscc = "$env:ProgramFiles\Inno Setup 6\ISCC.exe" }
+          if (-not (Test-Path $iscc)) { throw 'ISCC.exe not found' }
+          & $iscc installer/Sloppy.iss
+          if ($LASTEXITCODE -ne 0) { throw "ISCC failed with $LASTEXITCODE" }
+
+      - name: Silent-install smoke test
+        shell: pwsh
+        run: |
+          $dir = Join-Path $env:RUNNER_TEMP 'sloppy-smoke'
+          New-Item -ItemType Directory -Force -Path $dir | Out-Null
+          $fixtures = Join-Path $env:RUNNER_TEMP 'sloppy-fixtures'
+          New-Item -ItemType Directory -Force -Path $fixtures | Out-Null
+          Copy-Item runtime\models\Qwen3.5-2B-Q4_K_M.gguf $fixtures -Force
+          Copy-Item runtime\whisper\models\ggml-small.bin $fixtures -Force
+          $env:SLOP_TEST_ASSET_FIXTURES = $fixtures
+          $setup = Join-Path $pwd 'artifacts\SloppySetup.exe'
+          & $setup /DIR="$dir" /TASKS=desktopicon /VERYSILENT /SUPPRESSMSGBOXES
+          if ($LASTEXITCODE -ne 0) { throw "silent install failed with $LASTEXITCODE" }
+          foreach ($p in @('src\Slop.ps1','run.vbs','tools\slop-fetch-assets.ps1',
+                           'runtime\models\Qwen3.5-2B-Q4_K_M.gguf',
+                           'runtime\whisper\models\ggml-small.bin','data','.sloppy-install.json')) {
+            if (-not (Test-Path -LiteralPath (Join-Path $dir $p))) { throw "missing after install: $p" }
+          }
+          $link = Join-Path $env:APPDATA 'Microsoft\Windows\Start Menu\Programs\Sloppy\Sloppy.lnk'
+          if (-not (Test-Path -LiteralPath $link)) { throw 'Start Menu shortcut missing' }
+
+      - name: Ensure the release exists
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ github.ref_name }}
+        run: |
+          gh release view "$env:RELEASE_TAG" 2>$null
+          if ($LASTEXITCODE -ne 0) {
+            gh release create "$env:RELEASE_TAG" --generate-notes --title "Sloppy $env:RELEASE_TAG"
+          }
+
+      - name: Upload release assets
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ github.ref_name }}
+        run: |
+          gh release upload "$env:RELEASE_TAG" `
+            artifacts/SloppySetup.exe `
+            runtime/models/Qwen3.5-2B-Q4_K_M.gguf `
+            runtime/whisper/models/ggml-small.bin `
+            SHA256SUMS.txt --clobber

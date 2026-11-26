@@ -98,4 +98,20 @@ Describe 'Slop installer contracts' {
         $cmd = Get-Content (Join-Path $root 'run.cmd') -Raw
         $cmd | Should -Match 'wscript "%~dp0run\.vbs"'
     }
+
+    It 'builds and publishes the installer from a tag' {
+        $wf = Get-Content (Join-Path $root '.github/workflows/release.yml') -Raw
+        $wf | Should -Match 'on:'
+        $wf | Should -Match 'tags:'
+        $wf | Should -Match 'InnoSetup'
+        $wf | Should -Match '--version 6\.5\.4'
+        $wf | Should -Match 'ISCC\.exe'
+        $wf | Should -Match 'slop-fetch-assets\.ps1'
+        $wf | Should -Match 'SLOP_TEST_ASSET_FIXTURES'
+        $wf | Should -Match 'gh release view'
+        $wf | Should -Match 'gh release create'
+        $wf | Should -Match 'gh release upload'
+        $wf | Should -Match 'SHA256SUMS\.txt'
+        $wf | Should -Match 'lfs: true'
+    }
 }
