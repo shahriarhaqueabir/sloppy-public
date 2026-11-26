@@ -18,7 +18,7 @@ Today Sloppy's install is split across several implicit locations:
 
 This produced a real end-user failure: the bundled brain reported a missing `llama-server.exe` because the route planner had the correct app root but never passed it to the runtime path helper. Similar path drift would keep breaking voice and data on a fresh install.
 
-The user asked for one user-chosen folder that holds the app, runtimes, models, and its own data, with both the double-click installer and the one-liner using the same behavior. They specifically asked for an optional desktop shortcut checkbox and suggested Inno Setup. They also chose a hybrid payload, pinned release assets with local cache reuse, and no user-facing "testability" concept.
+The user asked for one user-chosen folder that holds the app, runtimes, models, voice artifacts, and its own data, with both the double-click installer and the one-liner using the same behavior. They specifically asked for an optional desktop shortcut checkbox and suggested Inno Setup. They also chose a hybrid payload, pinned release assets with local cache reuse, and no user-facing "testability" concept.
 
 ## Goal
 
@@ -41,13 +41,13 @@ Make a fresh Windows install a single guided operation:
 - No user-visible free/paid framing. The old `providerTier` field and `opencode-paid` route kind are removed, not relabelled.
 - No automatic migration of config/persona from old `%LOCALAPPDATA%\Sloppy` locations.
 - No desktop shortcut unless the user selects it.
-- No force-push, deploy, visibility change, or subagent use.
+- No force-push, deploy, tag, release, visibility change, remote change, or subagent use without explicit approval.
 
 ## Decisions
 
 | Decision | Choice | Rationale |
 |---|---|---|
-| Installer framework | Inno Setup 6.5.2+ | Native folder page, native optional task checkbox, `/DIR=` CLI support, and the 2 GB single-EXE limit was removed in 6.5.2. |
+| Installer framework | Inno Setup 6.5.4, pinned | Native folder page, native optional task checkbox, `/DIR=` CLI support, and the 2 GB single-EXE limit was removed in 6.5.2; 6.5.4 is pinned for reproducible builds. |
 | Single source of paths | One `Get-SlopAppRoot` | Removes the class of bug where each helper invents its own default. Test override remains internal. |
 | Data location | `{app}\data\config.json` and `{app}\data\persona.md` | User chose app + runtimes + own data in one folder. |
 | Payload | Hybrid | EXE bundles code/launchers/small runtime binaries; two large models download during install. |
@@ -57,6 +57,7 @@ Make a fresh Windows install a single guided operation:
 | Upgrade safety | `data\` excluded from uninstall | Config and persona must survive reinstall. |
 | CLI entry | `install.ps1` downloads/runs the same EXE | One behavior for GUI and CLI. |
 | Tier model | 1 = built-in local Qwen, 2 = OpenCode, 3 reserved/undecided | Only released tiers get UI and model catalogs. `custom` is not Tier 3 and resolves to `0` ("no released tier"). |
+| Settings and onboarding | Remove paid-provider fields; prefill OpenCode model from the tier catalog; tier choice changes available models | Users see one tier vocabulary in Brain/Customization and onboarding. Existing glass/indigo styling stays visible and is checked live. |
 
 ## Design
 
@@ -92,7 +93,7 @@ Only two things remain outside `{app}`:
 
 `install.cmd` remains the double-click entry point. It downloads and starts `SloppySetup.exe`.
 
-The one-liner remains `irm .../install.ps1 | iex`. `install.ps1` becomes a thin wrapper that:
+The parameter form is the canonical one-liner. Do not document `irm .../install.ps1 | iex` as the supported install command. `install.ps1` becomes a thin wrapper that:
 
 - downloads the pinned `SloppySetup.exe`;
 - runs it with the wizard when no `-InstallDir` is supplied;
@@ -100,7 +101,7 @@ The one-liner remains `irm .../install.ps1 | iex`. `install.ps1` becomes a thin 
 - maps `-DesktopShortcut` to `/TASKS=desktopicon`;
 - uses silent flags only when `-InstallDir` is supplied, so the picker is not left hanging in automation.
 
-Because `Invoke-Expression` cannot bind named parameters cleanly, docs show the parameter form as:
+Because `Invoke-Expression` cannot bind named parameters cleanly, docs must show:
 
 ```powershell
 $installer = irm https://raw.githubusercontent.com/shahriarhaqueabir/Sloppy/main/install.ps1
@@ -172,9 +173,9 @@ Remove `%LOCALAPPDATA%\Sloppy` and `%LOCALAPPDATA%\Programs\Sloppy` from product
 A Windows CI job:
 
 1. Checks out with LFS and runs `git lfs pull`.
-2. Installs Inno Setup 6.5.2+ via a pinned, reviewed action or package source.
+2. Installs pinned Inno Setup 6.5.4 via a reviewed action or package source.
 3. Compiles `installer/Sloppy.iss` with the release version/tag supplied from the tag.
-4. Uploads `SloppySetup.exe`, the two large model assets, and `SHA256SUMS.txt` to the same release.
+4. Creates or confirms the release before uploading anything, then uploads `SloppySetup.exe`, the two large model assets, and `SHA256SUMS.txt` to that same release.
 5. Runs a silent-install smoke test into a temp directory using a test override for model fixtures, then verifies the expected layout and shortcut targets.
 
 Downgrade to Inno Setup disk spanning only if EXE startup becomes unacceptable; the current payload is within the single-EXE limit.
@@ -199,10 +200,11 @@ Tier is derived from `brain`, not from `providerTier`. `providerTier` is removed
 - Selecting the desktop checkbox creates both Start Menu and desktop shortcuts; leaving it unchecked creates only Start Menu.
 - Both shortcuts launch `wscript.exe` with `run.vbs`; no PowerShell console flashes.
 - All runtime, CLI, DLL and downloaded model files exist under the chosen folder and pass checksums.
-- The one-liner with `-InstallDir` and `-DesktopShortcut` produces the same layout without a picker.
+- The canonical scriptblock one-liner with `-InstallDir` and `-DesktopShortcut` produces the same layout without a picker.
 - Re-running the installer upgrades in place and preserves `data\config.json` and `data\persona.md`.
 - `Get-SlopRuntimePaths`, `Get-SlopVoiceInstallRoot`, `Get-SlopUserDataPath`, preflight and disclosure copy all agree on the app root.
 - Brain choice drives tier and model options: Tier 1 offers only Qwen, Tier 2 offers OpenCode models, and no UI or config field claims Tier 3 or free/paid.
+- Onboarding no longer exposes paid-provider fields; its OpenCode model is prefilled from the shared catalog, and the Brain panel reproduces the same options.
 - Full Pester gate, CI, and CodeQL are green.
 
 ## Risks and trade-offs

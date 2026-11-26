@@ -11,7 +11,7 @@
 **Source of truth:** `docs/decisions/2026-11-26-single-folder-installer.md` (approved). Where this plan adds detail, it stays inside that spec's decisions.
 
 **Constraints carried into every task:**
-- No subagents, no force-push, no deploy, no visibility change, no remote change without explicit user approval.
+- No subagents, no force-push, no deploy, no tag, no release, no visibility change, and no remote change without explicit user approval.
 - Preserve existing LFS assets and user data. Do not bundle `gemma-4-E2B_q4_0-it.gguf` or `gemma-4-E2B-it-mmproj.gguf`.
 - No migration from old `%LOCALAPPDATA%` locations; old settings deliberately do not follow.
 - No user-facing test/debug mode. `SLOP_TEST_INSTALL_ROOT` and `SLOP_TEST_ASSET_FIXTURES` are hidden CI/internal overrides only.
@@ -1637,7 +1637,7 @@ $installer = irm https://raw.githubusercontent.com/shahriarhaqueabir/Sloppy/main
 & ([scriptblock]::Create($installer)) -InstallDir 'D:\Sloppy' -DesktopShortcut
 ```
 
-Setup asks for one folder and puts the app, bundled runtimes, downloaded models, and Sloppy's `data\` folder inside it. The desktop shortcut is optional and off by default; the Start Menu shortcut is always created. Both launch without a PowerShell console window.
+Setup asks for one folder and puts the app, bundled runtimes, downloaded models, voice artifacts, and Sloppy's `data\` folder inside it. The desktop shortcut is optional and off by default; the Start Menu shortcut is always created. Both launch without a PowerShell console window.
 
 Sloppy needs PowerShell 7.6 or newer. The installer installs it if missing.
 

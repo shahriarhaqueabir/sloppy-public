@@ -78,14 +78,27 @@ Everything above is wired in the WPF / PowerShell frontend; the capability and t
 
 ## Quick start
 
-**Windows (nothing installed):** download `install.cmd` from the repo (or the latest release) and double-click it.
-It uses winget to install PowerShell 7, Git and Git LFS, then clones and sets up Sloppy automatically.
+**Windows (nothing installed):** download `install.cmd` from the repo (or the latest release) and double-click it. It shows one folder picker and installs everything inside that folder.
 
 **PowerShell 7.6+ already installed:**
 
 ```powershell
-irm https://raw.githubusercontent.com/shahriarhaqueabir/Sloppy/main/install.ps1 | iex
+$installer = irm https://raw.githubusercontent.com/shahriarhaqueabir/Sloppy/main/install.ps1
+& ([scriptblock]::Create($installer))
 ```
+
+To choose the folder without the picker and opt into a desktop shortcut:
+
+```powershell
+$installer = irm https://raw.githubusercontent.com/shahriarhaqueabir/Sloppy/main/install.ps1
+& ([scriptblock]::Create($installer)) -InstallDir 'D:\Sloppy' -DesktopShortcut
+```
+
+Setup asks for one folder and puts the app, bundled runtimes, downloaded models, voice artifacts, and Sloppy's `data\` folder inside it. The desktop shortcut is optional and off by default; the Start Menu shortcut is always created. Both launch without a PowerShell console window.
+
+Sloppy needs PowerShell 7.6 or newer. The installer installs it if missing.
+
+**Upgrading:** re-running setup upgrades in place and preserves `data\config.json` and `data\persona.md`. Settings from an older `%LOCALAPPDATA%\Sloppy` install do not move automatically; start fresh in the chosen folder.
 
 **From a clone (headless, no console window):**
 
@@ -97,13 +110,13 @@ Requirements:
 
 - Windows
 - PowerShell 7.6 or later, in STA mode
-- Git LFS (to fetch bundled runtime artifacts in a source checkout)
-- For Tier 1: `runtime/models/Qwen3.5-2B-Q4_K_M.gguf` is tracked via Git LFS (1.3 GB) and fetched on checkout; no manual model supply step
+- Git LFS (only for a source checkout; the installer downloads the large models itself)
+- For Tier 1: `runtime/models/Qwen3.5-2B-Q4_K_M.gguf` is downloaded and checksum-verified during setup
 - Tier 1 runs on any Windows PC: an NVIDIA/CUDA build is used when available, otherwise a bundled CPU build. No GPU required.
-- Optional for voice: supply `whisper-cli.exe` and `ggml-small.bin` under `runtime/whisper/` yourself; LFS rules are configured, but these artifacts are not bundled in this checkout (live mic/Whisper smoke deferred)
+- For voice: the Whisper CLI and DLLs are bundled; `ggml-small.bin` is downloaded and checksum-verified during setup
 - Optional: a local OpenCode service with your agent, model and provider configured for Tier 2/OpenCode routing
 
-Sloppy prefers whatever OpenCode config you already have. If there is none, it installs a minimal zero-trust config; it never overwrites an active one. The Qwen3.5-2B brain answers text locally from the LFS-tracked GGUF under `runtime/models/`, and opt-in push-to-talk audio is transcribed locally by Whisper small (CLI and model supplied by you) before being sent through the same text path. Nothing is uploaded for Tier 1. Image capture and `mmproj` remain unused readiness hooks; there are no spoken replies.
+Sloppy prefers whatever OpenCode config you already have. If there is none, it installs a minimal zero-trust config; it never overwrites an active one. Tier 1 uses the local Qwen3.5-2B brain under `runtime/models/`, and opt-in push-to-talk audio is transcribed locally by the bundled Whisper small setup before being sent through the same text path. Nothing is uploaded for Tier 1. Image capture and `mmproj` remain unused readiness hooks; there are no spoken replies.
 
 ## 📋 Playbook (short)
 
