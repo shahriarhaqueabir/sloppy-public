@@ -863,7 +863,7 @@ Describe 'Slop installer contracts' {
     It 'fetches assets headlessly with checksum verification' {
         $src = Get-Content (Join-Path $root 'tools/slop-fetch-assets.ps1') -Raw
         $src | Should -Match 'Invoke-WebRequest'
-        $src | Should -Match 'Get-FileHash -Algorithm SHA256'
+        $src | Should -Match 'Get-FileHash .* -Algorithm SHA256'
         $src | Should -Match 'SLOP_TEST_ASSET_FIXTURES'
         $src | Should -Match '\.part'
         $src | Should -Match 'exit 1'
@@ -1002,7 +1002,7 @@ Write-Output 'ASSET_FAILURE_PATH_OK'
 Remove-Item $tmp -Recurse -Force
 ```
 
-Expected: `ASSET_FAILURE_PATH_OK`, proving a mismatch exits non-zero and leaves neither a destination nor a `.part` file. Note this probe cannot use the real large assets; checksum verification is proven with a deliberately wrong hash, and the real hashes are asserted by the manifest test above.
+Expected: `ASSET_FAILURE_PATH_OK`, proving a fetch failure exits non-zero and leaves neither a destination nor a `.part` file. An unreachable host does **not** exercise checksum verification; to prove the mismatch path, serve a small wrong-content payload from a local `HttpListener`, keep the deliberately wrong hash in the manifest, and confirm the same exit code and no leftover files. This probe cannot use the real large assets; their real hashes are asserted by the manifest test above.
 
 - [ ] **Step 6: Confirm GREEN for the contract suite**
 
