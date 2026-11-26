@@ -559,8 +559,9 @@ Append to `tests/slop-surfaces-check.ps1`:
     }
 
     It 'points deletion copy at the in-app data folder' {
+        $pattern = [regex]::Escape('data\config.json')
         Get-SlopDeletionScope -Action 'local-data' | ForEach-Object { $_.Scope } |
-            Should -Match [regex]::Escape('data\config.json')
+            Should -Match $pattern
         Get-SlopDeletionCopy -Action 'local-data' | Should -Not -Match 'LOCALAPPDATA'
     }
 ```
@@ -579,6 +580,13 @@ Append to `tests/slop-onboarding-check.ps1`:
         $opts = @(Get-SlopBrainModelOptions -Brain 'opencode')
         $opts | Should -Be @('big-pickle','beam-free')
     }
+```
+
+Also update the existing `generates the swatches...` test: it still asserts the `BrainNote` copy that Step 3 deletes. Replace that assertion with:
+
+```powershell
+        $src | Should -Not -Match 'BrainNote'
+        $src | Should -Match 'Tier 1 - built-in local Qwen; Tier 2 - OpenCode'
 ```
 
 Append to `tests/slop-shell-check.ps1`. The removed label is the old `3=custom` claim; Tier 3 stays reserved and must not be given a brain or model catalog in this change.
@@ -697,7 +705,7 @@ In `src/Slop.ps1`:
 In `src/Slop.Surfaces.ps1`:
 - line 8: `'Brain     = @('Tier','Provider','Model','Agent','Capability profile','Effective model')'`
 - line 33: remove `'BrainLocalityCombo'` from the `Editable` array.
-- line 48: change the scope string to `'{app}\data config and persona'`.
+- line 48: change the scope string to `'{app}\data\config.json and persona.md'`. The RED test above matches `data\config.json`, so the shorter proposal in the original draft would contradict it.
 
 In `src/Slop.Disclosure.ps1`, change line 48 inside `Get-SlopDeletionCopy` so the function reads:
 
