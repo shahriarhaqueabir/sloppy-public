@@ -18,13 +18,14 @@ Describe 'Slop.Route' {
     }
 
     It 'classifies an OpenCode route with a local provider' {
-        Resolve-SlopRouteKind -Config @{ brain='opencode'; providerLocality='local'; providerTier='free' } |
+        Resolve-SlopRouteKind -Config @{ brain='opencode'; providerLocality='local' } |
             Should -Be 'opencode-local'
     }
 
-    It 'classifies an OpenCode route with a remote paid provider' {
-        Resolve-SlopRouteKind -Config @{ brain='opencode'; providerLocality='remote'; providerTier='paid' } |
-            Should -Be 'opencode-paid'
+    It 'classifies an OpenCode route without a paid tier' {
+        Resolve-SlopRouteKind -Config @{ brain='opencode'; providerLocality='remote' } |
+            Should -Be 'opencode-remote'
+        @(Get-SlopRouteCatalog).Keys | Should -Not -Contain 'opencode-paid'
     }
 
     It 'lets an agent model preference win over the config default' {
@@ -39,7 +40,7 @@ Describe 'Slop.Route' {
     It 'badges locality, provider and effective model - not the tier' {
         Get-SlopRouteBadge -Kind 'opencode-local' -Provider 'Ollama' -Model 'qwen3:8b' |
             Should -Be 'Local · Ollama · qwen3:8b'
-        Get-SlopRouteBadge -Kind 'opencode-paid' -Provider 'OpenCode Go' -Model 'Qwen3.5-2B Q4_K_M' |
+        Get-SlopRouteBadge -Kind 'opencode-remote' -Provider 'OpenCode Go' -Model 'Qwen3.5-2B Q4_K_M' |
             Should -Be 'Remote · OpenCode Go · Qwen3.5-2B Q4_K_M'
     }
 
@@ -49,7 +50,6 @@ Describe 'Slop.Route' {
 
     It 'marks only remote routes as requiring disclosure' {
         (Get-SlopRouteCatalog)['opencode-remote'].TermsRequired | Should -BeTrue
-        (Get-SlopRouteCatalog)['opencode-paid'].TermsRequired | Should -BeTrue
         (Get-SlopRouteCatalog)['local-bundled'].TermsRequired | Should -BeFalse
         (Get-SlopRouteCatalog)['custom'].TermsRequired | Should -BeFalse
     }
@@ -134,5 +134,17 @@ Describe 'Slop.Route' {
         } finally {
             if (Test-Path -LiteralPath $root) { Remove-Item -LiteralPath $root -Recurse -Force }
         }
+    }
+
+    It 'keeps route planning independent of any tier field' {
+        $cfg = New-SlopDefaultConfig
+        $cfg.brain = 'opencode'
+        $cfg.providerLocality = 'remote'
+        $cfg.provider = 'opencode-go'
+        $cfg.agentId = 'sloppy'
+        $cfg.openCodeBaseUrl = 'http://127.0.0.1:28894'
+        $cat = Get-SlopRouteCatalog
+        $cat['opencode-remote'].TermsRequired | Should -BeTrue
+        $cat['opencode-remote'].Locality | Should -Be 'Remote'
     }
 }

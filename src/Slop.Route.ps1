@@ -7,7 +7,6 @@ function Get-SlopRouteCatalog {
         'custom'          = @{ Harness='Custom';   Locality='Local';  TermsRequired=$false }
         'opencode-local'  = @{ Harness='OpenCode'; Locality='Local';  TermsRequired=$false }
         'opencode-remote' = @{ Harness='OpenCode'; Locality='Remote'; TermsRequired=$true  }
-        'opencode-paid'   = @{ Harness='OpenCode'; Locality='Remote'; TermsRequired=$true  }
     }
 }
 
@@ -16,7 +15,6 @@ function Resolve-SlopRouteKind {
     if ([string]$Config.brain -eq 'custom') { return 'custom' }
     if ([string]$Config.brain -ne 'opencode') { return 'local-bundled' }
     if ([string]$Config.providerLocality -eq 'local') { return 'opencode-local' }
-    if ([string]$Config.providerTier -eq 'paid') { return 'opencode-paid' }
     return 'opencode-remote'
 }
 
@@ -66,7 +64,6 @@ function Get-SlopRoutePlan {
             [string]::IsNullOrEmpty($providerUri.Query) -and
             [string]::IsNullOrEmpty($providerUri.Fragment)
         if ($observedLocal) { $kind = 'opencode-local' }
-        elseif ([string]$Config.providerTier -eq 'paid') { $kind = 'opencode-paid' }
         else { $kind = 'opencode-remote' }
     }
     $catalog = Get-SlopRouteCatalog
