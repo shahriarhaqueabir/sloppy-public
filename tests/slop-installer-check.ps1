@@ -1,0 +1,38 @@
+#requires -Version 7.6
+Describe 'Slop installer contracts' {
+    BeforeAll {
+        $root = Split-Path $PSScriptRoot -Parent
+    }
+
+    It 'pins both large assets with a destination and SHA-256' {
+        $manifest = Get-Content (Join-Path $root 'tools/slop-assets.json') -Raw | ConvertFrom-Json
+        $manifest.version | Should -Be 1
+        $manifest.release | Should -Be 'v0.3.0'
+        @($manifest.assets).Count | Should -Be 2
+        foreach ($a in $manifest.assets) {
+            $a.sha256 | Should -Match '^[0-9A-F]{64}$'
+            $a.destination | Should -Not -Match '^\.'
+            $a.url | Should -Match '^https://github\.com/shahriarhaqueabir/Sloppy/releases/download/v0\.3\.0/'
+        }
+        @($manifest.assets.name) | Should -Be @('Qwen3.5-2B-Q4_K_M.gguf','ggml-small.bin')
+    }
+
+    It 'hashes the actual bundled asset sizes' {
+        $manifest = Get-Content (Join-Path $root 'tools/slop-assets.json') -Raw | ConvertFrom-Json
+        $qwen = $manifest.assets | Where-Object { $_.name -eq 'Qwen3.5-2B-Q4_K_M.gguf' }
+        $qwen.bytes | Should -Be 1312164352
+        $qwen.sha256 | Should -Be '4E936E9D3DEDC45FA4CADB4A271FA50F8D6F3DB3BE0EADDC01DC4D6D356AA327'
+        $whisper = $manifest.assets | Where-Object { $_.name -eq 'ggml-small.bin' }
+        $whisper.bytes | Should -Be 487601967
+        $whisper.sha256 | Should -Be '1BE3A9B2063867B937E64E2EC7483364A79917E157FA98C5D94B5C1FFFEA987B'
+    }
+
+    It 'fetches assets headlessly with checksum verification' {
+        $src = Get-Content (Join-Path $root 'tools/slop-fetch-assets.ps1') -Raw
+        $src | Should -Match 'Invoke-WebRequest'
+        $src | Should -Match 'Get-FileHash .* -Algorithm SHA256'
+        $src | Should -Match 'SLOP_TEST_ASSET_FIXTURES'
+        $src | Should -Match '\.part'
+        $src | Should -Match 'exit 1'
+    }
+}
