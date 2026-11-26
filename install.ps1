@@ -1,78 +1,43 @@
 <#
 .SYNOPSIS
-  Bootstrap installer for Sloppy (Windows).
+  Downloads and runs the single-folder Sloppy installer.
 .DESCRIPTION
-  Checks prerequisites (PowerShell 7.6+, git, git-lfs), clones or updates the
-  repo, fetches LFS artifacts, and creates a Start Menu shortcut.
-  Run from an elevated or normal PowerShell prompt:
-    irm https://raw.githubusercontent.com/shahriarhaqueabir/Sloppy/main/install.ps1 | iex
+  One behavior for the double-click installer and the PowerShell one-liner.
+  With -InstallDir the wizard is suppressed; without it the Inno folder picker
+  is shown. -DesktopShortcut opts into the otherwise-unchecked desktop task.
+.EXAMPLE
+  $installer = irm https://raw.githubusercontent.com/shahriarhaqueabir/Sloppy/main/install.ps1
+  & ([scriptblock]::Create($installer)) -InstallDir 'D:\Sloppy' -DesktopShortcut
 #>
+param(
+    [string]$InstallDir,
+    [switch]$DesktopShortcut,
+    [string]$ReleaseTag = 'v0.3.0'
+)
 $ErrorActionPreference = 'Stop'
 
-function Test-Command($name) {
-    return [bool](Get-Command $name -ErrorAction SilentlyContinue)
-}
+$base = 'https://github.com/shahriarhaqueabir/Sloppy/releases/download/' + $ReleaseTag
+$setupUrl = $base + '/SloppySetup.exe'
+$temp = Join-Path ([IO.Path]::GetTempPath()) ('sloppy-setup-' + [guid]::NewGuid().ToString('N'))
+New-Item -ItemType Directory -Path $temp -Force | Out-Null
+$setup = Join-Path $temp 'SloppySetup.exe'
 
-function Install-ViaWinget($id, $label) {
-    if (Test-Command winget) {
-        Write-Host "Installing $label via winget..."
-        & winget install --id $id --silent --accept-package-agreements --accept-source-agreements | Out-Null
-        # refresh PATH
-        $env:Path = [Environment]::GetEnvironmentVariable('Path','Machine') + ';' + [Environment]::GetEnvironmentVariable('Path','User')
-        return (Test-Command ($id.Split('.')[1]))
+try {
+    Write-Host 'Downloading the Sloppy installer...' -ForegroundColor Cyan
+    Invoke-WebRequest -Uri $setupUrl -OutFile $setup -UseBasicParsing
+
+    $argsList = [Collections.Generic.List[string]]::new()
+    if (-not [string]::IsNullOrWhiteSpace($InstallDir)) {
+        $argsList.Add('/DIR="' + [IO.Path]::GetFullPath($InstallDir) + '"')
+        $argsList.Add('/VERYSILENT')
+        $argsList.Add('/SUPPRESSMSGBOXES')
     }
-    return $false
-}
+    if ($DesktopShortcut) { $argsList.Add('/TASKS=desktopicon') }
+    else { $argsList.Add('/TASKS=') }
 
-Write-Host "Sloppy bootstrap installer" -ForegroundColor Cyan
-
-# --- prerequisites ---------------------------------------------------------
-if (-not (Test-Command pwsh)) {
-    if (-not (Install-ViaWinget 'Microsoft.PowerShell' 'PowerShell 7')) {
-        Write-Host "PowerShell 7+ is required. Install from https://aka.ms/powershell" -ForegroundColor Red
-        exit 1
-    }
+    $proc = Start-Process -FilePath $setup -ArgumentList $argsList.ToArray() -Wait -PassThru
+    if ($proc.ExitCode -ne 0) { throw "Sloppy setup exited with code $($proc.ExitCode)" }
 }
-$ver = (Get-Command pwsh).Version
-if ($ver -lt [version]'7.6') {
-    Write-Host "PowerShell 7.6+ required (found $ver)." -ForegroundColor Red
-    exit 1
+finally {
+    if (Test-Path -LiteralPath $temp) { Remove-Item -LiteralPath $temp -Recurse -Force }
 }
-if (-not (Test-Command git)) {
-    if (-not (Install-ViaWinget 'Git.Git' 'Git')) {
-        Write-Host "git is required. Install from https://git-scm.com" -ForegroundColor Red
-        exit 1
-    }
-}
-if (-not (Test-Command git-lfs)) {
-    if (-not (Install-ViaWinget 'GitHub.GitLFS' 'Git LFS')) {
-        Write-Host "git-lfs is required. Install from https://git-lfs.com" -ForegroundColor Red
-        exit 1
-    }
-}
-
-# --- install location -----------------------------------------------------
-$installDir = Join-Path $env:LOCALAPPDATA 'Sloppy'
-if (-not (Test-Path $installDir)) {
-    Write-Host "Cloning Sloppy into $installDir ..."
-    git clone https://github.com/shahriarhaqueabir/Sloppy.git $installDir
-} else {
-    Write-Host "Updating existing install at $installDir ..."
-    git -C $installDir pull --ff-only
-}
-git -C $installDir lfs pull
-
-# --- shortcut -------------------------------------------------------------
-$wsh = New-Object -ComObject WScript.Shell
-$startMenu = Join-Path $env:APPDATA 'Microsoft\Windows\Start Menu\Programs'
-$shortcut = $wsh.CreateShortcut((Join-Path $startMenu 'Sloppy.lnk'))
-$shortcut.TargetPath = "$env:WINDIR\System32\wscript.exe"
-$shortcut.Arguments = "`"$installDir\run.vbs`""
-$shortcut.WorkingDirectory = $installDir
-$shortcut.IconLocation = "$installDir\assets\sloppy.ico"
-$shortcut.Save()
-
-Write-Host ""
-Write-Host "Sloppy installed to $installDir" -ForegroundColor Green
-Write-Host "Launch from Start Menu: 'Sloppy', or run:" -ForegroundColor Green
-Write-Host "  pwsh -STA -File `"$installDir\src\Slop.ps1`"" -ForegroundColor Yellow

@@ -216,9 +216,10 @@ Assert-True ($src -match '\[int\]::TryParse\(\[string\]\$VoiceMaxSecondsBox\.Tex
 Assert-True ($src -match 'Invoke-SlopPreflight -InstallRoot \$script:VoiceInstallRoot') 'Repair voice runs the report-only preflight'
 Assert-True ($src -match 'Get-SlopVoiceReadinessText -Config \$cfg') 'Settings shows exact Whisper readiness'
 Assert-True ($src -match 'Get-SlopVoiceInstallRoot -InstallRoot') 'voice install root follows the actual app root'
-$installer = Get-Content (Join-Path $PSScriptRoot '../install.ps1') -Raw
-Assert-True ($installer -notmatch 'TargetPath = ''pwsh\.exe''') 'installed shortcut does not launch pwsh directly'
-Assert-True ($installer -match 'wscript\.exe' -and $installer -match 'run\.vbs') 'installed shortcut uses the headless VBS launcher'
+$iss = Get-Content (Join-Path $PSScriptRoot '../installer/Sloppy.iss') -Raw
+Assert-True ($iss -match 'Filename: "\{sys\}\\wscript\.exe"') 'installed shortcut uses wscript.exe'
+Assert-True ($iss -match 'Parameters: """\{app\}\\run\.vbs"""') 'installed shortcut uses the headless VBS launcher'
+Assert-True ($iss -notmatch 'Filename: "\{sys\}\\pwsh\.exe"') 'installed shortcut does not launch pwsh directly'
 
 Assert-True ($src -match 'function Start-SlopVoiceTranscription') 'voice transcription has a named worker starter'
 Assert-True ($src -match 'Invoke-SlopWhisperTranscription -Paths \$Paths -WavPath \$Wav') 'voice worker invokes the local Whisper wrapper'

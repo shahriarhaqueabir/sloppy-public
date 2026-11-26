@@ -77,4 +77,25 @@ Describe 'Slop installer contracts' {
         }
         @($missing).Count | Should -Be 0
     }
+
+    It 'maps the documented one-liner parameters to Inno switches' {
+        $src = Get-Content (Join-Path $root 'install.ps1') -Raw
+        $src | Should -Match 'param\('
+        $src | Should -Match '\[string\]\$InstallDir'
+        $src | Should -Match '\[switch\]\$DesktopShortcut'
+        $src | Should -Match '/DIR='
+        $src | Should -Match '/TASKS=desktopicon'
+        $src | Should -Match '/VERYSILENT'
+        $src | Should -Match 'SloppySetup\.exe'
+        $src | Should -Not -Match 'git clone'
+    }
+
+    It 'launches from the script folder with no console window' {
+        $vbs = Get-Content (Join-Path $root 'run.vbs') -Raw
+        $vbs | Should -Match 'WScript\.ScriptFullName'
+        $vbs | Should -Match '-WindowStyle Hidden'
+        $vbs | Should -Match ', 0, False'
+        $cmd = Get-Content (Join-Path $root 'run.cmd') -Raw
+        $cmd | Should -Match 'wscript "%~dp0run\.vbs"'
+    }
 }
