@@ -76,11 +76,9 @@ Everything above is wired in the WPF / PowerShell frontend; the capability and t
 # Large runtime/models are Git LFS-tracked: git lfs pull
 `
 
-## Quick start
+## Install
 
-**Windows (nothing installed):** download `install.cmd` from the repo (or the latest release) and double-click it. It shows one folder picker and installs everything inside that folder.
-
-**PowerShell 7.6+ already installed:**
+Double-click `install.cmd`, or run the one-liner:
 
 ```powershell
 $installer = irm https://raw.githubusercontent.com/shahriarhaqueabir/Sloppy/main/install.ps1
@@ -100,7 +98,7 @@ Sloppy needs PowerShell 7.6 or newer. The installer installs it if missing.
 
 **Upgrading:** re-running setup upgrades in place and preserves `data\config.json` and `data\persona.md`. Settings from an older `%LOCALAPPDATA%\Sloppy` install do not move automatically; start fresh in the chosen folder.
 
-**From a clone (headless, no console window):**
+### From a source clone
 
 Double-click `run.cmd`. It uses a VBScript wrapper so no PowerShell console
 flashes. `pwsh -WindowStyle Hidden -STA -File src/Slop.ps1` still works but can
