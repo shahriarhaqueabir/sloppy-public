@@ -30,7 +30,7 @@ Describe 'Slop preflight' {
         $report = Invoke-SlopPreflight -InstallRoot $script:Root -ConfigPath $script:ConfigPath -ExpectedModelSha1 $script:Hash
         $report.Ok | Should -BeTrue
         @($report.Errors).Count | Should -Be 0
-        ($report.Lines -join "`n") | Should -Match '\[OK\] config: config version 2'
+        ($report.Lines -join "`n") | Should -Match '\[OK\] config: config version 3'
         ($report.Lines -join "`n") | Should -Match '\[OK\] Whisper model SHA-1'
         ($report.Lines -join "`n") | Should -Match '\[OK\] Qwen model'
     }

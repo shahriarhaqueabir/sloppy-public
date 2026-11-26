@@ -162,4 +162,15 @@ Describe 'Slop.LocalModel' {
             if ($child -and -not $child.HasExited) { Stop-Process -Id $child.Id -Force }
         }
     }
+
+    It 'defaults runtime paths to the canonical app root' {
+        $previous = $env:SLOP_TEST_INSTALL_ROOT
+        try {
+            $env:SLOP_TEST_INSTALL_ROOT = $script:TestRoot
+            $paths = Get-SlopRuntimePaths
+            $paths.InstallRoot | Should -Be ([IO.Path]::GetFullPath($script:TestRoot))
+            $paths.ModelFile | Should -Be (Join-Path ([IO.Path]::GetFullPath($script:TestRoot)) 'runtime\models\Qwen3.5-2B-Q4_K_M.gguf')
+        }
+        finally { $env:SLOP_TEST_INSTALL_ROOT = $previous }
+    }
 }

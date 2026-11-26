@@ -7,8 +7,9 @@ Describe 'Slop.Config' {
     BeforeEach {
         $script:TestRoot = Join-Path ([IO.Path]::GetTempPath()) ('slop-config-' + [guid]::NewGuid().ToString('N'))
         New-Item -ItemType Directory -Path $script:TestRoot -Force | Out-Null
-        $script:ConfigPath = Join-Path $script:TestRoot 'config.json'
-        $script:PersonaPath = Join-Path $script:TestRoot 'persona.md'
+        New-Item -ItemType Directory -Path (Join-Path $script:TestRoot 'data') -Force | Out-Null
+        $script:ConfigPath = Join-Path $script:TestRoot 'data\config.json'
+        $script:PersonaPath = Join-Path $script:TestRoot 'data\persona.md'
     }
 
     AfterEach {
@@ -17,16 +18,17 @@ Describe 'Slop.Config' {
         }
     }
 
-    It 'honours the disposable test appdata override without touching LOCALAPPDATA' {
-        $previous = $env:SLOP_TEST_APPDATA
+    It 'honours the disposable install-root override without touching LOCALAPPDATA' {
+        $previous = $env:SLOP_TEST_INSTALL_ROOT
         try {
-            $env:SLOP_TEST_APPDATA = $script:TestRoot
-            Get-SlopUserDataPath | Should -Be $script:TestRoot
+            $env:SLOP_TEST_INSTALL_ROOT = $script:TestRoot
+            Get-SlopAppRoot | Should -Be ([IO.Path]::GetFullPath($script:TestRoot))
+            Get-SlopUserDataPath | Should -Be (Join-Path $script:TestRoot 'data')
             Get-SlopConfigPath | Should -Be $script:ConfigPath
             Get-SlopPersonaPath | Should -Be $script:PersonaPath
         } finally {
-            if ($null -eq $previous) { Remove-Item Env:SLOP_TEST_APPDATA -ErrorAction SilentlyContinue }
-            else { $env:SLOP_TEST_APPDATA = $previous }
+            if ($null -eq $previous) { Remove-Item Env:SLOP_TEST_INSTALL_ROOT -ErrorAction SilentlyContinue }
+            else { $env:SLOP_TEST_INSTALL_ROOT = $previous }
         }
     }
 
@@ -223,7 +225,7 @@ Describe 'Slop.Config' {
 
     It 'defaults voice off with pinned Whisper relative paths' {
         $cfg = New-SlopDefaultConfig
-        $cfg.version | Should -Be 2
+        $cfg.version | Should -Be 3
         $cfg.voiceEnabled | Should -BeFalse
         $cfg.whisperRuntimeFile | Should -Be 'runtime\whisper\whisper-cli.exe'
         $cfg.whisperModelFile | Should -Be 'runtime\whisper\models\ggml-small.bin'
@@ -354,5 +356,11 @@ Describe 'Slop.Config' {
         Get-Content -LiteralPath $script:PersonaPath -Raw | Should -Be 'second persona'
         $bytes = [IO.File]::ReadAllBytes($script:PersonaPath)
         $bytes[0] | Should -Not -Be 0xEF
+    }
+
+    It 'does not fall back to LOCALAPPDATA in production code' {
+        $src = Get-Content (Join-Path $PSScriptRoot '../src/Slop.Config.ps1') -Raw
+        $src | Should -Not -Match 'Join-Path \$env:LOCALAPPDATA ''Sloppy'''
+        $src | Should -Not -Match 'SLOP_TEST_APPDATA'
     }
 }

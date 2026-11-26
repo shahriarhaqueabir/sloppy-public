@@ -1,7 +1,10 @@
 # Sloppy portable configuration. Pure path/schema/IO helpers; no WPF, no network.
 $ErrorActionPreference = 'Stop'
 
-$script:SlopConfigVersion = 2
+# Captured at dot-source time so the root stays tied to this file even when the
+# function is called from the WPF shell or a Pester container.
+$script:SlopConfigFileRoot = $PSScriptRoot
+$script:SlopConfigVersion = 3
 $script:SlopIdentityColors = @{
     ocean = '#6366F1'
     moss  = '#14B8A6'
@@ -10,21 +13,23 @@ $script:SlopIdentityColors = @{
     sky   = '#38BDF8'
     stone = '#94A3B8'
 }
-# 'custom' is a local OpenAI-compatible endpoint; 'opencode' is the opt-in
-# harness route (local or remote provider). Part B requires both.
 $script:SlopBrains = @('builtin', 'custom', 'opencode')
 $script:SlopPersonalities = @('calm', 'playful', 'curious', 'professional')
 $script:SlopCapabilityProfiles = @('companion', 'workspace', 'power')
 
-function Get-SlopUserDataPath {
-    # Live verifiers point this at a disposable directory. LOCALAPPDATA itself is
-    # deliberately left alone because the bundled runtime lives under it.
-    if (-not [string]::IsNullOrWhiteSpace($env:SLOP_TEST_APPDATA)) {
-        return $env:SLOP_TEST_APPDATA
+function Get-SlopAppRoot {
+    # Hidden CI/headless isolation only. Never surfaced in the UI or docs as a
+    # user feature.
+    if (-not [string]::IsNullOrWhiteSpace($env:SLOP_TEST_INSTALL_ROOT)) {
+        return [IO.Path]::GetFullPath($env:SLOP_TEST_INSTALL_ROOT)
     }
-    if (-not $env:LOCALAPPDATA) { throw 'LOCALAPPDATA is not set' }
-    return Join-Path $env:LOCALAPPDATA 'Sloppy'
+    if ($script:SlopConfigFileRoot) {
+        return [IO.Path]::GetFullPath((Join-Path $script:SlopConfigFileRoot '..'))
+    }
+    throw 'Cannot resolve the Sloppy app root'
 }
+
+function Get-SlopUserDataPath { return Join-Path (Get-SlopAppRoot) 'data' }
 function Get-SlopConfigPath    { return Join-Path (Get-SlopUserDataPath) 'config.json' }
 function Get-SlopPersonaPath   { return Join-Path (Get-SlopUserDataPath) 'persona.md' }
 function Get-SlopIdentityColors { return @{} + $script:SlopIdentityColors }

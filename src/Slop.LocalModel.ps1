@@ -1,5 +1,8 @@
 # Bundled llama.cpp lifecycle. Headless: process/argument helpers and HTTP health only.
 $ErrorActionPreference = 'Stop'
+if (-not (Get-Command Get-SlopAppRoot -ErrorAction SilentlyContinue)) {
+    . (Join-Path $PSScriptRoot 'Slop.Config.ps1')
+}
 $script:SlopModelPort = 18080
 $script:SlopAllowedContextSizes = @(8192, 16384, 32768)
 
@@ -26,7 +29,7 @@ function Resolve-SlopRuntimeFilePath {
 
 function Get-SlopRuntimePaths {
     param(
-        [string]$InstallRoot = (Join-Path $env:LOCALAPPDATA 'Programs\Sloppy'),
+        [string]$InstallRoot = (Get-SlopAppRoot),
         [AllowEmptyString()][string]$ModelFile = 'runtime\models\Qwen3.5-2B-Q4_K_M.gguf',
         [AllowEmptyString()][string]$MmprojFile = ''
     )

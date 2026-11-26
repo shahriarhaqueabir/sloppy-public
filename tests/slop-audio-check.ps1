@@ -93,4 +93,13 @@ echo second line
         $langs | Should -Contain 'en'
         $langs | Should -Contain 'zh'
     }
+
+    It 'defaults the voice root to the canonical app root' {
+        $previous = $env:SLOP_TEST_INSTALL_ROOT
+        try {
+            $env:SLOP_TEST_INSTALL_ROOT = $script:Root
+            Get-SlopVoiceInstallRoot | Should -Be ([IO.Path]::GetFullPath($script:Root))
+        }
+        finally { $env:SLOP_TEST_INSTALL_ROOT = $previous }
+    }
 }

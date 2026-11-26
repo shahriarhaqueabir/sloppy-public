@@ -71,13 +71,13 @@ Describe 'Slop.Onboarding' {
         $src | Should -Not -Match 'ValidateRange\(1,5\)'
     }
 
-    It 'writes voice settings from the wizard into the version 2 result' {
+    It 'writes voice settings from the wizard into the version 3 result' {
         $src = Get-Content (Join-Path $PSScriptRoot '../src/Slop.Onboarding.ps1') -Raw
         $src | Should -Match '\$result\.voiceEnabled = \[bool\]\$VoiceEnabledCheck\.IsChecked'
         $src | Should -Match '\$result\.whisperLanguage = \(\[string\]\$VoiceLanguageCombo\.SelectedItem\)\.Trim\(\)\.ToLowerInvariant\(\)'
         $fallback = New-SlopFallbackOnboardingResult -Config @{ name = 'Pip'; voiceEnabled = $true }
         (Test-SlopConfig -Config $fallback).Ok | Should -BeTrue
-        $fallback.version | Should -Be 2
+        $fallback.version | Should -Be 3
         $fallback.voiceEnabled | Should -BeTrue
         $fallback.whisperLanguage | Should -Be 'auto'
     }
