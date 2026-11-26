@@ -1545,23 +1545,27 @@ jobs:
         shell: pwsh
         env:
           GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ github.ref_name }}
         run: |
-          gh release view "${{ github.ref_name }}" 2>$null
+          gh release view "$env:RELEASE_TAG" 2>$null
           if ($LASTEXITCODE -ne 0) {
-            gh release create "${{ github.ref_name }}" --generate-notes --title "Sloppy ${{ github.ref_name }}"
+            gh release create "$env:RELEASE_TAG" --generate-notes --title "Sloppy $env:RELEASE_TAG"
           }
 
       - name: Upload release assets
         shell: pwsh
         env:
           GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ github.ref_name }}
         run: |
-          gh release upload "${{ github.ref_name }}" `
+          gh release upload "$env:RELEASE_TAG" `
             artifacts/SloppySetup.exe `
             runtime/models/Qwen3.5-2B-Q4_K_M.gguf `
             runtime/whisper/models/ggml-small.bin `
             SHA256SUMS.txt --clobber
 ```
+
+GitHub expressions are passed through the `RELEASE_TAG` environment variable instead of being embedded in PowerShell strings; this keeps the embedded script parseable before Actions substitutes expressions.
 
 - [ ] **Step 4: Confirm GREEN**
 
