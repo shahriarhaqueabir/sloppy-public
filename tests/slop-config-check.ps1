@@ -97,7 +97,6 @@ Describe 'Slop.Config' {
             @{ key='name'; value=('x' * 41) }
             @{ key='autostart'; value='yes' }
             @{ key='providerLocality'; value='somewhere' }
-            @{ key='providerTier'; value='enterprise' }
             @{ key='capabilityProfile'; value='root' }
             @{ key='agent'; value='not-a-table' }
         )
@@ -112,7 +111,6 @@ Describe 'Slop.Config' {
         $cfg = New-SlopDefaultConfig
         $cfg.brain = 'opencode'
         $cfg.providerLocality = 'local'
-        $cfg.providerTier = 'free'
         $cfg.provider = 'Ollama'
         $cfg.model = 'qwen3:8b'
         $cfg.capabilityProfile = 'companion'
@@ -170,12 +168,12 @@ Describe 'Slop.Config' {
         $r.Config.PSObject.Properties.Name | Should -Not -Contain 'futureKey'
     }
 
-    It 'migrates version 0 and version 1 configs to version 2 in memory' {
+    It 'migrates version 0 and version 1 configs to version 3 in memory' {
         foreach ($version in 0, 1) {
             [IO.File]::WriteAllText($script:ConfigPath, ('{{"version":{0},"name":"Pea"}}' -f $version), [Text.UTF8Encoding]::new($false))
             $r = Read-SlopConfig -ConfigPath $script:ConfigPath
             $r.Ok | Should -BeTrue
-            $r.Config.version | Should -Be 2
+            $r.Config.version | Should -Be 3
             $r.Config.name | Should -Be 'Pea'
         }
     }
@@ -285,7 +283,7 @@ Describe 'Slop.Config' {
         $cfg = New-SlopDefaultConfig
         $cfg.agent = @{ model = 'stale-discovered-model' }
         $r = Set-SlopConfigBrain -Config $cfg -Brain 'custom' -Provider 'ignored' `
-            -ProviderLocality 'remote' -ProviderTier 'paid' -EndpointUrl 'http://127.0.0.1:18080/' `
+            -ProviderLocality 'remote' -EndpointUrl 'http://127.0.0.1:18080/' `
             -Model 'local-model' -AgentId 'ignored' -CapabilityProfile 'power'
         $r.Ok | Should -BeTrue
         @($r.Errors).Count | Should -Be 0
@@ -301,7 +299,7 @@ Describe 'Slop.Config' {
 
     It 'Set-SlopConfigBrain rejects a non-loopback custom endpoint' {
         $r = Set-SlopConfigBrain -Config (New-SlopDefaultConfig) -Brain 'custom' -Provider '' `
-            -ProviderLocality '' -ProviderTier 'free' -EndpointUrl 'https://example.invalid/v1' `
+            -ProviderLocality '' -EndpointUrl 'https://example.invalid/v1' `
             -Model 'local-model' -AgentId '' -CapabilityProfile 'companion'
         $r.Ok | Should -BeFalse
         ($r.Errors -join '; ') | Should -Match 'endpointUrl'
@@ -309,13 +307,13 @@ Describe 'Slop.Config' {
 
     It 'Set-SlopConfigBrain requires a model for OpenCode and defaults the agent id' {
         $missing = Set-SlopConfigBrain -Config (New-SlopDefaultConfig) -Brain 'opencode' -Provider 'Probe' `
-            -ProviderLocality 'local' -ProviderTier 'free' -EndpointUrl '' -Model '' `
+            -ProviderLocality 'local' -EndpointUrl '' -Model '' `
             -AgentId '' -CapabilityProfile 'companion'
         $missing.Ok | Should -BeFalse
         ($missing.Errors -join '; ') | Should -Match 'opencode model is required'
 
         $valid = Set-SlopConfigBrain -Config (New-SlopDefaultConfig) -Brain 'opencode' -Provider 'Probe' `
-            -ProviderLocality 'local' -ProviderTier 'free' -EndpointUrl '' -Model 'probe-model' `
+            -ProviderLocality 'local' -EndpointUrl '' -Model 'probe-model' `
             -AgentId '' -CapabilityProfile 'companion'
         $valid.Ok | Should -BeTrue
         $valid.Config.agentId | Should -Be 'sloppy'
@@ -327,23 +325,21 @@ Describe 'Slop.Config' {
         $configured = New-SlopDefaultConfig
         $configured.provider = 'Probe'
         $configured.providerLocality = 'remote'
-        $configured.providerTier = 'paid'
         $configured.endpointUrl = 'http://127.0.0.1:1234'
         $configured.model = 'probe-model'
         $configured.modelName = 'probe-model'
         $r = Set-SlopConfigBrain -Config $configured -Brain 'builtin' -Provider '' `
-            -ProviderLocality '' -ProviderTier 'free' -EndpointUrl '' -Model '' `
+            -ProviderLocality '' -EndpointUrl '' -Model '' `
             -AgentId '' -CapabilityProfile 'companion'
         $r.Ok | Should -BeTrue
         $r.Config.provider | Should -Be ''
         $r.Config.providerLocality | Should -Be ''
-        $r.Config.providerTier | Should -Be 'free'
         $r.Config.endpointUrl | Should -Be ''
         $r.Config.model | Should -Be ''
         $r.Config.modelName | Should -Be ''
 
         $bad = Set-SlopConfigBrain -Config (New-SlopDefaultConfig) -Brain 'telepathy' -Provider '' `
-            -ProviderLocality '' -ProviderTier 'free' -EndpointUrl '' -Model '' `
+            -ProviderLocality '' -EndpointUrl '' -Model '' `
             -AgentId '' -CapabilityProfile 'companion'
         $bad.Ok | Should -BeFalse
         ($bad.Errors -join '; ') | Should -Match 'brain'
@@ -362,5 +358,35 @@ Describe 'Slop.Config' {
         $src = Get-Content (Join-Path $PSScriptRoot '../src/Slop.Config.ps1') -Raw
         $src | Should -Not -Match 'Join-Path \$env:LOCALAPPDATA ''Sloppy'''
         $src | Should -Not -Match 'SLOP_TEST_APPDATA'
+    }
+
+    It 'has no free or paid tier field in the default config' {
+        $cfg = New-SlopDefaultConfig
+        $cfg.version | Should -Be 3
+        $cfg.ContainsKey('providerTier') | Should -BeFalse
+        $cfg.brain | Should -Be 'builtin'
+        $cfg.model | Should -Be 'big-pickle'
+    }
+
+    It 'maps tier 1 and tier 2 to different model option sets' {
+        @(Get-SlopBrainModelOptions -Brain 'builtin') | Should -Be @('Qwen3.5-2B Q4_K_M')
+        @(Get-SlopBrainModelOptions -Brain 'opencode') | Should -Be @('big-pickle','beam-free')
+        @(Get-SlopBrainModelOptions -Brain 'custom') | Should -Be @()
+        Resolve-SlopTier -Brain 'builtin' | Should -Be 1
+        Resolve-SlopTier -Brain 'opencode' | Should -Be 2
+        Resolve-SlopTier -Brain 'custom' | Should -Be 0
+    }
+
+    It 'migrates a v2 config with providerTier to v3 without rejecting it' {
+        $path = Join-Path $script:TestRoot 'v2-config.json'
+        $v2 = New-SlopDefaultConfig
+        $v2.version = 2
+        $v2.providerTier = 'paid'
+        $v2 | ConvertTo-Json -Depth 5 | Set-Content -LiteralPath $path -Encoding utf8
+        $result = Read-SlopConfig -ConfigPath $path
+        $result.Ok | Should -BeTrue
+        $result.Config.version | Should -Be 3
+        $result.Config.ContainsKey('providerTier') | Should -BeFalse
+        $result.Config.providerLocality | Should -Be 'remote'
     }
 }

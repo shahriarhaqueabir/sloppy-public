@@ -113,7 +113,7 @@ Describe 'Slop.Provider' {
         $env:OPENCODE_PASSWORD = 'test-password'
         try {
         $plan = Get-SlopStreamPlan -Config @{
-            brain='opencode'; providerLocality='local'; providerTier='free'
+            brain='opencode'; providerLocality='local'
             provider='Ollama'; model='qwen3:8b'; capabilityProfile='companion'
             agentId='sloppy'; openCodeBaseUrl='http://127.0.0.1:28894'; serviceConfigPath=''
         } -UserText 'hello' -ObservedProviderEndpointUrl 'http://127.0.0.1:11434' `

@@ -66,10 +66,8 @@ function New-SlopDefaultConfig {
         modelName         = 'Qwen3.5-2B Q4_K_M'
         autostart         = $true
 
-        # Tier 1 bundled local brain (Qwen3.5-2B Q4_K_M). localVisionReady and
-        # localAudioReady remain readiness hooks; Tier 1 voice uses the explicit
-        # Slop.Audio.ps1 paths below, not a capability flag. localMmprojFile is
-        # empty on the default text-only path and is only checked when supplied.
+        # Tier 1 bundled local brain (Qwen3.5-2B Q4_K_M). Readiness flags stay
+        # hooks; Tier 1 voice resolves through Slop.Audio.ps1 paths.
         localModelName    = 'Qwen3.5-2B Q4_K_M'
         localModelFile    = 'runtime\models\Qwen3.5-2B-Q4_K_M.gguf'
         localMmprojFile   = ''
@@ -77,17 +75,17 @@ function New-SlopDefaultConfig {
         localVisionReady  = $true
         localAudioReady   = $true
 
-        # Tier 1 voice input. Voice is opt-in and stays inside this machine.
+        # Tier 1 voice input, opt-in and local only.
         voiceEnabled      = $false
         whisperRuntimeFile = 'runtime\whisper\whisper-cli.exe'
         whisperModelFile   = 'runtime\whisper\models\ggml-small.bin'
         whisperLanguage    = 'auto'
         voiceMaxSeconds    = 30
 
-        # Part B route fields. Defaults stay local-first and disclose nothing.
+        # Tier 2 route fields. Locality is a preference; disclosure is driven by
+        # observed endpoint evidence, not by a stored price label.
         provider          = 'opencode'
         providerLocality  = ''
-        providerTier      = 'free'
         capabilityProfile = 'companion'
         agentId           = 'sloppy'
         model             = 'big-pickle'
@@ -95,6 +93,26 @@ function New-SlopDefaultConfig {
         openCodeBaseUrl   = 'http://127.0.0.1:28894'
         serviceConfigPath = ''
         openCodeSessionId = ''
+    }
+}
+
+function Get-SlopBrainOrder { return @('builtin', 'opencode', 'custom') }
+
+function Get-SlopBrainModelOptions {
+    param([Parameter(Mandatory)][AllowEmptyString()][string]$Brain)
+    switch ([string]$Brain) {
+        'builtin'  { return @('Qwen3.5-2B Q4_K_M') }
+        'opencode' { return @('big-pickle', 'beam-free') }
+        default    { return @() }
+    }
+}
+
+function Resolve-SlopTier {
+    param([Parameter(Mandatory)][AllowEmptyString()][string]$Brain)
+    switch ([string]$Brain) {
+        'builtin'  { return 1 }
+        'opencode' { return 2 }
+        default    { return 0 }
     }
 }
 
@@ -129,9 +147,6 @@ function Test-SlopConfig {
     # silently escalate a route or a capability profile.
     if ([string]$Config.providerLocality -notin @('', 'local', 'remote')) {
         $errors.Add('providerLocality must be local or remote')
-    }
-    if ([string]$Config.providerTier -notin @('free', 'paid')) {
-        $errors.Add('providerTier must be free or paid')
     }
     if ($script:SlopCapabilityProfiles -notcontains [string]$Config.capabilityProfile) {
         $errors.Add('capabilityProfile is unknown')
@@ -179,17 +194,28 @@ function Read-SlopConfig {
     try { $raw = Get-Content -LiteralPath $ConfigPath -Raw | ConvertFrom-Json }
     catch { return @{ Ok = $false; Exists = $true; Config = $defaults; Reason = 'config.json is not valid JSON' } }
 
-    # Unknown keys are ignored. Missing known keys take defaults. Pre-voice
-    # configs (version 0/1/absent) migrate to version 2 before validation.
+    # Unknown keys are ignored. Missing known keys take defaults. Pre-v3 configs
+    # (version 0/1/2/absent) migrate to version 3 before validation.
     $cfg = @{}
     foreach ($key in $defaults.Keys) {
         $cfg[$key] = if ($raw.PSObject.Properties[$key]) { $raw.$key } else { $defaults[$key] }
     }
-    # Version 0/1 configs are pre-voice shapes. Normalize numeric JSON values to
+    # Version 0/1/2 configs are pre-v3 shapes. Normalize numeric JSON values to
     # [int] before validation because ConvertFrom-Json emits [long].
     if ($cfg.version -is [int] -or $cfg.version -is [long]) { $cfg.version = [int]$cfg.version }
-    else { $cfg.version = 2 }
-    if ($cfg.version -lt 2) { $cfg.version = 2 }
+    else { $cfg.version = 3 }
+    if ($cfg.version -lt 3) {
+        # v2 carried providerTier=free|paid. The $cfg loop above copies only v3
+        # default keys, so the legacy value lives on $raw (the parsed JSON) and
+        # MUST be read from there. Drop the price label; a paid remote choice
+        # still resolves to the same observed remote route.
+        $legacyTier = $raw.PSObject.Properties['providerTier']
+        if ($null -ne $legacyTier -and [string]$legacyTier.Value -eq 'paid' -and
+            [string]::IsNullOrWhiteSpace([string]$cfg.providerLocality)) {
+            $cfg.providerLocality = 'remote'
+        }
+        $cfg.version = 3
+    }
     if ([string]$cfg.brain -eq 'builtin' -or [string]$cfg.brain -eq 'custom' -or [string]$cfg.brain -eq 'opencode') {
         # normalise JSON booleans and strings without accepting arbitrary values
         $cfg.autostart = [bool]$cfg.autostart
@@ -290,7 +316,6 @@ function Set-SlopConfigBrain {
         [Parameter(Mandatory)][AllowEmptyString()][string]$Brain,
         [Parameter(Mandatory)][AllowEmptyString()][string]$Provider,
         [Parameter(Mandatory)][AllowEmptyString()][string]$ProviderLocality,
-        [Parameter(Mandatory)][AllowEmptyString()][string]$ProviderTier,
         [Parameter(Mandatory)][AllowEmptyString()][string]$EndpointUrl,
         [Parameter(Mandatory)][AllowEmptyString()][string]$Model,
         [Parameter(Mandatory)][AllowEmptyString()][string]$AgentId,
@@ -303,7 +328,6 @@ function Set-SlopConfigBrain {
     $candidate.brain = ([string]$Brain).Trim().ToLowerInvariant()
     $candidate.provider = ([string]$Provider).Trim()
     $candidate.providerLocality = ([string]$ProviderLocality).Trim().ToLowerInvariant()
-    $candidate.providerTier = ([string]$ProviderTier).Trim().ToLowerInvariant()
     $candidate.endpointUrl = ([string]$EndpointUrl).Trim().TrimEnd('/')
     $candidate.model = $modelValue
     $candidate.modelName = $modelValue
@@ -319,7 +343,6 @@ function Set-SlopConfigBrain {
         'builtin' {
             $candidate.provider = ''
             $candidate.providerLocality = ''
-            $candidate.providerTier = 'free'
             $candidate.endpointUrl = ''
             $candidate.model = ''
             $candidate.modelName = ''
@@ -327,7 +350,6 @@ function Set-SlopConfigBrain {
         'custom' {
             $candidate.provider = ''
             $candidate.providerLocality = ''
-            $candidate.providerTier = 'free'
             $candidate.agentId = 'sloppy'
             $candidate.capabilityProfile = 'companion'
             if ([string]::IsNullOrWhiteSpace($modelValue)) { $errors.Add('custom model is required') }
