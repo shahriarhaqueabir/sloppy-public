@@ -1304,6 +1304,14 @@ Append to `tests/slop-installer-check.ps1`:
         $cmd = Get-Content (Join-Path $root 'run.cmd') -Raw
         $cmd | Should -Match 'wscript "%~dp0run\.vbs"'
     }
+
+    It 'bootstraps with Windows PowerShell when pwsh is absent' {
+        $cmd = Get-Content (Join-Path $root 'install.cmd') -Raw
+        $cmd | Should -Match 'where pwsh'
+        $cmd | Should -Match 'set "SLOP_PS=powershell"'
+        $cmd | Should -Match '%SLOP_PS% -NoProfile'
+        $cmd | Should -Match 'scriptblock\]::Create'
+    }
 ```
 
 - [ ] **Step 2: Confirm RED**
@@ -1373,15 +1381,19 @@ echo.
 echo  Sloppy installer
 echo  =================
 echo.
+set "SLOP_PS=pwsh"
 where pwsh >nul 2>&1
-if errorlevel 1 (
-  echo Sloppy needs PowerShell 7.6 or newer.
-  echo Install it from https://aka.ms/powershell then re-run.
-  pause
-  exit /b 1
-)
+if not errorlevel 1 goto :run
+set "SLOP_PS=powershell"
+where powershell >nul 2>&1
+if not errorlevel 1 goto :run
+echo Sloppy needs Windows PowerShell or PowerShell 7.
+echo Install PowerShell 7 from https://aka.ms/powershell then re-run.
+pause
+exit /b 1
 
-pwsh -NoProfile -ExecutionPolicy Bypass -Command ^
+:run
+%SLOP_PS% -NoProfile -ExecutionPolicy Bypass -Command ^
   "$i = irm https://raw.githubusercontent.com/shahriarhaqueabir/Sloppy/main/install.ps1; ^& ([scriptblock]::Create($i))"
 if errorlevel 1 (
   echo Sloppy setup did not complete.
@@ -1390,6 +1402,8 @@ if errorlevel 1 (
 )
 endlocal
 ```
+
+The Windows PowerShell fallback is intentional: `install.ps1` is a downloader, and the Inno installer installs PowerShell 7 when it is missing.
 
 Replace `run.vbs`:
 
