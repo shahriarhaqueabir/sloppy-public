@@ -17,6 +17,27 @@ function Get-SlopProcesses {
         ForEach-Object { Get-Process -Id $_.ProcessId -ErrorAction SilentlyContinue })
 }
 
+function Test-SlopOwnedBrainCommandLine {
+    param(
+        [Parameter(Mandatory)][AllowEmptyString()][string]$CommandLine,
+        [Parameter(Mandatory)][string]$Repo
+    )
+    if ([string]::IsNullOrWhiteSpace($CommandLine)) { return $false }
+    if ($CommandLine -notmatch '--alias\s+sloppy(?:\s|$)') { return $false }
+    $root = [IO.Path]::GetFullPath($Repo).TrimEnd('\', '/')
+    foreach ($sep in @('\', '/')) {
+        $prefix = $root + $sep + 'runtime' + $sep
+        if ($CommandLine.IndexOf($prefix, [StringComparison]::OrdinalIgnoreCase) -ge 0) { return $true }
+    }
+    return $false
+}
+
+function Get-SlopBrainProcesses {
+    @(Get-CimInstance Win32_Process -Filter "Name='llama-server.exe'" |
+        Where-Object { Test-SlopOwnedBrainCommandLine -CommandLine ([string]$_.CommandLine) -Repo $Repo } |
+        ForEach-Object { Get-Process -Id $_.ProcessId -ErrorAction SilentlyContinue })
+}
+
 function Get-OpenCodeBaseUrl {
     try {
         $line = @(& opencode service status 2>$null | Where-Object { $_ -match '^https?://' })[0]
@@ -147,7 +168,7 @@ switch ($Action) {
         "Slop started (PID $($proc.Id))"
     }
     'Stop' {
-        $procs = Get-SlopProcesses
+        $procs = @(Get-SlopProcesses) + @(Get-SlopBrainProcesses)
         if (-not $procs.Count) { 'Slop is not running'; return }
         foreach ($p in $procs) {
             $id = $p.Id
