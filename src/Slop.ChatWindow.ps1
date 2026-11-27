@@ -100,12 +100,13 @@ function Get-SlopChatWindowXaml {
   <Grid x:Name="ChatRoot">
     <Grid.RowDefinitions>
       <RowDefinition Height="34"/>
+      <RowDefinition Height="Auto"/>
       <RowDefinition Height="*"/>
       <RowDefinition Height="Auto"/>
     </Grid.RowDefinitions>
     <!-- Readability comes from a dark backplate inside the transparent window,
          never from a system material that would replace the WPF surface. -->
-    <Border x:Name="ChatBackplate" Grid.RowSpan="3" Margin="4" CornerRadius="12"
+    <Border x:Name="ChatBackplate" Grid.RowSpan="4" Margin="4" CornerRadius="12"
             Background="#F212141C" BorderBrush="#8893A4BD" BorderThickness="2"
             SnapsToDevicePixels="True" IsHitTestVisible="False"/>
     <Border x:Name="ChatDragGrip" Grid.Row="0" Margin="0,0,124,0" Background="Transparent"
@@ -133,122 +134,179 @@ function Get-SlopChatWindowXaml {
         </StackPanel>
       </Grid>
     </Border>
-    <Grid Grid.Row="1" Margin="12,6,12,6">
+    <Border x:Name="ChatDeckPanel" Grid.Row="1" Visibility="Visible" Margin="12,4,12,0" CornerRadius="10"
+            Background="#F212141C" BorderBrush="#8893A4BD" BorderThickness="2"
+            Padding="8" SnapsToDevicePixels="True">
+      <Grid>
+        <Grid.RowDefinitions>
+          <RowDefinition Height="Auto"/>
+          <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <WrapPanel x:Name="DeckStrip" Grid.Row="0" Margin="0,0,0,4">
+          <Button x:Name="DeckOverviewButton" Content="Overview" Tag="Overview" Width="76" Height="24"
+                  Margin="0,0,4,0" FontSize="10" Background="#F24F46E5" Foreground="#FFFFFF"
+                  BorderBrush="#55FFFFFF" BorderThickness="1" Cursor="Hand"
+                  AutomationProperties.Name="Control deck overview"/>
+          <Button x:Name="DeckSettingsButton" Content="Settings" Tag="Settings" Width="76" Height="24"
+                  Margin="0,0,4,0" FontSize="10" Background="#F2263348" Foreground="#EAEAEA"
+                  BorderBrush="#55FFFFFF" BorderThickness="1" Cursor="Hand"
+                  AutomationProperties.Name="Control deck settings"/>
+          <Button x:Name="DeckDataButton" Content="Data" Tag="Data" Width="76" Height="24"
+                  Margin="0,0,4,0" FontSize="10" Background="#F2263348" Foreground="#EAEAEA"
+                  BorderBrush="#55FFFFFF" BorderThickness="1" Cursor="Hand"
+                  AutomationProperties.Name="Control deck data"/>
+          <Button x:Name="DeckToolsButton" Content="Tools &amp; Skills" Tag="Tools" Width="100" Height="24"
+                  Margin="0,0,4,0" FontSize="10" Background="#F2263348" Foreground="#EAEAEA"
+                  BorderBrush="#55FFFFFF" BorderThickness="1" Cursor="Hand"
+                  AutomationProperties.Name="Control deck tools and skills"/>
+          <Button x:Name="DeckUnderHoodButton" Content="Under the hood" Tag="UnderTheHood" Width="104" Height="24"
+                  Margin="0,0,4,0" FontSize="10" Background="#F2263348" Foreground="#EAEAEA"
+                  BorderBrush="#55FFFFFF" BorderThickness="1" Cursor="Hand"
+                  AutomationProperties.Name="Control deck under the hood"/>
+          <Button x:Name="DeckExitButton" Content="Exit" Tag="Exit" Width="60" Height="24"
+                  Margin="0,0,4,0" FontSize="10" Background="#F2263348" Foreground="#EAEAEA"
+                  BorderBrush="#55FFFFFF" BorderThickness="1" Cursor="Hand"
+                  AutomationProperties.Name="Control deck exit"/>
+          <Button x:Name="DeckCollapseButton" Content="⌄" Width="24" Height="24"
+                  ToolTip="Collapse or expand the deck body"
+                  Background="#F2263348" Foreground="#EAEAEA" BorderBrush="#55FFFFFF"
+                  BorderThickness="1" Cursor="Hand" FontSize="11"
+                  AutomationProperties.Name="Collapse or expand the deck body"/>
+        </WrapPanel>
+        <Border x:Name="DeckBody" Grid.Row="1" Height="220" CornerRadius="8"
+                Background="#F212141C" BorderBrush="#44FFFFFF" BorderThickness="1" Padding="8">
+          <Grid>
+            <Grid.RowDefinitions>
+              <RowDefinition Height="*"/>
+              <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <ScrollViewer Grid.Row="0" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+              <StackPanel>
+                <StackPanel x:Name="DeckOverviewSection">
+                  <TextBlock Text="Overview" FontSize="13" FontWeight="SemiBold" Foreground="#EAEAEA" Margin="0,0,0,6"/>
+                  <TextBlock x:Name="DeckOverviewText" Text="Route, brain, session and signal state appear here."
+                             Foreground="#DADAE2" FontSize="11" TextWrapping="Wrap" Margin="0,0,0,8"
+                             IsHitTestVisible="False"/>
+                  <TextBlock x:Name="DeckConversationLengthText" Text="Conversation length: 0 messages"
+                             Foreground="#93A4BD" FontSize="11" Margin="0,0,0,8" IsHitTestVisible="False"/>
+                </StackPanel>
+                <StackPanel x:Name="DeckSettingsSection" Visibility="Collapsed">
+                  <TextBlock Text="Settings" FontSize="13" FontWeight="SemiBold" Foreground="#EAEAEA" Margin="0,0,0,6"/>
+                  <Border CornerRadius="6" Background="#F2263348" BorderBrush="#44FFFFFF" BorderThickness="1"
+                          Padding="8" Margin="0,0,0,8">
+                    <StackPanel>
+                      <TextBlock Text="Voice" FontSize="11" FontWeight="SemiBold" Foreground="#A5B4FC" Margin="0,0,0,4"/>
+                      <CheckBox x:Name="DeckVoiceEnabledCheck" Content="Voice input (local transcription)"
+                                Foreground="#DADAE2" FontSize="11" Margin="0,0,0,4"/>
+                      <TextBlock Text="Language" Foreground="#B8B8C0" FontSize="10" Margin="0,0,0,2"/>
+                      <ComboBox x:Name="DeckVoiceLanguageCombo" Height="24" FontSize="11" Width="140"
+                                HorizontalAlignment="Left" Margin="0,0,0,4"
+                                ItemContainerStyle="{StaticResource SlopChatComboBoxItem}"/>
+                      <TextBlock Text="Max seconds" Foreground="#B8B8C0" FontSize="10" Margin="0,0,0,2"/>
+                      <TextBox x:Name="DeckVoiceMaxSecondsBox" Height="24" FontSize="11" Width="80"
+                               HorizontalAlignment="Left" Padding="6,3" VerticalContentAlignment="Center"
+                               Margin="0,0,0,4"/>
+                      <TextBlock x:Name="DeckVoiceReadyText" Text="Whisper readiness: unknown"
+                                 Foreground="#93A4BD" FontSize="10" TextWrapping="Wrap" Margin="0,0,0,4"
+                                 IsHitTestVisible="False"/>
+                      <Button x:Name="DeckVoiceSaveButton" Content="Save voice" Width="100" Height="24"
+                              FontSize="10" Background="#F24F46E5" Foreground="#FFFFFF"
+                              BorderBrush="#55FFFFFF" BorderThickness="1" Cursor="Hand"
+                              AutomationProperties.Name="Save deck voice settings"/>
+                    </StackPanel>
+                  </Border>
+                  <Border CornerRadius="6" Background="#F2263348" BorderBrush="#44FFFFFF" BorderThickness="1"
+                          Padding="8" Margin="0,0,0,8">
+                    <StackPanel>
+                      <TextBlock Text="Model" FontSize="11" FontWeight="SemiBold" Foreground="#A5B4FC" Margin="0,0,0,4"/>
+                      <TextBlock x:Name="DeckModelRouteText" Text="Route: unset" Foreground="#DADAE2"
+                                 FontSize="10" TextWrapping="Wrap" Margin="0,0,0,4" IsHitTestVisible="False"/>
+                      <TextBlock Text="Brain tier and model" Foreground="#B8B8C0" FontSize="10" Margin="0,0,0,2"/>
+                      <TextBox x:Name="DeckModelBox" Height="24" FontSize="11" Padding="6,3"
+                               VerticalContentAlignment="Center" Margin="0,0,0,4"/>
+                      <Button x:Name="DeckModelSaveButton" Content="Save model" Width="100" Height="24"
+                              FontSize="10" Background="#F24F46E5" Foreground="#FFFFFF"
+                              BorderBrush="#55FFFFFF" BorderThickness="1" Cursor="Hand"
+                              AutomationProperties.Name="Save deck model settings"/>
+                    </StackPanel>
+                  </Border>
+                  <Border CornerRadius="6" Background="#F2263348" BorderBrush="#44FFFFFF" BorderThickness="1"
+                          Padding="8" Margin="0,0,0,8">
+                    <StackPanel>
+                      <TextBlock Text="Data" FontSize="11" FontWeight="SemiBold" Foreground="#A5B4FC" Margin="0,0,0,4"/>
+                      <TextBlock Text="Config location (read-only)" Foreground="#B8B8C0" FontSize="10" Margin="0,0,0,2"/>
+                      <TextBlock x:Name="DeckDataPathText" Text="unavailable" Foreground="#93A4BD"
+                                 FontSize="10" TextWrapping="Wrap" IsHitTestVisible="False"/>
+                    </StackPanel>
+                  </Border>
+                </StackPanel>
+                <StackPanel x:Name="DeckDataSection" Visibility="Collapsed">
+                  <TextBlock Text="Data" FontSize="13" FontWeight="SemiBold" Foreground="#EAEAEA" Margin="0,0,0,6"/>
+                  <TextBlock Text="Deletion scopes are confirmed before anything is removed."
+                             Foreground="#B8B8C0" FontSize="11" TextWrapping="Wrap" Margin="0,0,0,8"
+                             IsHitTestVisible="False"/>
+                  <Button x:Name="DeckDeleteConversationButton" Content="Delete conversation" Width="180" Height="26"
+                          Margin="0,0,0,6" FontSize="11" Background="#F24F46E5" Foreground="#FFFFFF"
+                          BorderBrush="#55FFFFFF" BorderThickness="1" Cursor="Hand"
+                          AutomationProperties.Name="Delete conversation"/>
+                  <Button x:Name="DeckDeleteSessionButton" Content="Delete OpenCode session" Width="180" Height="26"
+                          Margin="0,0,0,6" FontSize="11" Background="#F2263348" Foreground="#EAEAEA"
+                          BorderBrush="#55FFFFFF" BorderThickness="1" Cursor="Hand"
+                          AutomationProperties.Name="Delete OpenCode session"/>
+                  <Button x:Name="DeckDeleteLocalDataButton" Content="Delete local data" Width="180" Height="26"
+                          Margin="0,0,0,8" FontSize="11" Background="#F2263348" Foreground="#EAEAEA"
+                          BorderBrush="#55FFFFFF" BorderThickness="1" Cursor="Hand"
+                          AutomationProperties.Name="Delete local data"/>
+                </StackPanel>
+                <StackPanel x:Name="DeckToolsSection" Visibility="Collapsed">
+                  <TextBlock Text="Tools &amp; Skills" FontSize="13" FontWeight="SemiBold" Foreground="#EAEAEA" Margin="0,0,0,6"/>
+                  <CheckBox x:Name="WorkspaceFilesToggle" Content="Workspace files" Foreground="#DADAE2" FontSize="11" Margin="0,0,0,4"/>
+                  <CheckBox x:Name="WebAccessToggle" Content="Web access" Foreground="#DADAE2" FontSize="11" Margin="0,0,0,2"/>
+                  <TextBlock x:Name="WebAccessDisclosureText"
+                             Text="Can fetch web content; requests can reach beyond this PC."
+                             Foreground="#93A4BD" FontSize="10" TextWrapping="Wrap" Margin="18,0,0,6"
+                             IsHitTestVisible="False"/>
+                  <CheckBox x:Name="ShellCommandsToggle" Content="Shell commands" Foreground="#DADAE2" FontSize="11" Margin="0,0,0,2"/>
+                  <TextBlock x:Name="ShellCommandsDisclosureText"
+                             Text="Can run shell commands that may change files on this PC."
+                             Foreground="#93A4BD" FontSize="10" TextWrapping="Wrap" Margin="18,0,0,6"
+                             IsHitTestVisible="False"/>
+                  <CheckBox x:Name="SkillsPluginsToggle" Content="Skills and plugins" Foreground="#DADAE2" FontSize="11" Margin="0,0,0,4"/>
+                  <CheckBox x:Name="SubagentsTasksToggle" Content="Subagents and tasks" Foreground="#DADAE2" FontSize="11" Margin="0,0,0,4"/>
+                  <CheckBox x:Name="ExternalFoldersToggle" Content="External folders" Foreground="#DADAE2" FontSize="11" Margin="0,0,0,8"/>
+                </StackPanel>
+                <StackPanel x:Name="DeckUnderHoodSection" Visibility="Collapsed">
+                  <TextBlock Text="Under the hood" FontSize="13" FontWeight="SemiBold" Foreground="#EAEAEA" Margin="0,0,0,6"/>
+                  <TextBox x:Name="DeckUnderHoodText" IsReadOnly="True" IsReadOnlyCaretVisible="True"
+                           AcceptsReturn="True" TextWrapping="Wrap" Height="180" FontSize="10"
+                           Background="#F2263348" Foreground="#B8B8C0" BorderBrush="#44FFFFFF"
+                           Padding="6,4" Text="Effective route and state appear here."/>
+                </StackPanel>
+                <StackPanel x:Name="DeckExitSection" Visibility="Collapsed">
+                  <TextBlock Text="Exit" FontSize="13" FontWeight="SemiBold" Foreground="#EAEAEA" Margin="0,0,0,6"/>
+                  <TextBlock Text="Say or type 'Sloppy, shutdown' to confirm before leaving."
+                             Foreground="#B8B8C0" FontSize="11" TextWrapping="Wrap" Margin="0,0,0,8"
+                             IsHitTestVisible="False"/>
+                  <Button x:Name="DeckShutdownButton" Content="Sloppy, shutdown" Width="180" Height="26"
+                          Margin="0,0,0,6" FontSize="11" Background="#F24F46E5" Foreground="#FFFFFF"
+                          BorderBrush="#55FFFFFF" BorderThickness="1" Cursor="Hand"
+                          AutomationProperties.Name="Sloppy shutdown"/>
+                </StackPanel>
+              </StackPanel>
+            </ScrollViewer>
+            <TextBlock x:Name="DeckStatusText" Grid.Row="1" Text="" Foreground="#93A4BD" FontSize="10"
+                       TextWrapping="Wrap" Margin="0,6,0,0" IsHitTestVisible="False"/>
+          </Grid>
+        </Border>
+      </Grid>
+    </Border>
+    <Grid Grid.Row="2" Margin="12,6,12,6">
       <ScrollViewer x:Name="ChatScroll" VerticalScrollBarVisibility="Auto"
                     HorizontalScrollBarVisibility="Disabled">
         <StackPanel x:Name="ChatStack"/>
       </ScrollViewer>
-      <Border x:Name="ChatDeckPanel" Visibility="Collapsed" CornerRadius="10"
-              Background="#F212141C" BorderBrush="#8893A4BD" BorderThickness="2"
-              Padding="10" SnapsToDevicePixels="True">
-        <Grid>
-          <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
-          </Grid.RowDefinitions>
-          <WrapPanel Grid.Row="0" Margin="0,0,0,8">
-            <Button x:Name="DeckOverviewButton" Content="Overview" Tag="Overview" Width="76" Height="24"
-                    Margin="0,0,4,4" FontSize="10" Background="#F24F46E5" Foreground="#FFFFFF"
-                    BorderBrush="#55FFFFFF" BorderThickness="1" Cursor="Hand"
-                    AutomationProperties.Name="Control deck overview"/>
-            <Button x:Name="DeckSettingsButton" Content="Settings" Tag="Settings" Width="76" Height="24"
-                    Margin="0,0,4,4" FontSize="10" Background="#F2263348" Foreground="#EAEAEA"
-                    BorderBrush="#55FFFFFF" BorderThickness="1" Cursor="Hand"
-                    AutomationProperties.Name="Control deck settings"/>
-            <Button x:Name="DeckDataButton" Content="Data" Tag="Data" Width="76" Height="24"
-                    Margin="0,0,4,4" FontSize="10" Background="#F2263348" Foreground="#EAEAEA"
-                    BorderBrush="#55FFFFFF" BorderThickness="1" Cursor="Hand"
-                    AutomationProperties.Name="Control deck data"/>
-            <Button x:Name="DeckToolsButton" Content="Tools &amp; Skills" Tag="Tools" Width="100" Height="24"
-                    Margin="0,0,4,4" FontSize="10" Background="#F2263348" Foreground="#EAEAEA"
-                    BorderBrush="#55FFFFFF" BorderThickness="1" Cursor="Hand"
-                    AutomationProperties.Name="Control deck tools and skills"/>
-            <Button x:Name="DeckUnderHoodButton" Content="Under the hood" Tag="UnderTheHood" Width="104" Height="24"
-                    Margin="0,0,4,4" FontSize="10" Background="#F2263348" Foreground="#EAEAEA"
-                    BorderBrush="#55FFFFFF" BorderThickness="1" Cursor="Hand"
-                    AutomationProperties.Name="Control deck under the hood"/>
-            <Button x:Name="DeckExitButton" Content="Exit" Tag="Exit" Width="60" Height="24"
-                    Margin="0,0,4,4" FontSize="10" Background="#F2263348" Foreground="#EAEAEA"
-                    BorderBrush="#55FFFFFF" BorderThickness="1" Cursor="Hand"
-                    AutomationProperties.Name="Control deck exit"/>
-          </WrapPanel>
-          <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
-            <StackPanel>
-              <StackPanel x:Name="DeckOverviewSection">
-                <TextBlock Text="Overview" FontSize="13" FontWeight="SemiBold" Foreground="#EAEAEA" Margin="0,0,0,6"/>
-                <TextBlock x:Name="DeckOverviewText" Text="Route, brain, session and signal state appear here."
-                           Foreground="#DADAE2" FontSize="11" TextWrapping="Wrap" Margin="0,0,0,8"
-                           IsHitTestVisible="False"/>
-                <TextBlock x:Name="DeckConversationLengthText" Text="Conversation length: 0 messages"
-                           Foreground="#93A4BD" FontSize="11" Margin="0,0,0,8" IsHitTestVisible="False"/>
-              </StackPanel>
-              <StackPanel x:Name="DeckSettingsSection" Visibility="Collapsed">
-                <TextBlock Text="Settings" FontSize="13" FontWeight="SemiBold" Foreground="#EAEAEA" Margin="0,0,0,6"/>
-                <TextBlock x:Name="DeckSettingsText" Text="Voice and model settings live in the main Settings panel."
-                           Foreground="#B8B8C0" FontSize="11" TextWrapping="Wrap" Margin="0,0,0,8"
-                           IsHitTestVisible="False"/>
-              </StackPanel>
-              <StackPanel x:Name="DeckDataSection" Visibility="Collapsed">
-                <TextBlock Text="Data" FontSize="13" FontWeight="SemiBold" Foreground="#EAEAEA" Margin="0,0,0,6"/>
-                <TextBlock Text="Deletion scopes are confirmed before anything is removed."
-                           Foreground="#B8B8C0" FontSize="11" TextWrapping="Wrap" Margin="0,0,0,8"
-                           IsHitTestVisible="False"/>
-                <Button x:Name="DeckDeleteConversationButton" Content="Delete conversation" Width="180" Height="26"
-                        Margin="0,0,0,6" FontSize="11" Background="#F24F46E5" Foreground="#FFFFFF"
-                        BorderBrush="#55FFFFFF" BorderThickness="1" Cursor="Hand"
-                        AutomationProperties.Name="Delete conversation"/>
-                <Button x:Name="DeckDeleteSessionButton" Content="Delete OpenCode session" Width="180" Height="26"
-                        Margin="0,0,0,6" FontSize="11" Background="#F2263348" Foreground="#EAEAEA"
-                        BorderBrush="#55FFFFFF" BorderThickness="1" Cursor="Hand"
-                        AutomationProperties.Name="Delete OpenCode session"/>
-                <Button x:Name="DeckDeleteLocalDataButton" Content="Delete local data" Width="180" Height="26"
-                        Margin="0,0,0,8" FontSize="11" Background="#F2263348" Foreground="#EAEAEA"
-                        BorderBrush="#55FFFFFF" BorderThickness="1" Cursor="Hand"
-                        AutomationProperties.Name="Delete local data"/>
-              </StackPanel>
-              <StackPanel x:Name="DeckToolsSection" Visibility="Collapsed">
-                <TextBlock Text="Tools &amp; Skills" FontSize="13" FontWeight="SemiBold" Foreground="#EAEAEA" Margin="0,0,0,6"/>
-                <CheckBox x:Name="WorkspaceFilesToggle" Content="Workspace files" Foreground="#DADAE2" FontSize="11" Margin="0,0,0,4"/>
-                <CheckBox x:Name="WebAccessToggle" Content="Web access" Foreground="#DADAE2" FontSize="11" Margin="0,0,0,2"/>
-                <TextBlock x:Name="WebAccessDisclosureText"
-                           Text="Can fetch web content; requests can reach beyond this PC."
-                           Foreground="#93A4BD" FontSize="10" TextWrapping="Wrap" Margin="18,0,0,6"
-                           IsHitTestVisible="False"/>
-                <CheckBox x:Name="ShellCommandsToggle" Content="Shell commands" Foreground="#DADAE2" FontSize="11" Margin="0,0,0,2"/>
-                <TextBlock x:Name="ShellCommandsDisclosureText"
-                           Text="Can run shell commands that may change files on this PC."
-                           Foreground="#93A4BD" FontSize="10" TextWrapping="Wrap" Margin="18,0,0,6"
-                           IsHitTestVisible="False"/>
-                <CheckBox x:Name="SkillsPluginsToggle" Content="Skills and plugins" Foreground="#DADAE2" FontSize="11" Margin="0,0,0,4"/>
-                <CheckBox x:Name="SubagentsTasksToggle" Content="Subagents and tasks" Foreground="#DADAE2" FontSize="11" Margin="0,0,0,4"/>
-                <CheckBox x:Name="ExternalFoldersToggle" Content="External folders" Foreground="#DADAE2" FontSize="11" Margin="0,0,0,8"/>
-              </StackPanel>
-              <StackPanel x:Name="DeckUnderHoodSection" Visibility="Collapsed">
-                <TextBlock Text="Under the hood" FontSize="13" FontWeight="SemiBold" Foreground="#EAEAEA" Margin="0,0,0,6"/>
-                <TextBox x:Name="DeckUnderHoodText" IsReadOnly="True" IsReadOnlyCaretVisible="True"
-                         AcceptsReturn="True" TextWrapping="Wrap" Height="180" FontSize="10"
-                         Background="#F2263348" Foreground="#B8B8C0" BorderBrush="#44FFFFFF"
-                         Padding="6,4" Text="Effective route and state appear here."/>
-              </StackPanel>
-              <StackPanel x:Name="DeckExitSection" Visibility="Collapsed">
-                <TextBlock Text="Exit" FontSize="13" FontWeight="SemiBold" Foreground="#EAEAEA" Margin="0,0,0,6"/>
-                <TextBlock Text="Say or type 'Sloppy, shutdown' to confirm before leaving."
-                           Foreground="#B8B8C0" FontSize="11" TextWrapping="Wrap" Margin="0,0,0,8"
-                           IsHitTestVisible="False"/>
-                <Button x:Name="DeckShutdownButton" Content="Sloppy, shutdown" Width="180" Height="26"
-                        Margin="0,0,0,6" FontSize="11" Background="#F24F46E5" Foreground="#FFFFFF"
-                        BorderBrush="#55FFFFFF" BorderThickness="1" Cursor="Hand"
-                        AutomationProperties.Name="Sloppy shutdown"/>
-              </StackPanel>
-            </StackPanel>
-          </ScrollViewer>
-          <TextBlock x:Name="DeckStatusText" Grid.Row="2" Text="" Foreground="#93A4BD" FontSize="10"
-                     TextWrapping="Wrap" Margin="0,6,0,0" IsHitTestVisible="False"/>
-        </Grid>
-      </Border>
     </Grid>
-    <Border x:Name="ChatInputChrome" Grid.Row="2" Margin="12,0,12,12" Padding="8" CornerRadius="10"
+    <Border x:Name="ChatInputChrome" Grid.Row="3" Margin="12,0,12,12" Padding="8" CornerRadius="10"
             Background="#F21E293B" BorderBrush="#44FFFFFF" BorderThickness="1">
       <StackPanel>
         <WrapPanel x:Name="ShortcutsStrip" Margin="0,0,0,6"/>
