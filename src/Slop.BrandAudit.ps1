@@ -111,7 +111,7 @@ function Get-SlopBrandTokenValues {
 }
 
 function Test-SlopBrandCopyException {
-    param([Parameter(Mandatory)][string]$Value)
+    param([Parameter(Mandatory)][AllowEmptyString()][string]$Value)
 
     if ([string]::IsNullOrWhiteSpace($Value)) { return $true }
     if ($Value.StartsWith('{')) { return $true }
@@ -124,7 +124,7 @@ function Test-SlopBrandCopyException {
 }
 
 function Get-SlopBrandBannedCopy {
-    param([Parameter(Mandatory)][string]$Value)
+    param([Parameter(Mandatory)][AllowEmptyString()][string]$Value)
     foreach ($phrase in $script:SlopBrandBannedPhrases) {
         if ($Value -match [regex]::Escape($phrase)) { return $phrase }
     }

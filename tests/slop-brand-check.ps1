@@ -91,7 +91,7 @@ $fixture = @'
         $lines = @(
             '$xaml = @''',
             '<Window xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation">',
-            '  <Border Margin="" />',
+            '  <Border Margin="" ToolTip="" />',
             '</Window>',
             '''@'
         )
