@@ -275,6 +275,10 @@ Assert-True ($src -match 'clipInset = 8\.0') 'content clip inset follows the tig
 Assert-True ($src -match 'x:Name="OutlinePath"[^>]*Fill="Transparent"') 'outline is a transparent top layer'
 Assert-True ($src -match '\$OutlinePath\.Data = \$BodyPath\.Data') 'outline tracks the membrane path each tick'
 
+Assert-True ($src -match 'x:Name="ControlDeckButton"') 'control deck button is wired in the shell'
+Assert-True ($src -match '\$script:ChatDeckOpen') 'control deck open state is owned by the shell'
+Assert-True ($src -match 'x:Name="DeckStatusText"') 'control deck status is wired in the shell'
+
 Describe 'Slop shell / XAML static checks' {
     foreach ($check in $script:SlopChecks) {
         $name = $check.Name
