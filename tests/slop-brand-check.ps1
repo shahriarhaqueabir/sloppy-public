@@ -200,3 +200,35 @@ Describe 'Sloppy design style roles' {
         }
     }
 }
+
+Describe 'Sloppy brand audit artifacts' {
+    BeforeAll {
+        $script:root = Split-Path -Parent $PSScriptRoot
+        . (Join-Path $script:root 'src/Slop.BrandAudit.ps1')
+        $script:baselinePath = Join-Path $script:root 'tests/slop-brand-baseline.json'
+        $script:reportPath = Join-Path $script:root 'docs/brand-audit.md'
+        $script:gate = Test-SlopBrandGate -Root $script:root -BaselinePath $script:baselinePath
+    }
+
+    It 'ships a parseable baseline file' {
+        Test-Path -LiteralPath $script:baselinePath | Should -BeTrue
+        $parsed = @(Get-Content -LiteralPath $script:baselinePath -Raw | ConvertFrom-Json)
+        $parsed.Count | Should -BeGreaterThan 0
+    }
+
+    It 'baselines every current finding with a reason and no hard failures' {
+        $script:gate.Ok | Should -BeTrue
+        @($script:gate.New).Count | Should -Be 0
+        @($script:gate.MissingReason).Count | Should -Be 0
+        @($script:gate.Errors).Count | Should -Be 0
+    }
+
+    It 'ships a generated report matching the gate findings' {
+        Test-Path -LiteralPath $script:reportPath | Should -BeTrue
+        $report = Get-Content -LiteralPath $script:reportPath -Raw
+        $report | Should -Match 'surface \| file \| line \| rule \| value \| severity \| exception reason'
+        $report | Should -Match "Accepted baseline: $($script:gate.Findings.Count)"
+        $report | Should -Match 'Voice profile'
+        $report | Should -Match 'ratchet baseline, not approval'
+    }
+}
