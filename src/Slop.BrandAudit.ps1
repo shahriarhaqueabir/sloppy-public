@@ -40,7 +40,7 @@ function Get-SlopBrandFindingKey {
 }
 
 function Test-SlopBrandArtMark {
-    param([Parameter(Mandatory)][string]$Name)
+    param([Parameter(Mandatory)][AllowEmptyString()][string]$Name)
     foreach ($mark in $script:SlopBrandArtMarks) {
         if ($Name -like "*$mark*") { return $true }
     }
@@ -137,7 +137,7 @@ function New-SlopBrandFinding {
         [Parameter(Mandatory)][string]$File,
         [Parameter(Mandatory)][int]$Line,
         [Parameter(Mandatory)][string]$Rule,
-        [Parameter(Mandatory)][string]$Value,
+        [Parameter(Mandatory)][AllowEmptyString()][string]$Value,
         [string]$Severity = 'baselined',
         [string]$Reason = ''
     )
