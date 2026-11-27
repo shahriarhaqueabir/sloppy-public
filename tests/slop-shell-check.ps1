@@ -241,6 +241,7 @@ Assert-True ($src -match '\$script:MicCapTimer\.Interval = \[TimeSpan\]::FromSec
 Assert-True ($src -match 'Remove-Item -LiteralPath \$Wav -Force -ErrorAction SilentlyContinue') 'temporary WAV is deleted in the worker finally block'
 Assert-True ($src -match '\$SendBtn\.IsEnabled = -not \[bool\]\$script:IsStreaming') 'voice idle state never re-enables Send during a stream'
 Assert-True ($src -match "tok\.StartsWith\('__VOICE__'\)") 'voice success marker is handled before plain text'
+Assert-True ($src -match 'tok -eq ''__VOICEDONE__''\) \{ \$script:VoiceBusy = \$false; Set-SlopMicUiState -State idle \}') 'voice busy flag is released when the worker finishes'
 
 Assert-True ($src -match 'Get-SlopBrainOrder') 'Brain combo uses the ordered tier list'
 Assert-True ($src -match 'Get-SlopBrainModelOptions -Brain') 'model options come from the shared catalog'
