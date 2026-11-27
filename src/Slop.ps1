@@ -2860,6 +2860,21 @@ $window.Add_Closed({
     }
     Remove-SlopCompletedSideJobs
     $script:OpenCodeSessionId = $null
+    if ($script:LocalModelProcess) {
+        # Stop only the brain this app started or adopted on its own loopback
+        # port. Revalidate it at shutdown so a reused PID can never be killed,
+        # and leave the shared OpenCode service untouched.
+        try {
+            $shutdownPaths = Get-SlopRuntimePaths `
+                -InstallRoot (Split-Path $PSScriptRoot -Parent) `
+                -ModelFile ([string]$script:SlopConfigResult.Config.localModelFile) `
+                -MmprojFile ([string]$script:SlopConfigResult.Config.localMmprojFile)
+            if (Test-SlopOwnedModelProcess -Paths $shutdownPaths -Process $script:LocalModelProcess) {
+                Stop-SlopLocalModel -Process $script:LocalModelProcess
+            }
+        } catch { }
+        $script:LocalModelProcess = $null
+    }
     [System.Windows.Threading.Dispatcher]::CurrentDispatcher.BeginInvokeShutdown([System.Windows.Threading.DispatcherPriority]::Normal)
 })
 

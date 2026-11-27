@@ -22,6 +22,7 @@ function Get-SlopShutdownTeardownSteps {
         'RejectPendingApprovals'
         'DeleteOpenCodeSession'
         'CloseChat'
+        'StopOwnedLocalModel'
         'ShutdownApplication'
     )
 }
