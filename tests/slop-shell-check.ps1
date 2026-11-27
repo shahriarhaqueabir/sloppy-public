@@ -297,7 +297,8 @@ Assert-True ($architecture -match 'inset from the work area') 'architecture desc
 # as that window is hidden, ending the script and killing the whole app.
 Assert-True ($src -notmatch '\$window\.ShowDialog\(\)') 'main pet window is not a modal dialog'
 Assert-True ($src -match '\[System\.Windows\.Threading\.Dispatcher\]::Run\(\)') 'main loop stays alive while the pet window is hidden'
-Assert-True ($src -match '\$window\.Add_Closed\(\{[\s\S]{0,2400}BeginInvokeShutdown\(\)') 'closing the pet window shuts down the dispatcher'
+Assert-True ($src -match '\$window\.Add_Closed\(\{[\s\S]{0,2400}BeginInvokeShutdown\(\[System\.Windows\.Threading\.DispatcherPriority\]') 'closing the pet window shuts down the dispatcher with a valid priority'
+Assert-True ($src -match 'if \(\$null -ne \[System\.Windows\.Application\]::Current\)[\s\S]{0,160}\.Shutdown\(\)') 'application shutdown is guarded when no WPF Application exists'
 
 Describe 'Slop shell / XAML static checks' {
     foreach ($check in $script:SlopChecks) {
