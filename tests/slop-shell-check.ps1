@@ -279,6 +279,12 @@ Assert-True ($src -match 'x:Name="ControlDeckButton"') 'control deck button is w
 Assert-True ($src -match '\$script:ChatDeckOpen') 'control deck open state is owned by the shell'
 Assert-True ($src -match '\$script:DeckStatusText') 'control deck status is wired in the shell'
 
+Assert-True ($src -match '\[System\.Windows\.Controls\.TextBox\]::new\(\)') 'bubbles use read-only TextBox'
+Assert-True ($src -match 'IsReadOnly\s*=\s*\$true') 'bubble text cannot be edited'
+Assert-True ($src -match 'IsReadOnlyCaretVisible\s*=\s*\$true') 'bubble text is selectable'
+Assert-True ($src -notmatch 'CopyButton|ReadAloud|Clipboard') 'no copy or read-aloud affordance'
+Assert-True ($src -notmatch 'AssistantBubbleText\.Focus\(\)') 'bubble creation does not steal focus'
+
 Describe 'Slop shell / XAML static checks' {
     foreach ($check in $script:SlopChecks) {
         $name = $check.Name
