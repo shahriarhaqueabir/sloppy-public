@@ -155,6 +155,11 @@ Describe 'Slop transparent chat window contract' {
             }
         } finally { $win.Close() }
     }
+
+    It 'uses readable fills for dynamically created chat shortcut chips' {
+        $script:AppSrc | Should -Not -Match "ConvertFromString\('#22FFFFFF'\)"
+        [regex]::Matches($script:AppSrc, "ConvertFromString\('#F2263348'\)").Count | Should -BeGreaterOrEqual 4
+    }
 }
 
 Describe 'Slop shell chat-window wiring' {
