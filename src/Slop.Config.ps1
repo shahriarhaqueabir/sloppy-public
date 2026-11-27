@@ -125,6 +125,67 @@ function Resolve-SlopTier {
     }
 }
 
+function Get-SlopTierCatalog {
+    $defaults = New-SlopDefaultConfig
+    return @(
+        @{ Id = 'tier-1'; Label = 'Tier 1 - Local LLM'; Brain = 'builtin'; DefaultModel = [string]$defaults.localModelName }
+        @{ Id = 'tier-2'; Label = 'Tier 2 - OpenCode'; Brain = 'opencode'; DefaultModel = 'big-pickle' }
+    )
+}
+
+function Resolve-SlopTierFromConfig {
+    param([AllowNull()][hashtable]$Config)
+    if ($null -eq $Config) { return '' }
+    switch ([string]$Config.brain) {
+        'builtin'  { return 'tier-1' }
+        'opencode' { return 'tier-2' }
+        default    { return '' }
+    }
+}
+
+function Get-SlopTierDefaultModel {
+    param([Parameter(Mandatory)][ValidateSet('tier-1','tier-2')][string]$TierId)
+    if ($TierId -eq 'tier-1') { return [string](New-SlopDefaultConfig).localModelName }
+    return 'big-pickle'
+}
+
+function Set-SlopTierConfig {
+    param(
+        [Parameter(Mandatory)][hashtable]$Config,
+        [Parameter(Mandatory)][ValidateSet('tier-1','tier-2')][string]$TierId,
+        [Parameter(Mandatory)][AllowEmptyString()][string]$Model,
+        [string]$BaseUrl = (New-SlopDefaultConfig).openCodeBaseUrl
+    )
+
+    $defaults = New-SlopDefaultConfig
+    $isLocal = ($TierId -eq 'tier-1')
+    $brain = if ($isLocal) { 'builtin' } else { 'opencode' }
+    $modelValue = if ($isLocal) { [string]$defaults.localModelName } else { ([string]$Model).Trim() }
+
+    if (-not $isLocal -and [string]::IsNullOrWhiteSpace($modelValue)) {
+        return @{ Ok = $false; Config = $Config; Errors = @('Model is required.') }
+    }
+    if (-not $isLocal -and -not (Test-SlopLoopbackHttpUrl -Url $BaseUrl)) {
+        return @{ Ok = $false; Config = $Config; Errors = @('OpenCode base URL must be loopback.') }
+    }
+
+    $result = Set-SlopConfigBrain -Config $Config `
+        -Brain $brain `
+        -Provider $(if ($isLocal) { '' } else { 'opencode' }) `
+        -ProviderLocality $(if ($isLocal) { '' } else { [string]$Config.providerLocality }) `
+        -EndpointUrl '' `
+        -Model $modelValue `
+        -AgentId $(if ($isLocal) { '' } else { 'sloppy' }) `
+        -CapabilityProfile 'companion'
+    if (-not $result.Ok) { return $result }
+
+    $candidate = $result.Config
+    if ([string]::IsNullOrWhiteSpace([string]$candidate.localModelName)) { $candidate.localModelName = [string]$defaults.localModelName }
+    if ([string]::IsNullOrWhiteSpace([string]$candidate.localModelFile)) { $candidate.localModelFile = [string]$defaults.localModelFile }
+    if (-not $isLocal) { $candidate.openCodeBaseUrl = $BaseUrl.Trim().TrimEnd('/') }
+    return @{ Ok = $true; Config = $candidate; Errors = @() }
+}
+
 function Get-SlopAutostartValue {
     param([Parameter(Mandatory)][string]$ExecutablePath)
     return '"' + ($ExecutablePath -replace '"', '\"') + '"'
