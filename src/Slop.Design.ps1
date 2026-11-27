@@ -156,3 +156,62 @@ function Test-SlopContrast {
     $dark = [Math]::Min($a, $b)
     return ($light + 0.05) / ($dark + 0.05)
 }
+
+# Named component roles. These are contracts for the audit, not XAML resource
+# keys: surfaces may keep local resources while the roles stay the source of
+# truth for token pairing and minimum control size.
+$script:SlopBrandStyleRoles = [ordered]@{
+    'slop.button.primary'   = [pscustomobject]@{
+        Token = 'fill.primary'; TextToken = 'text.primary'; MinSize = 24
+    }
+    'slop.button.secondary' = [pscustomobject]@{
+        Token = 'surface.raised'; TextToken = 'text.primary'; MinSize = 24
+    }
+    'slop.button.danger'    = [pscustomobject]@{
+        Token = 'fill.destructive'; TextToken = 'text.primary'; MinSize = 24
+    }
+    'slop.input'            = [pscustomobject]@{
+        Token = 'surface.panel'; TextToken = 'text.primary'; MinSize = 24
+    }
+    'slop.checkbox'         = [pscustomobject]@{
+        Token = 'surface.panel'; TextToken = 'text.primary'; MinSize = 24
+    }
+    'slop.combo'            = [pscustomobject]@{
+        Token = 'surface.panel'; TextToken = 'text.primary'; MinSize = 24
+    }
+    'slop.card'             = [pscustomobject]@{
+        Token = 'surface.panel'; TextToken = 'text.primary'
+    }
+    'slop.header'           = [pscustomobject]@{
+        Token = 'surface.app'; TextToken = 'text.primary'
+    }
+    'slop.status.idle'      = [pscustomobject]@{
+        Token = 'surface.app'; TextToken = 'status.text.idle'
+    }
+    'slop.status.thinking'  = [pscustomobject]@{
+        Token = 'surface.app'; TextToken = 'status.text.thinking'
+    }
+    'slop.status.working'   = [pscustomobject]@{
+        Token = 'surface.app'; TextToken = 'status.text.working'
+    }
+    'slop.status.success'   = [pscustomobject]@{
+        Token = 'surface.app'; TextToken = 'status.text.success'
+    }
+    'slop.status.error'     = [pscustomobject]@{
+        Token = 'surface.app'; TextToken = 'status.text.error'
+    }
+}
+
+function Get-SlopStyleRole {
+    param([Parameter(Mandatory)][string]$Name)
+    if (-not $script:SlopBrandStyleRoles.Contains($Name)) {
+        throw "Unknown component style role: $Name"
+    }
+    $role = $script:SlopBrandStyleRoles[$Name]
+    return [pscustomobject]@{
+        Name = $Name
+        Token = $role.Token
+        TextToken = $role.TextToken
+        MinSize = if ($role.PSObject.Properties.Name -contains 'MinSize') { $role.MinSize } else { $null }
+    }
+}
