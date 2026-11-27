@@ -173,4 +173,49 @@ Describe 'Slop.LocalModel' {
         }
         finally { $env:SLOP_TEST_INSTALL_ROOT = $previous }
     }
+
+    It 'adopts a verified brain already holding the loopback port' {
+        $paths = Get-SlopRuntimePaths -InstallRoot $script:TestRoot
+        $connections = @([pscustomobject]@{ OwningProcess = 4242; LocalAddress = '127.0.0.1' })
+        $candidate = [pscustomobject]@{ Id = 4242 }
+        $adopted = Get-SlopOwnedModelProcessOnPort -Paths $paths -Connections $connections `
+            -ProcessResolver { param($id) $candidate } -Verifier { param($process) $true }
+        $adopted | Should -Be $candidate
+    }
+
+    It 'does not adopt an unverified process on the brain port' {
+        $paths = Get-SlopRuntimePaths -InstallRoot $script:TestRoot
+        $connections = @([pscustomobject]@{ OwningProcess = 4242; LocalAddress = '127.0.0.1' })
+        $candidate = [pscustomobject]@{ Id = 4242 }
+        $adopted = Get-SlopOwnedModelProcessOnPort -Paths $paths -Connections $connections `
+            -ProcessResolver { param($id) $candidate } -Verifier { param($process) $false }
+        $adopted | Should -BeNull
+    }
+
+    It 'ignores non-loopback listeners when looking for an owned brain' {
+        $paths = Get-SlopRuntimePaths -InstallRoot $script:TestRoot
+        $connections = @([pscustomobject]@{ OwningProcess = 99; LocalAddress = '0.0.0.0' })
+        $script:SawCandidate = $false
+        $adopted = Get-SlopOwnedModelProcessOnPort -Paths $paths -Connections $connections `
+            -ProcessResolver { param($id) $script:SawCandidate = $true; [pscustomobject]@{ Id = $id } } `
+            -Verifier { param($process) $true }
+        $adopted | Should -BeNull
+        $script:SawCandidate | Should -BeFalse
+    }
+
+    It 'verifies adoption with the same ownership check used for a tracked process' {
+        $src = Get-Content (Join-Path $PSScriptRoot '../src/Slop.LocalModel.ps1') -Raw
+        $body = [regex]::Match($src, 'function Get-SlopOwnedModelProcessOnPort\s*\{(?<body>[\s\S]*?)\n\}').Groups['body'].Value
+        $body | Should -Not -Be ''
+        $body | Should -Match 'Test-SlopOwnedModelProcess -Paths \$Paths -Process \$process'
+    }
+
+    It 'reuses a verified orphaned brain instead of refusing a held port' {
+        $src = Get-Content (Join-Path $PSScriptRoot '../src/Slop.LocalModel.ps1') -Raw
+        $body = [regex]::Match($src, 'function Start-SlopLocalModel\s*\{(?<body>[\s\S]*?)\n\}').Groups['body'].Value
+        $body | Should -Not -Be ''
+        $body | Should -Match 'if \(-not \(Test-SlopPortAvailable -Port \$Paths\.Port\)\)'
+        $body | Should -Match 'Get-SlopOwnedModelProcessOnPort -Paths \$Paths'
+        $body | Should -Match 'Ok = \$true; Reason = \$null; Process = \$adopted'
+    }
 }
