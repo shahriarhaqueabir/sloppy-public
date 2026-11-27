@@ -21,7 +21,7 @@ $fixture = @'
   </StackPanel>
 </Window>
 '@
-        Set-Content -LiteralPath (Join-Path $fixtureDir 'Fixture.ps1') -Value ("`$xaml = @'`n" + $fixture + "'@`n") -Encoding utf8
+        Set-Content -LiteralPath (Join-Path $fixtureDir 'Fixture.ps1') -Value ("`$xaml = @'`n" + $fixture + "`n'@`n") -Encoding utf8
 
         $script:fixtureFindings = @()
         if ($script:moduleExists -and (Get-Command Get-SlopBrandFindings -ErrorAction SilentlyContinue)) {
