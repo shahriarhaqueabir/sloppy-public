@@ -837,7 +837,7 @@ After writing this plan, validate it without touching product code:
 1. Parse every fenced PowerShell block with `[System.Management.Automation.Language.Parser]::ParseInput`; expect 0 errors.
 2. Temp-probe the pure pane, toggle, and shutdown functions from this plan; expect all RED assertions to fail before GREEN source and all GREEN values to match.
 3. Verify each cited anchor against the working tree: listed function and XAML names exist at the listed files.
-4. Scan the plan for placeholder tokens (`TODO`, `TBD`, `FIXME`, standalone `...`) and machine-specific paths; expect 0. A git range such as `origin/main...HEAD` is not a placeholder.
+4. Scan the plan for unfinished-work placeholder tokens and a standalone ellipsis, plus machine-specific paths; expect 0. A git range such as `origin/main...HEAD` is not a placeholder.
 5. Check `Test-SlopEffectivePermissions` contracts continue to fail closed with broad grants.
 6. Confirm no plan step deletes files, changes `data/`, pushes, tags, deploys, or changes visibility.
 
