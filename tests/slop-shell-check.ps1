@@ -300,6 +300,15 @@ Assert-True ($src -match '\[System\.Windows\.Threading\.Dispatcher\]::Run\(\)') 
 Assert-True ($src -match '\$window\.Add_Closed\(\{[\s\S]{0,2400}BeginInvokeShutdown\(\[System\.Windows\.Threading\.DispatcherPriority\]') 'closing the pet window shuts down the dispatcher with a valid priority'
 Assert-True ($src -match 'if \(\$null -ne \[System\.Windows\.Application\]::Current\)[\s\S]{0,160}\.Shutdown\(\)') 'application shutdown is guarded when no WPF Application exists'
 
+Assert-True ($src -match '\. \(Join-Path \$PSScriptRoot ''Slop\.AgentPack\.ps1''\)') 'agent pack module is dot-sourced by the shell'
+Assert-True ($src -match 'Test-SlopAgentOverlay -Text \$personaText') 'Customize validates persona overlay length before saving'
+Assert-True ($src -match 'Customize invalid: " \+ \(\$overlay\.Errors -join ''; ''\)') 'Customize reports an overlong overlay with a specific message'
+Assert-True ($src -match 'Get-SlopResolvedAgentPack -AppRoot \(Split-Path \$PSScriptRoot -Parent\)') 'shell resolves the app-root identity pack before a request'
+Assert-True ($src -match '-Identity \$config -PersonaText \(Read-SlopPersona\)') 'resolver receives config identity and the user overlay'
+Assert-True ($src -match 'if \(-not \$agentPack\.Ok\)') 'shell fails closed on an unresolved identity'
+Assert-True ($src -match 'Sloppy identity could not be resolved') 'resolver failure produces a plain-language bubble'
+Assert-True ($src -match '-PersonaText \$agentPack\.Text') 'stream plan receives the resolved system prompt'
+
 Describe 'Slop shell / XAML static checks' {
     foreach ($check in $script:SlopChecks) {
         $name = $check.Name

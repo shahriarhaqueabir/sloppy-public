@@ -2,6 +2,7 @@
 Describe 'Slop.Provider' {
     BeforeAll {
         . (Join-Path $PSScriptRoot '../src/Slop.Config.ps1')
+        . (Join-Path $PSScriptRoot '../src/Slop.AgentPack.ps1')
         . (Join-Path $PSScriptRoot '../src/Slop.Lifecycle.ps1')
         . (Join-Path $PSScriptRoot '../src/Slop.LocalModel.ps1')
         . (Join-Path $PSScriptRoot '../src/Slop.Provider.ps1')
@@ -229,5 +230,35 @@ Describe 'Slop.Provider' {
             $listener.Stop()
             if ($job) { Remove-Job $job -Force }
         }
+    }
+
+    It 'sends the resolved identity pack on both custom and OpenCode routes' {
+        $root = Split-Path $PSScriptRoot -Parent
+        $pack = Get-SlopResolvedAgentPack -AppRoot $root `
+            -Identity @{ name='Mochi' } -PersonaText 'Remember the underscore key.'
+        $pack.Ok | Should -BeTrue
+
+        $custom = Get-SlopStreamPlan -Config @{
+            brain='custom'; endpointUrl='http://127.0.0.1:11434/'; model='qwen3:8b'
+        } -UserText 'hello' -PersonaText $pack.Text -ScriptRootPath (Join-Path $root 'fake/src') -RepoRootPath $root
+        $customBody = $custom.AdapterArgs.RequestBody | ConvertFrom-Json
+        $customBody.messages[0].role | Should -Be 'system'
+        $customBody.messages[0].content | Should -Be $pack.Text
+
+        $savedPassword = $env:OPENCODE_PASSWORD
+        $env:OPENCODE_PASSWORD = 'test-password'
+        try {
+            $oc = Get-SlopStreamPlan -Config @{
+                brain='opencode'; providerLocality='local'
+                provider='Ollama'; model='qwen3:8b'; capabilityProfile='companion'
+                agentId='sloppy'; openCodeBaseUrl='http://127.0.0.1:28894'; serviceConfigPath=''
+            } -UserText 'hello' -PersonaText $pack.Text `
+                -ObservedProviderEndpointUrl 'http://127.0.0.1:11434' `
+                -ScriptRootPath (Join-Path $root 'fake/src') -RepoRootPath $root
+            $ocBody = $oc.AdapterArgs.PromptBody | ConvertFrom-Json
+            $ocBody.text | Should -Match 'You are Sloppy'
+            $ocBody.text | Should -Match 'Remember the underscore key\.'
+        }
+        finally { $env:OPENCODE_PASSWORD = $savedPassword }
     }
 }
