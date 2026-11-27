@@ -1,6 +1,11 @@
 # Sloppy portable configuration. Pure path/schema/IO helpers; no WPF, no network.
 $ErrorActionPreference = 'Stop'
 
+# Capability toggles are a pure module with no config dependency. Dot-source it
+# here so the defaults, reader repair and validation share one key set.
+$capabilityModule = Join-Path $PSScriptRoot 'Slop.CapabilityToggles.ps1'
+if (Test-Path -LiteralPath $capabilityModule) { . $capabilityModule }
+
 # Captured at dot-source time so the root stays tied to this file even when the
 # function is called from the WPF shell or a Pester container.
 $script:SlopConfigFileRoot = $PSScriptRoot
@@ -93,6 +98,10 @@ function New-SlopDefaultConfig {
         openCodeBaseUrl   = 'http://127.0.0.1:28894'
         serviceConfigPath = ''
         openCodeSessionId = ''
+
+        # Six capability toggles, all off by default. The reader repairs legacy
+        # v3 configs that predate this key; validation never auto-enables one.
+        capabilityToggles = Get-SlopDefaultCapabilityToggles
     }
 }
 
@@ -182,6 +191,15 @@ function Test-SlopConfig {
     if (([string]$Config.openCodeSessionId).Length -gt 120) { $errors.Add('openCodeSessionId is too long') }
     if ($null -ne $Config.agent -and $Config.agent -isnot [hashtable]) { $errors.Add('agent must be a hashtable') }
 
+    if (-not $Config.ContainsKey('capabilityToggles')) {
+        $errors.Add('capabilityToggles is required')
+    } elseif ($Config.capabilityToggles -isnot [hashtable]) {
+        $errors.Add('capabilityToggles must be a hashtable')
+    } else {
+        $capCheck = Test-SlopCapabilityToggles -Toggles $Config.capabilityToggles
+        foreach ($message in $capCheck.Errors) { $errors.Add($message) }
+    }
+
     return @{ Ok = ($errors.Count -eq 0); Errors = $errors.ToArray() }
 }
 
@@ -249,6 +267,22 @@ function Read-SlopConfig {
         }
         $cfg.agent = $agent
     }
+    # A JSON object for 'capabilityToggles' arrives as PSCustomObject. Normalize
+    # to a hashtable, default every missing or non-boolean key to false, and drop
+    # unknown keys. A present boolean is never overwritten.
+    $storedToggles = $cfg.capabilityToggles
+    $rawToggles = @{}
+    if ($storedToggles -is [hashtable]) {
+        foreach ($key in $storedToggles.Keys) { $rawToggles[[string]$key] = $storedToggles[$key] }
+    } elseif ($null -ne $storedToggles) {
+        foreach ($prop in $storedToggles.PSObject.Properties) { $rawToggles[$prop.Name] = $prop.Value }
+    }
+    $cleanToggles = @{}
+    foreach ($key in (Get-SlopCapabilityToggleMap).Keys) {
+        $value = if ($rawToggles.ContainsKey($key)) { $rawToggles[$key] } else { $false }
+        $cleanToggles[$key] = if ($value -is [bool]) { [bool]$value } else { $false }
+    }
+    $cfg.capabilityToggles = $cleanToggles
     $check = Test-SlopConfig -Config $cfg
     if (-not $check.Ok) {
         return @{ Ok = $false; Exists = $true; Config = $defaults; Reason = ($check.Errors -join '; ') }

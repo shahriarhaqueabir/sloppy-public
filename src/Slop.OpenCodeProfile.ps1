@@ -1,6 +1,11 @@
 # Controlled OpenCode config generation and fail-closed verification. Headless.
 $ErrorActionPreference = 'Stop'
 
+# Capability resolution is a pure module. Dot-source it so New-SlopControlledConfig
+# can resolve a profile from toggles even when the shell has not loaded it.
+$capabilityModule = Join-Path $PSScriptRoot 'Slop.CapabilityToggles.ps1'
+if (Test-Path -LiteralPath $capabilityModule) { . $capabilityModule }
+
 function Get-SlopProfileApprovalModes { return @('once','reject') }
 
 function New-SlopPermissionProfile {
@@ -50,22 +55,66 @@ function New-SlopPermissionProfile {
 
 function New-SlopControlledConfig {
     param(
-        [Parameter(Mandatory)][ValidateSet('companion','workspace','power')][string]$Profile,
+        [string]$Profile,
         [Parameter(Mandatory)][string]$AgentId,
         [Parameter(Mandatory)][string]$Model,
-        [string[]]$WorkspaceFolders = @()
+        [string[]]$WorkspaceFolders = @(),
+        [hashtable]$CapabilityToggles = $null
     )
-    $profileRules = New-SlopPermissionProfile -Name $Profile -WorkspaceFolders $WorkspaceFolders
+    $toggleSet = $CapabilityToggles
+    $effectiveToggles = if ($null -ne $toggleSet) { $toggleSet } else { Get-SlopDefaultCapabilityToggles }
+    $profileName = if ([string]::IsNullOrWhiteSpace([string]$Profile)) {
+        Get-SlopCapabilityProfile -Toggles $effectiveToggles
+    } else {
+        [string]$Profile
+    }
+    $profileRules = New-SlopPermissionProfile -Name $profileName -WorkspaceFolders $WorkspaceFolders
+
+    # Deny-all stays first. Capability allows punch only narrow holes; the
+    # secret hard denies are appended last so they always win under findLast
+    # (no web toggle can re-allow file://, loopback or cloud metadata).
+    $denyAll = @{ action='*'; resource='*'; effect='deny' }
+    $secretDenies = @($profileRules.Permissions | Where-Object {
+        $_.effect -eq 'deny' -and $_.resource -ne '*'
+    })
+    $allows = @()
+    if ($null -eq $toggleSet) {
+        # Legacy callers pass no toggles: keep the profile's existing allows.
+        $allows = @($profileRules.Permissions | Where-Object { $_.effect -eq 'allow' })
+    } else {
+        $map = Get-SlopCapabilityToggleMap
+        foreach ($key in $map.Keys) {
+            if (-not $effectiveToggles.ContainsKey($key)) { continue }
+            if ($effectiveToggles[$key] -isnot [bool] -or $effectiveToggles[$key] -ne $true) { continue }
+            $action = $map[$key]
+            switch ($key) {
+                'workspaceFiles'  { $allows += @{ action=$action; resource='./**'; effect='allow' } }
+                'webAccess'       {
+                    $allows += @{ action=$action; resource='https://*'; effect='allow' }
+                    $allows += @{ action=$action; resource='http://*';  effect='allow' }
+                }
+                'shellCommands'   { $allows += @{ action=$action; resource='git status *'; effect='allow' } }
+                'skillsPlugins'   { $allows += @{ action=$action; resource='skill:*'; effect='allow' } }
+                'subagentsTasks'  { $allows += @{ action=$action; resource='task:*'; effect='allow' } }
+                'externalFolders' {
+                    foreach ($folder in @($WorkspaceFolders)) {
+                        $allows += @{ action=$action; resource=$folder; effect='allow' }
+                    }
+                }
+            }
+        }
+    }
+    $permissions = @($denyAll) + @($allows) + @($secretDenies)
     return @{
         '$schema'   = 'https://opencode.ai/config.json'
         model       = $Model
-        permissions = @($profileRules.Permissions)
+        permissions = $permissions
         policies    = @($profileRules.Policies)
         agents      = @{
             $AgentId = @{
                 description = 'Sloppy companion agent. Capabilities come from the selected profile.'
                 system      = 'You are a warm desktop companion. Be concise and honest about what you can do.'
-                permissions = @($profileRules.Permissions)
+                permissions = $permissions
             }
         }
     }
