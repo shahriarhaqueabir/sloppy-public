@@ -389,4 +389,43 @@ Describe 'Slop.Config' {
         $result.Config.ContainsKey('providerTier') | Should -BeFalse
         $result.Config.providerLocality | Should -Be 'remote'
     }
+
+    It 'defaults capability toggles to all off' {
+        $cfg = New-SlopDefaultConfig
+        $cfg.ContainsKey('capabilityToggles') | Should -BeTrue
+        @($cfg.capabilityToggles.Keys).Count | Should -Be 6
+        foreach ($v in $cfg.capabilityToggles.Values) { $v | Should -BeFalse }
+        (Test-SlopConfig -Config $cfg).Ok | Should -BeTrue
+    }
+
+    It 'repairs a v3 config missing capability toggles on read' {
+        $cfg = New-SlopDefaultConfig
+        $cfg.Remove('capabilityToggles')
+        $cfg | ConvertTo-Json -Depth 5 | Set-Content -LiteralPath $script:ConfigPath -Encoding utf8
+        $result = Read-SlopConfig -ConfigPath $script:ConfigPath
+        $result.Ok | Should -BeTrue
+        $result.Config.version | Should -Be 3
+        @($result.Config.capabilityToggles.Keys).Count | Should -Be 6
+        foreach ($v in $result.Config.capabilityToggles.Values) { $v | Should -BeFalse }
+    }
+
+    It 'normalizes a stored capabilityToggles object to booleans on read' {
+        $cfg = New-SlopDefaultConfig
+        $cfg.capabilityToggles.webAccess = $true
+        $cfg | ConvertTo-Json -Depth 5 | Set-Content -LiteralPath $script:ConfigPath -Encoding utf8
+        $result = Read-SlopConfig -ConfigPath $script:ConfigPath
+        $result.Ok | Should -BeTrue
+        $result.Config.capabilityToggles | Should -BeOfType [hashtable]
+        $result.Config.capabilityToggles.webAccess | Should -BeTrue
+        $result.Config.capabilityToggles.shellCommands | Should -BeFalse
+    }
+
+    It 'rejects unknown and non-boolean capability toggles in Test-SlopConfig' {
+        $bad = New-SlopDefaultConfig
+        $bad.capabilityToggles.bogus = $true
+        (Test-SlopConfig -Config $bad).Ok | Should -BeFalse
+        $bad2 = New-SlopDefaultConfig
+        $bad2.capabilityToggles.webAccess = 'yes'
+        (Test-SlopConfig -Config $bad2).Ok | Should -BeFalse
+    }
 }

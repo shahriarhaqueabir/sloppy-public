@@ -48,4 +48,16 @@ Describe 'Slop.OpenCodeProfile' {
     It 'never proposes an Allow always grant' {
         (Get-SlopProfileApprovalModes) -join ',' | Should -Be 'once,reject'
     }
+    It 'generates capability-specific allows without broad grants' {
+        $t = @{
+            workspaceFiles = $false; webAccess = $false; shellCommands = $false
+            skillsPlugins = $false; subagentsTasks = $false; externalFolders = $true
+        }
+        $cfg = New-SlopControlledConfig -CapabilityToggles $t -AgentId 'sloppy' -Model 'beam-free'
+        @($cfg.permissions | Where-Object { $_.action -eq 'external_directory' -and $_.resource -eq '*' }).Count |
+            Should -Be 0
+        $json = $cfg | ConvertTo-Json -Depth 8 -Compress
+        $json | Should -Match 'service\.json'
+        $json | Should -Match '169\.254\.169\.254'
+    }
 }
