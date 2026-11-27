@@ -61,4 +61,80 @@ Describe 'Slop control deck' {
             $script:ChatSrc | Should -Match ([regex]::Escape('x:Name="' + $name + '"'))
         }
     }
+
+    It 'sizes the deck body without squeezing transcript or composer' {
+        Get-SlopDeckBodyHeight -WindowHeight 760 -DeckOpen $true | Should -Be 220
+        Get-SlopDeckBodyHeight -WindowHeight 410 -DeckOpen $true | Should -Be 92
+        Get-SlopDeckBodyHeight -WindowHeight 200 -DeckOpen $true | Should -Be 0
+        Get-SlopDeckBodyHeight -WindowHeight 760 -DeckOpen $false | Should -Be 0
+    }
+
+    It 'builds a safe deck settings snapshot from a config' {
+        $cfg = @{
+            voiceEnabled = $true; whisperLanguage = 'de'; voiceMaxSeconds = 45
+            brain = 'opencode'; model = 'beam-free'; modelName = 'beam-free'
+        }
+        $snapshot = Get-SlopDeckSettingsSnapshot -Config $cfg -ConfigPath 'C:/fixture/config.json' -Route 'OpenCode' -Readiness 'Ready'
+        $snapshot.ConfigAvailable | Should -BeTrue
+        $snapshot.VoiceEnabled | Should -BeTrue
+        $snapshot.VoiceLanguage | Should -Be 'de'
+        $snapshot.VoiceMaxSeconds | Should -Be 45
+        $snapshot.VoiceReadyText | Should -Be 'Ready'
+        $snapshot.RouteText | Should -Be 'OpenCode'
+        $snapshot.Brain | Should -Be 'opencode'
+        $snapshot.Model | Should -Be 'beam-free'
+        $snapshot.DataPath | Should -Be 'C:/fixture/config.json'
+    }
+
+    It 'uses safe defaults when config is missing' {
+        $snapshot = Get-SlopDeckSettingsSnapshot -Config $null -ConfigPath '' -Route '' -Readiness ''
+        $snapshot.ConfigAvailable | Should -BeFalse
+        $snapshot.VoiceEnabled | Should -BeFalse
+        $snapshot.VoiceLanguage | Should -Be 'auto'
+        $snapshot.VoiceMaxSeconds | Should -Be 30
+        $snapshot.Brain | Should -Be 'unset'
+        $snapshot.Model | Should -Be 'unset'
+        $snapshot.DataPath | Should -Be 'unavailable'
+    }
+
+    It 'validates deck voice edits before a config write' {
+        $cfg = @{ voiceEnabled = $false; whisperLanguage = 'auto'; voiceMaxSeconds = 30 }
+        $good = Get-SlopDeckVoiceEdit -Config $cfg -Language 'DE' -MaxSeconds '45'
+        $good.Ok | Should -BeTrue
+        $good.Config.whisperLanguage | Should -Be 'de'
+        $good.Config.voiceMaxSeconds | Should -Be 45
+        $cfg.whisperLanguage | Should -Be 'auto'
+        (Get-SlopDeckVoiceEdit -Config $cfg -Language 'auto' -MaxSeconds '9').Ok | Should -BeFalse
+        (Get-SlopDeckVoiceEdit -Config $cfg -Language 'auto' -MaxSeconds '121').Ok | Should -BeFalse
+        (Get-SlopDeckVoiceEdit -Config $cfg -Language 'auto' -MaxSeconds 'many').Ok | Should -BeFalse
+        (Get-SlopDeckVoiceEdit -Config $null -Language 'auto' -MaxSeconds '30').Ok | Should -BeFalse
+    }
+
+    It 'builds model edit arguments that preserve other brain fields' {
+        . (Join-Path $PSScriptRoot '../src/Slop.Config.ps1')
+        $cfg = @{
+            brain = 'opencode'; provider = 'opencode-go'; providerLocality = 'remote'
+            endpointUrl = 'http://127.0.0.1:28894'; model = 'old'; modelName = 'old'
+            agentId = 'sloppy'; capabilityProfile = 'companion'
+            voiceEnabled = $true; whisperLanguage = 'de'; voiceMaxSeconds = 45
+        }
+        $edit = Get-SlopDeckModelEditArguments -Config $cfg -Model 'new-model'
+        $edit.Ok | Should -BeTrue
+        $edit.Brain | Should -Be 'opencode'
+        $edit.Provider | Should -Be 'opencode-go'
+        $edit.EndpointUrl | Should -Be 'http://127.0.0.1:28894'
+        $edit.AgentId | Should -Be 'sloppy'
+        $edit.CapabilityProfile | Should -Be 'companion'
+        $result = Set-SlopConfigBrain -Config $cfg `
+            -Brain $edit.Brain -Provider $edit.Provider -ProviderLocality $edit.ProviderLocality `
+            -EndpointUrl $edit.EndpointUrl -Model $edit.Model -AgentId $edit.AgentId `
+            -CapabilityProfile $edit.CapabilityProfile
+        $result.Ok | Should -BeTrue
+        $result.Config.voiceEnabled | Should -BeTrue
+        $result.Config.whisperLanguage | Should -Be 'de'
+        $result.Config.voiceMaxSeconds | Should -Be 45
+        $result.Config.model | Should -Be 'new-model'
+        (Get-SlopDeckModelEditArguments -Config $cfg -Model '').Ok | Should -BeFalse
+        (Get-SlopDeckModelEditArguments -Config $null -Model 'new-model').Ok | Should -BeFalse
+    }
 }
