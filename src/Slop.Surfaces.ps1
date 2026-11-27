@@ -3,9 +3,9 @@ $ErrorActionPreference = 'Stop'
 
 function Get-SlopDestinationMap {
     return @{
-        Settings  = @('Startup behaviour','Data location','About and version','Advanced / developer')
+        Settings  = @('Companion','Effective route','Voice','Startup behaviour','Data location','About and version','Advanced / developer')
         Customize = @('Name','Colour','Personality','Persona text')
-        Brain     = @('Tier','Provider','Model','Agent','Capability profile','Effective model')
+        Brain     = @('Where answers come from','Tier','Provider','Model','Agent','Capability profile','Effective model','Advanced')
         Privacy   = @('Active data route','Provider terms','Deletion scopes','Deletion actions')
     }
 }
@@ -16,7 +16,7 @@ function Get-SlopDestinationContract {
         'Settings' {
             return @{
                 Status   = 'SettingsStatusText'
-                Editable = @('SettingsInstructionsBox','SettingsModelBox','SettingsBaseUrlBox','SettingsAgentIdBox','VoiceEnabledCheck','VoiceLanguageCombo','VoiceMaxSecondsBox')
+                Editable = @('VoiceEnabledCheck','VoiceLanguageCombo','VoiceMaxSecondsBox')
                 Actions  = @('SettingsSaveButton','AutostartButton','VoiceRepairButton','SettingsBack')
             }
         }

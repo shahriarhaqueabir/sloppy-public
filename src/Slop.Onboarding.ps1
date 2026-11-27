@@ -126,53 +126,59 @@ function Show-SlopOnboarding {
         <ScrollViewer x:Name="Screen4" Visibility="Collapsed" VerticalScrollBarVisibility="Auto">
           <StackPanel Margin="0,0,8,0">
             <TextBlock Foreground="#B8B8C0" FontSize="11" TextWrapping="Wrap" Margin="0,0,0,8"
-                       Text="Choose where answers come from. Tier 1 - built-in local Qwen; Tier 2 - OpenCode. Custom is an advanced local endpoint, not a tier. Nothing is sent anywhere until you opt in."/>
+                       Text="Choose where answers come from. Built-in works offline; OpenCode uses the service you set up. For a custom endpoint, open Advanced setup. Nothing leaves this PC until you opt in."/>
             <RadioButton x:Name="BrainBuiltIn" GroupName="SlopBrain" IsChecked="True"
                          Foreground="#EAEAEA" FontSize="11" Margin="0,2"
                          Content="Built-in — works offline (recommended)"/>
             <RadioButton x:Name="BrainCustom" GroupName="SlopBrain"
                          Foreground="#EAEAEA" FontSize="11" Margin="0,2"
                          Content="Custom — local OpenAI-compatible endpoint"/>
-            <StackPanel x:Name="EndpointRow" Visibility="Collapsed" Margin="20,4,0,8">
-              <TextBox x:Name="EndpointBox" Height="28" FontSize="11" MaxLength="200"
-                       Background="#18FFFFFF" Foreground="#EAEAEA" BorderBrush="#44FFFFFF"
-                       Padding="6,3" VerticalContentAlignment="Center"
-                       ToolTip="Local http URL, for example http://127.0.0.1:11434"/>
-              <TextBox x:Name="ModelBox" Height="28" FontSize="11" MaxLength="120" Margin="0,6,0,0"
-                       Background="#18FFFFFF" Foreground="#EAEAEA" BorderBrush="#44FFFFFF"
-                       Padding="6,3" VerticalContentAlignment="Center" ToolTip="Model name"/>
-            </StackPanel>
             <RadioButton x:Name="BrainOpenCodeLocal" GroupName="SlopBrain"
                          Foreground="#EAEAEA" FontSize="11" Margin="0,2"
                          Content="OpenCode — use a local provider"/>
             <RadioButton x:Name="BrainOpenCodeRemote" GroupName="SlopBrain"
                          Foreground="#EAEAEA" FontSize="11" Margin="0,2"
                          Content="OpenCode — use a remote provider (disclosure first)"/>
-            <StackPanel x:Name="OpenCodeRow" Visibility="Collapsed" Margin="20,4,0,8">
-              <TextBox x:Name="ProviderBox" Height="27" FontSize="11" MaxLength="80"
-                       Background="#18FFFFFF" Foreground="#EAEAEA" BorderBrush="#44FFFFFF"
-                       Padding="6,3" VerticalContentAlignment="Center" ToolTip="Provider, for example Ollama"/>
-              <TextBox x:Name="RouteModelBox" Height="27" FontSize="11" MaxLength="120" Margin="0,5,0,0"
-                       Background="#18FFFFFF" Foreground="#EAEAEA" BorderBrush="#44FFFFFF"
-                       Padding="6,3" VerticalContentAlignment="Center" ToolTip="Model"/>
-              <TextBox x:Name="AgentBox" Height="27" FontSize="11" MaxLength="80" Margin="0,5,0,0"
-                       Background="#18FFFFFF" Foreground="#EAEAEA" BorderBrush="#44FFFFFF"
-                       Padding="6,3" VerticalContentAlignment="Center" ToolTip="OpenCode agent id"/>
-              <ComboBox x:Name="ProfileCombo" Height="27" FontSize="11" Margin="0,5,0,0"
-                        ToolTip="Capability profile"/>
-              <TextBlock x:Name="EffectiveModelText" Foreground="#B8B8C0" FontSize="10"
-                         Margin="0,5,0,0" TextWrapping="Wrap"/>
-              <Button x:Name="TermsButton" Content="Read the data route and provider terms"
-                      Style="{StaticResource SlopButton}" Background="#22FFFFFF"
-                      Foreground="#EAEAEA" FontSize="10" HorizontalAlignment="Left"
-                      Padding="8,3" Margin="0,8,0,0"/>
-            </StackPanel>
-            <TextBlock Text="Voice input" Foreground="#93A4BD" FontSize="10" FontWeight="SemiBold" Margin="0,8,0,4"/>
-            <CheckBox x:Name="VoiceEnabledCheck" Foreground="#B8B8C0" FontSize="10" Margin="0,2,0,4"
-                      Content="Enable voice input (local Whisper small; off by default)"/>
+            <Expander Header="Advanced setup" Foreground="#B8B8C0" FontSize="11" IsExpanded="False" Margin="0,8,0,4">
+              <StackPanel Margin="12,4,0,4">
+                <TextBlock Text="Raw values for people who need them." Foreground="#93A4BD" FontSize="11"
+                           TextWrapping="Wrap" Margin="0,0,0,6"/>
+                <StackPanel x:Name="EndpointRow" Visibility="Collapsed" Margin="0,0,0,8">
+                  <TextBox x:Name="EndpointBox" Height="28" FontSize="11" MaxLength="200"
+                           Background="#18FFFFFF" Foreground="#EAEAEA" BorderBrush="#44FFFFFF"
+                           Padding="6,3" VerticalContentAlignment="Center"
+                           ToolTip="Local http URL, for example http://127.0.0.1:11434"/>
+                  <TextBox x:Name="ModelBox" Height="28" FontSize="11" MaxLength="120" Margin="0,6,0,0"
+                           Background="#18FFFFFF" Foreground="#EAEAEA" BorderBrush="#44FFFFFF"
+                           Padding="6,3" VerticalContentAlignment="Center" ToolTip="Model name"/>
+                </StackPanel>
+                <StackPanel x:Name="OpenCodeRow" Visibility="Collapsed" Margin="0,0,0,8">
+                  <TextBox x:Name="ProviderBox" Height="27" FontSize="11" MaxLength="80"
+                           Background="#18FFFFFF" Foreground="#EAEAEA" BorderBrush="#44FFFFFF"
+                           Padding="6,3" VerticalContentAlignment="Center" ToolTip="Provider, for example Ollama"/>
+                  <TextBox x:Name="RouteModelBox" Height="27" FontSize="11" MaxLength="120" Margin="0,5,0,0"
+                           Background="#18FFFFFF" Foreground="#EAEAEA" BorderBrush="#44FFFFFF"
+                           Padding="6,3" VerticalContentAlignment="Center" ToolTip="Model"/>
+                  <TextBox x:Name="AgentBox" Height="27" FontSize="11" MaxLength="80" Margin="0,5,0,0"
+                           Background="#18FFFFFF" Foreground="#EAEAEA" BorderBrush="#44FFFFFF"
+                           Padding="6,3" VerticalContentAlignment="Center" ToolTip="OpenCode agent id"/>
+                  <ComboBox x:Name="ProfileCombo" Height="27" FontSize="11" Margin="0,5,0,0"
+                            ToolTip="Capability profile"/>
+                  <TextBlock x:Name="EffectiveModelText" Foreground="#B8B8C0" FontSize="11"
+                             Margin="0,5,0,0" TextWrapping="Wrap"/>
+                  <Button x:Name="TermsButton" Content="Read the data route and provider terms"
+                          Style="{StaticResource SlopButton}" Background="#22FFFFFF"
+                          Foreground="#EAEAEA" FontSize="11" HorizontalAlignment="Left"
+                          Padding="8,3" Margin="0,8,0,0"/>
+                </StackPanel>
+              </StackPanel>
+            </Expander>
+            <TextBlock Text="Voice input" Foreground="#93A4BD" FontSize="11" FontWeight="SemiBold" Margin="0,8,0,4"/>
+            <CheckBox x:Name="VoiceEnabledCheck" Foreground="#B8B8C0" FontSize="11" Margin="0,2,0,4"
+                      Content="Enable voice input (local transcription, off by default)"/>
             <ComboBox x:Name="VoiceLanguageCombo" Height="26" FontSize="11" Width="120"
                       HorizontalAlignment="Left" ToolTip="Whisper language"/>
-            <TextBlock x:Name="VoiceReadyText" Foreground="#8A8A96" FontSize="10" TextWrapping="Wrap"
+            <TextBlock x:Name="VoiceReadyText" Foreground="#93A4BD" FontSize="11" TextWrapping="Wrap"
                        Margin="0,5,0,0" Text="Whisper readiness: checking"/>
           </StackPanel>
         </ScrollViewer>

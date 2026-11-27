@@ -138,51 +138,63 @@ $xaml = @'
                 <StackPanel Margin="0,0,4,0">
                   <TextBlock Text="Settings" FontSize="14" FontWeight="SemiBold" Foreground="#EAEAEA" Margin="6,6,6,10"/>
 
-                  <TextBlock Text="Companion" Foreground="#A5B4FC" FontSize="10" FontWeight="SemiBold" Margin="6,0,6,4"/>
-                  <TextBlock Text="Custom instructions" Foreground="#B8B8C0" FontSize="10" Margin="6,0,6,2"/>
-                  <TextBox x:Name="SettingsInstructionsBox" Height="56" FontSize="11" AcceptsReturn="True"
-                           TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" Margin="6,0,6,8" Padding="6,4"/>
+                  <TextBlock Text="Companion" Foreground="#A5B4FC" FontSize="11" FontWeight="SemiBold" Margin="6,0,6,4"/>
+                  <TextBlock Text="Name, colour and personality are set in Customize." Foreground="#B8B8C0" FontSize="11"
+                             TextWrapping="Wrap" Margin="6,0,6,8"/>
 
-                  <TextBlock Text="Brain / runtime" Foreground="#A5B4FC" FontSize="10" FontWeight="SemiBold" Margin="6,4,6,4"/>
-                  <TextBlock Text="Model (synced to model/modelName)" Foreground="#B8B8C0" FontSize="10" Margin="6,0,6,2"/>
-                  <TextBox x:Name="SettingsModelBox" Height="28" FontSize="11" Margin="6,0,6,8" Padding="6,4"/>
-                  <TextBlock Text="OpenCode base URL (loopback only)" Foreground="#B8B8C0" FontSize="10" Margin="6,0,6,2"/>
-                  <TextBox x:Name="SettingsBaseUrlBox" Height="28" FontSize="11" Margin="6,0,6,8" Padding="6,4"/>
-                  <TextBlock Text="OpenCode agent id" Foreground="#B8B8C0" FontSize="10" Margin="6,0,6,2"/>
-                  <TextBox x:Name="SettingsAgentIdBox" Height="28" FontSize="11" Margin="6,0,6,8" Padding="6,4"/>
+                  <TextBlock Text="Brain" Foreground="#A5B4FC" FontSize="11" FontWeight="SemiBold" Margin="6,4,6,4"/>
+                  <TextBlock Text="Effective route" Foreground="#B8B8C0" FontSize="11" Margin="6,0,6,2"/>
+                  <TextBlock x:Name="SettingsRouteText" Foreground="#DADAE2" FontSize="11"
+                             TextWrapping="Wrap" Margin="6,0,6,8"/>
+                  <Expander Header="Advanced" Foreground="#B8B8C0" FontSize="11" IsExpanded="False" Margin="6,0,6,8">
+                    <StackPanel Margin="8,4,0,4">
+                      <TextBlock Text="Raw values for people who need them." Foreground="#93A4BD" FontSize="11"
+                                 TextWrapping="Wrap" Margin="0,0,0,6"/>
+                      <TextBlock Text="Model (synced to model/modelName)" Foreground="#B8B8C0" FontSize="11" Margin="0,0,0,2"/>
+                      <TextBox x:Name="SettingsModelBox" Height="28" FontSize="11" IsReadOnly="True"
+                               Margin="0,0,0,8" Padding="6,4"/>
+                      <TextBlock Text="OpenCode base URL" Foreground="#B8B8C0" FontSize="11" Margin="0,0,0,2"/>
+                      <TextBox x:Name="SettingsBaseUrlBox" Height="28" FontSize="11" IsReadOnly="True"
+                               Margin="0,0,0,8" Padding="6,4"/>
+                      <TextBlock Text="OpenCode agent id" Foreground="#B8B8C0" FontSize="11" Margin="0,0,0,2"/>
+                      <TextBox x:Name="SettingsAgentIdBox" Height="28" FontSize="11" IsReadOnly="True"
+                               Margin="0,0,0,8" Padding="6,4"/>
+                    </StackPanel>
+                  </Expander>
 
-                  <TextBlock Text="Voice input" Foreground="#A5B4FC" FontSize="10" FontWeight="SemiBold" Margin="6,4,6,4"/>
-                  <CheckBox x:Name="VoiceEnabledCheck" Content="Voice enabled (local transcription, off by default)"
-                            Foreground="#B8B8C0" FontSize="10" Margin="6,0,6,6"/>
-                  <TextBlock Text="Language" Foreground="#B8B8C0" FontSize="10" Margin="6,0,6,2"/>
+                  <TextBlock Text="Voice" Foreground="#A5B4FC" FontSize="11" FontWeight="SemiBold" Margin="6,4,6,4"/>
+                  <CheckBox x:Name="VoiceEnabledCheck" Content="Voice input (local transcription, off by default)"
+                            Foreground="#B8B8C0" FontSize="11" Margin="6,0,6,6"/>
+                  <TextBlock Text="Language" Foreground="#B8B8C0" FontSize="11" Margin="6,0,6,2"/>
                   <ComboBox x:Name="VoiceLanguageCombo" Height="26" FontSize="11" Margin="6,0,6,6" Width="140"
                             HorizontalAlignment="Left"/>
-                  <TextBlock Text="Max seconds" Foreground="#B8B8C0" FontSize="10" Margin="6,0,6,2"/>
+                  <TextBlock Text="Max seconds" Foreground="#B8B8C0" FontSize="11" Margin="6,0,6,2"/>
                   <TextBox x:Name="VoiceMaxSecondsBox" Height="26" FontSize="11" Width="80" Margin="6,0,6,6"
                            HorizontalAlignment="Left" Padding="6,3" VerticalContentAlignment="Center"/>
                   <Button x:Name="VoiceRepairButton" Content="Repair voice" HorizontalAlignment="Left"
-                          Style="{StaticResource SlopButton}" FontSize="10" Margin="6,0,6,6"
+                          Style="{StaticResource SlopButton}" FontSize="11" Margin="6,0,6,6"
                           Background="#22FFFFFF" Foreground="#EAEAEA" Padding="10,4"/>
-                  <TextBlock x:Name="VoiceReadyText" Text="Whisper readiness: unknown" Foreground="#8A8A96"
-                             FontSize="10" TextWrapping="Wrap" Margin="6,0,6,10"/>
+                  <TextBlock x:Name="VoiceReadyText" Text="Whisper readiness: unknown" Foreground="#93A4BD"
+                             FontSize="11" TextWrapping="Wrap" Margin="6,0,6,10"/>
 
                   <Button x:Name="SettingsSaveButton" Content="Save" HorizontalAlignment="Left"
-                          Style="{StaticResource SlopButton}" FontSize="10" Margin="6,0,6,6"
-                          Background="#6366F1" Foreground="White" Padding="10,4"/>
-                  <TextBlock x:Name="SettingsStatusText" Text="" Foreground="#93A4BD" FontSize="10"
+                          Style="{StaticResource SlopButton}" FontSize="11" Margin="6,0,6,6"
+                          Background="#4F46E5" Foreground="White" Padding="10,4"/>
+                  <TextBlock x:Name="SettingsStatusText" Text="" Foreground="#93A4BD" FontSize="11"
                              TextWrapping="Wrap" Margin="6,0,6,10"/>
 
                   <TextBlock Text="Startup behaviour" Foreground="#B8B8C0" FontSize="11" Margin="6,0,6,2"/>
                   <Button x:Name="AutostartButton" Content="Autostart: Off" HorizontalAlignment="Left"
-                          Style="{StaticResource SlopButton}" FontSize="10" Margin="6,0,6,8"/>
-                  <TextBlock Text="Data location: {app}\data (inside the folder you chose during setup)" Foreground="#8A8A96" FontSize="10"
+                          Style="{StaticResource SlopButton}" FontSize="11" Margin="6,0,6,8"/>
+                  <TextBlock Text="Data location: {app}\data (inside the folder you chose during setup)" Foreground="#93A4BD" FontSize="11"
                              TextWrapping="Wrap" Margin="6,0,6,10"/>
-                  <TextBlock x:Name="AboutText" Text="About and version - Sloppy companion v1" Foreground="#8A8A96"
-                             FontSize="10" TextWrapping="Wrap" Margin="6,0,6,8"/>
-                  <TextBlock Text="Advanced / developer" Foreground="#B8B8C0" FontSize="11" Margin="6,0,6,2"/>
-                  <StackPanel x:Name="AdvancedStack" Margin="6,0,6,8"/>
+                  <TextBlock x:Name="AboutText" Text="About and version - Sloppy companion v1" Foreground="#93A4BD"
+                             FontSize="11" TextWrapping="Wrap" Margin="6,0,6,8"/>
+                  <Expander Header="Advanced / developer" Foreground="#B8B8C0" FontSize="11" IsExpanded="False" Margin="6,0,6,8">
+                    <StackPanel x:Name="AdvancedStack" Margin="6,4,6,8"/>
+                  </Expander>
                   <Button x:Name="SettingsBack" Content="Back to chat" HorizontalAlignment="Left"
-                          Style="{StaticResource SlopButton}" FontSize="10" Margin="6,2,6,6"/>
+                          Style="{StaticResource SlopButton}" FontSize="11" Margin="6,2,6,6"/>
                 </StackPanel>
               </ScrollViewer>
             </StackPanel>
@@ -191,7 +203,9 @@ $xaml = @'
               <ScrollViewer VerticalScrollBarVisibility="Auto" MaxHeight="560">
                 <StackPanel Margin="0,0,4,0">
                   <TextBlock Text="Customize" FontSize="14" FontWeight="SemiBold" Foreground="#EAEAEA" Margin="6,6,6,10"/>
-                  <TextBlock Text="Name" Foreground="#B8B8C0" FontSize="10" Margin="6,0,6,2"/>
+                  <TextBlock Text="This is the only place your name, colour, personality and persona text are edited."
+                             Foreground="#93A4BD" FontSize="11" TextWrapping="Wrap" Margin="6,0,6,8"/>
+                  <TextBlock Text="Name" Foreground="#B8B8C0" FontSize="11" Margin="6,0,6,2"/>
                   <TextBox x:Name="CustomizeNameBox" Height="28" FontSize="11" Margin="6,0,6,8" Padding="6,4"/>
                   <TextBlock Text="Colour" Foreground="#B8B8C0" FontSize="10" Margin="6,0,6,2"/>
                   <ComboBox x:Name="CustomizeColourCombo" Height="26" FontSize="11" Width="180"
@@ -203,8 +217,8 @@ $xaml = @'
                   <TextBox x:Name="CustomizePersonaBox" Height="110" FontSize="10" AcceptsReturn="True"
                            TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" Margin="6,0,6,8" Padding="6,4"/>
                   <Button x:Name="CustomizeSaveButton" Content="Save" HorizontalAlignment="Left"
-                          Style="{StaticResource SlopButton}" FontSize="10" Margin="6,0,6,6"
-                          Background="#6366F1" Foreground="White" Padding="10,4"/>
+                          Style="{StaticResource SlopButton}" FontSize="11" Margin="6,0,6,6"
+                          Background="#4F46E5" Foreground="White" Padding="10,4"/>
                   <TextBlock x:Name="CustomizeStatusText" Text="" Foreground="#93A4BD" FontSize="10"
                              TextWrapping="Wrap" Margin="6,0,6,10"/>
                   <Button x:Name="CustomizeBack" Content="Back to chat" HorizontalAlignment="Left"
@@ -217,23 +231,31 @@ $xaml = @'
               <ScrollViewer VerticalScrollBarVisibility="Auto" MaxHeight="560">
                 <StackPanel Margin="0,0,4,0">
                   <TextBlock Text="Brain" FontSize="14" FontWeight="SemiBold" Foreground="#EAEAEA" Margin="6,6,6,10"/>
-                  <TextBlock x:Name="BrainRouteText" Foreground="#DADAE2" FontSize="11" Margin="6,0,6,6"/>
-                  <TextBlock x:Name="BrainEffectiveText" Foreground="#8A8A96" FontSize="10" TextWrapping="Wrap" Margin="6,0,6,8"/>
-                  <TextBlock Text="Brain tier - 1 = built-in local, 2 = OpenCode" Foreground="#B8B8C0" FontSize="10" Margin="6,0,6,2"/>
-                  <ComboBox x:Name="BrainTypeCombo" Height="26" FontSize="11" Width="180" HorizontalAlignment="Left" Margin="6,0,6,8"/>
-                  <TextBlock Text="Provider" Foreground="#B8B8C0" FontSize="10" Margin="6,0,6,2"/>
-                  <TextBox x:Name="BrainProviderBox" Height="26" FontSize="11" Margin="6,0,6,8" Padding="6,3"/>
-                  <TextBlock Text="Endpoint URL (custom, loopback only)" Foreground="#B8B8C0" FontSize="10" Margin="6,0,6,2"/>
-                  <TextBox x:Name="BrainEndpointBox" Height="26" FontSize="11" Margin="6,0,6,8" Padding="6,3"/>
-                  <TextBlock Text="Model" Foreground="#B8B8C0" FontSize="10" Margin="6,0,6,2"/>
-                  <ComboBox x:Name="BrainModelBox" Height="26" FontSize="11" IsEditable="True" Margin="6,0,6,8" Padding="6,3" Width="220" HorizontalAlignment="Left"/>
-                  <TextBlock Text="Agent id" Foreground="#B8B8C0" FontSize="10" Margin="6,0,6,2"/>
-                  <TextBox x:Name="BrainAgentIdBox" Height="26" FontSize="11" Margin="6,0,6,8" Padding="6,3"/>
-                  <TextBlock Text="Capability profile" Foreground="#B8B8C0" FontSize="10" Margin="6,0,6,2"/>
-                  <ComboBox x:Name="BrainProfileCombo" Height="26" FontSize="11" Width="180" HorizontalAlignment="Left" Margin="6,0,6,8"/>
+                  <TextBlock Text="Where answers come from" Foreground="#A5B4FC" FontSize="11" FontWeight="SemiBold"
+                             Margin="6,0,6,4"/>
+                  <TextBlock x:Name="BrainRouteText" Foreground="#DADAE2" FontSize="11" TextWrapping="Wrap" Margin="6,0,6,6"/>
+                  <TextBlock x:Name="BrainEffectiveText" Foreground="#93A4BD" FontSize="11" TextWrapping="Wrap" Margin="6,0,6,6"/>
+                  <TextBlock Text="Brain tier" Foreground="#B8B8C0" FontSize="11" Margin="6,4,6,2"/>
+                  <ComboBox x:Name="BrainTypeCombo" Height="26" FontSize="11" Width="180" HorizontalAlignment="Left" Margin="6,0,6,6"/>
+                  <Expander Header="Advanced" Foreground="#B8B8C0" FontSize="11" IsExpanded="False" Margin="6,0,6,8">
+                    <StackPanel Margin="8,4,0,4">
+                      <TextBlock Text="Raw values for people who need them." Foreground="#93A4BD" FontSize="11"
+                                 TextWrapping="Wrap" Margin="0,0,0,6"/>
+                      <TextBlock Text="Provider" Foreground="#B8B8C0" FontSize="11" Margin="0,0,0,2"/>
+                      <TextBox x:Name="BrainProviderBox" Height="26" FontSize="11" Margin="0,0,0,8" Padding="6,3"/>
+                      <TextBlock Text="Endpoint URL (custom, loopback only)" Foreground="#B8B8C0" FontSize="11" Margin="0,0,0,2"/>
+                      <TextBox x:Name="BrainEndpointBox" Height="26" FontSize="11" Margin="0,0,0,8" Padding="6,3"/>
+                      <TextBlock Text="Model" Foreground="#B8B8C0" FontSize="11" Margin="0,0,0,2"/>
+                      <ComboBox x:Name="BrainModelBox" Height="26" FontSize="11" IsEditable="True" Margin="0,0,0,8" Padding="6,3" Width="220" HorizontalAlignment="Left"/>
+                      <TextBlock Text="Agent id" Foreground="#B8B8C0" FontSize="11" Margin="0,0,0,2"/>
+                      <TextBox x:Name="BrainAgentIdBox" Height="26" FontSize="11" Margin="0,0,0,8" Padding="6,3"/>
+                      <TextBlock Text="Capability profile" Foreground="#B8B8C0" FontSize="11" Margin="0,0,0,2"/>
+                      <ComboBox x:Name="BrainProfileCombo" Height="26" FontSize="11" Width="180" HorizontalAlignment="Left" Margin="0,0,0,8"/>
+                    </StackPanel>
+                  </Expander>
                   <Button x:Name="BrainSaveButton" Content="Save" HorizontalAlignment="Left"
-                          Style="{StaticResource SlopButton}" FontSize="10" Margin="6,0,6,6"
-                          Background="#6366F1" Foreground="White" Padding="10,4"/>
+                          Style="{StaticResource SlopButton}" FontSize="11" Margin="6,0,6,6"
+                          Background="#4F46E5" Foreground="White" Padding="10,4"/>
                   <TextBlock x:Name="BrainStatusText" Text="" Foreground="#93A4BD" FontSize="10"
                              TextWrapping="Wrap" Margin="6,0,6,10"/>
                   <Button x:Name="BrainBack" Content="Back to chat" HorizontalAlignment="Left"
@@ -247,25 +269,27 @@ $xaml = @'
                 <StackPanel Margin="0,0,4,0">
                   <TextBlock Text="Privacy" FontSize="14" FontWeight="SemiBold" Foreground="#EAEAEA" Margin="6,6,6,10"/>
                   <TextBlock Text="Active data route" Foreground="#B8B8C0" FontSize="11" Margin="6,0,6,2"/>
-                  <TextBlock x:Name="PrivacyRouteText" Foreground="#DADAE2" FontSize="10" TextWrapping="Wrap"
+                  <TextBlock x:Name="PrivacyRouteText" Foreground="#DADAE2" FontSize="11" TextWrapping="Wrap"
                              MaxHeight="110" Margin="6,0,6,8"/>
-                  <TextBlock x:Name="PrivacyTermsLink" Foreground="#93C5FD" FontSize="10" TextWrapping="Wrap"
+                  <TextBlock x:Name="PrivacyTermsLink" Foreground="#93C5FD" FontSize="11" TextWrapping="Wrap"
                              Visibility="Collapsed" Margin="6,0,6,8"/>
                   <TextBlock Text="Deletion scopes" Foreground="#B8B8C0" FontSize="11" Margin="6,4,6,2"/>
-                  <TextBlock x:Name="PrivacyConversationCopy" Foreground="#8A8A96" FontSize="10" TextWrapping="Wrap" Margin="6,0,6,4"/>
-                  <TextBlock x:Name="PrivacySessionCopy" Foreground="#8A8A96" FontSize="10" TextWrapping="Wrap" Margin="6,0,6,4"/>
-                  <TextBlock x:Name="PrivacyLocalDataCopy" Foreground="#8A8A96" FontSize="10" TextWrapping="Wrap" Margin="6,0,6,8"/>
+                  <TextBlock x:Name="PrivacyConversationCopy" Foreground="#93A4BD" FontSize="11" TextWrapping="Wrap" Margin="6,0,6,4"/>
+                  <TextBlock x:Name="PrivacySessionCopy" Foreground="#93A4BD" FontSize="11" TextWrapping="Wrap" Margin="6,0,6,4"/>
+                  <TextBlock x:Name="PrivacyLocalDataCopy" Foreground="#93A4BD" FontSize="11" TextWrapping="Wrap" Margin="6,0,6,8"/>
                   <TextBlock Text="Deletion actions" Foreground="#B8B8C0" FontSize="11" Margin="6,4,6,2"/>
+                  <TextBlock Text="These actions cannot be undone." Foreground="#93A4BD" FontSize="11"
+                             TextWrapping="Wrap" Margin="6,0,6,6"/>
                   <Button x:Name="DeleteConversationButton" Content="Clear conversation" HorizontalAlignment="Left"
-                          Style="{StaticResource SlopButton}" FontSize="10" Margin="6,0,6,6"/>
+                          Style="{StaticResource SlopButton}" FontSize="11" Margin="6,0,6,6"/>
                   <Button x:Name="DeleteSessionButton" Content="Delete OpenCode session" HorizontalAlignment="Left"
-                          Style="{StaticResource SlopButton}" FontSize="10" Margin="6,0,6,6"/>
+                          Style="{StaticResource SlopButton}" FontSize="11" Margin="6,0,6,6"/>
                   <Button x:Name="DeleteLocalDataButton" Content="Clear Sloppy local data" HorizontalAlignment="Left"
-                          Style="{StaticResource SlopButton}" FontSize="10" Margin="6,0,6,8"/>
-                  <TextBlock x:Name="PrivacyStatusText" Text="" Foreground="#93A4BD" FontSize="10"
+                          Style="{StaticResource SlopButton}" FontSize="11" Margin="6,0,6,8"/>
+                  <TextBlock x:Name="PrivacyStatusText" Text="" Foreground="#93A4BD" FontSize="11"
                              TextWrapping="Wrap" Margin="6,0,6,10"/>
                   <Button x:Name="PrivacyBack" Content="Back to chat" HorizontalAlignment="Left"
-                          Style="{StaticResource SlopButton}" FontSize="10" Margin="6,2,6,6"/>
+                          Style="{StaticResource SlopButton}" FontSize="11" Margin="6,2,6,6"/>
                 </StackPanel>
               </ScrollViewer>
             </StackPanel>
@@ -373,7 +397,7 @@ $AutostartButton = $window.FindName('AutostartButton')
 $DeleteConversationButton = $window.FindName('DeleteConversationButton')
 $DeleteSessionButton = $window.FindName('DeleteSessionButton')
 $DeleteLocalDataButton = $window.FindName('DeleteLocalDataButton')
-$SettingsInstructionsBox = $window.FindName('SettingsInstructionsBox')
+$SettingsRouteText = $window.FindName('SettingsRouteText')
 $SettingsModelBox = $window.FindName('SettingsModelBox')
 $SettingsBaseUrlBox = $window.FindName('SettingsBaseUrlBox')
 $SettingsAgentIdBox = $window.FindName('SettingsAgentIdBox')
@@ -1093,7 +1117,8 @@ function Load-SlopSettings {
     $cfg = $script:SlopConfigResult.Config
     if ($null -eq $cfg) { return }
     $defaults = New-SlopDefaultConfig
-    $SettingsInstructionsBox.Text = if ($cfg.instructions) { [string]$cfg.instructions } else { [string]$defaults.instructions }
+    $kind = Resolve-SlopRouteKind -Config $cfg
+    $SettingsRouteText.Text = if ($kind -like 'opencode*') { Get-SlopCopy -Key 'route.opencode' } else { Get-SlopCopy -Key 'route.local' }
     $model = [string]$cfg.model
     if ([string]::IsNullOrWhiteSpace($model)) { $model = [string]$cfg.modelName }
     if ([string]::IsNullOrWhiteSpace($model)) { $model = [string]$defaults.model }
@@ -1108,13 +1133,8 @@ function Save-SlopSettings {
     $cfg = @{}
     foreach ($key in $script:SlopConfigResult.Config.Keys) { $cfg[$key] = $script:SlopConfigResult.Config[$key] }
 
-    $cfg.instructions = [string]$SettingsInstructionsBox.Text
-    $model = ([string]$SettingsModelBox.Text).Trim()
-    $cfg.model = $model
-    $cfg.modelName = $model
-    $cfg.openCodeBaseUrl = ([string]$SettingsBaseUrlBox.Text).Trim().TrimEnd('/')
-    $cfg.agentId = ([string]$SettingsAgentIdBox.Text).Trim()
-    if ([string]::IsNullOrWhiteSpace([string]$cfg.agentId)) { $cfg.agentId = 'sloppy' }
+    # Tier, provider, endpoint, model and agent belong to Brain. Settings owns
+    # only the voice opt-in and its local transcription settings.
     $cfg.voiceEnabled = [bool]$VoiceEnabledCheck.IsChecked
     $cfg.whisperLanguage = ([string]$VoiceLanguageCombo.Text).Trim().ToLowerInvariant()
     $seconds = 0

@@ -48,7 +48,7 @@ Describe 'Slop.Onboarding' {
         $src | Should -Match 'Get-SlopIdentityColor -ColorKey'
         $src | Should -Match 'foreach \(\$entry in \(Get-SlopIdentityColors\)'
         $src | Should -Not -Match 'BrainNote'
-        $src | Should -Match 'Tier 1 - built-in local Qwen; Tier 2 - OpenCode'
+        $src | Should -Match 'Choose where answers come from\. Built-in works offline'
         $src | Should -Match 'BrainCustom'
         $src | Should -Match 'BrainOpenCodeLocal'
         $src | Should -Match 'BrainOpenCodeRemote'

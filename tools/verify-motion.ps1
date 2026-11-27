@@ -524,14 +524,14 @@ $personaPath = Get-SlopPersonaPath
 
 Invoke-UiaButton 'Settings'
 Start-Sleep -Milliseconds 350
-Set-UiaValue 'SettingsAgentIdBox' 'probe-agent'
+Set-UiaValue 'VoiceMaxSecondsBox' '45'
 Invoke-Uia 'SettingsSaveButton'
 Start-Sleep -Milliseconds 350
 $settingsStatus = Get-UiaText 'SettingsStatusText'
 "SAVE Settings status=$settingsStatus"
 if ($settingsStatus -notmatch 'Settings saved\.') { throw 'Settings save did not show visible success' }
 $savedCfg = Get-Content -LiteralPath $cfgPath -Raw | ConvertFrom-Json
-if ($savedCfg.agentId -ne 'probe-agent') { throw 'Settings save did not persist agentId' }
+if ([int]$savedCfg.voiceMaxSeconds -ne 45) { throw 'Settings save did not persist voiceMaxSeconds' }
 if ((Find-Uia 'AboutText').Current.IsOffscreen) { throw 'Settings closed after save' }
 Invoke-Uia 'SettingsBack'
 Start-Sleep -Milliseconds 250
