@@ -8,7 +8,7 @@ if (-not (Get-Command Get-SlopIdentityColors -ErrorAction SilentlyContinue)) {
 function Get-SlopAdapterContract {
     return @{
         Version        = 1
-        MarkerContract = @('__DONE__', '__CONNECTED__', '__WARN__', '__ERR__', '__TOK__', '__OC')
+        MarkerContract = @('__DONE__', '__CONNECTED__', '__WARN__', '__ERR__', '__TOK__', '__OC', '__THINK__')
         QueueType      = 'System.Collections.Concurrent.ConcurrentQueue[string]'
         EntryPoint     = 'Invoke-SlopAdapter'
     }
@@ -91,7 +91,8 @@ function New-SlopChatRequestBody {
         [Parameter(Mandatory)][AllowEmptyString()][string]$UserText,
         [object[]]$History = @(),
         [object[]]$Attachments = @(),
-        [int]$MaxLength = 8000
+        [int]$MaxLength = 8000,
+        [switch]$DisableThinking
     )
     if ($UserText.Length -gt $MaxLength) { throw "prompt exceeds $MaxLength characters" }
     $messages = [Collections.Generic.List[object]]::new()
@@ -118,13 +119,17 @@ function New-SlopChatRequestBody {
     } else {
         $messages.Add(@{ role = 'user'; content = $UserText })
     }
-    return @{
+    $result = @{
         model       = 'sloppy'
         messages    = $messages.ToArray()
         stream      = $true
         temperature = 0.8
         max_tokens  = 512
-    } | ConvertTo-Json -Depth 8 -Compress
+    }
+    if ($DisableThinking) {
+        $result.chat_template_kwargs = @{ enable_thinking = $false }
+    }
+    return $result | ConvertTo-Json -Depth 8 -Compress
 }
 
 # Part B supersedes the original SLOP_ADAPTER escape hatch: route selection now

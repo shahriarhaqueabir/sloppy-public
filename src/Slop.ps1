@@ -60,7 +60,7 @@ $xaml = @'
     <!-- Organic body: path coordinates are WINDOW space, so the Path sits at Canvas origin.
          Round line joins/caps keep the outline smooth; no Aliased EdgeMode on curves. -->
     <Path x:Name="BodyPath"
-          Fill="#D81E293B" Stroke="#CC3B82F6" StrokeThickness="3"
+          Fill="#D81E293B" Stroke="Transparent" StrokeThickness="0"
           StrokeLineJoin="Round" StrokeStartLineCap="Round" StrokeEndLineCap="Round"
           IsHitTestVisible="False" Opacity="0" Visibility="Collapsed"/>
     <!-- Glossy rim highlight along the upper-left arc, inset from the outline -->
@@ -70,12 +70,11 @@ $xaml = @'
           Opacity="0" Visibility="Collapsed"/>
 
     <!-- Stable content layer: rounded clip keeps rectangular rows off the curve -->
-    <Grid x:Name="Frame" Width="448" Height="294" Canvas.Left="18" Canvas.Top="18"
+    <Grid x:Name="Frame" Width="448" Height="294" Canvas.Left="10" Canvas.Top="10"
           Opacity="0" Visibility="Collapsed">
       <Grid.Clip>
-        <!-- Inset 8px (body margin 18 + inward-dent safety), radius tracks the
-             body's rounded frame. SizeChanged rebuilds this for resized windows. -->
-        <RectangleGeometry Rect="10,10,428,274" RadiusX="27" RadiusY="27"/>
+        <!-- Inset from the tightened frame; SizeChanged rebuilds this for resized windows. -->
+        <RectangleGeometry Rect="4,4,440,286" RadiusX="27" RadiusY="27"/>
       </Grid.Clip>
       <Grid.RowDefinitions>
         <RowDefinition Height="36"/>
@@ -306,6 +305,12 @@ $xaml = @'
       </Border>
     </Grid>
 
+    <!-- Outline is the outermost layer: transparent fill, visible stroke. -->
+    <Path x:Name="OutlinePath"
+          Fill="Transparent" Stroke="#CC3B82F6" StrokeThickness="3"
+          StrokeLineJoin="Round" StrokeStartLineCap="Round" StrokeEndLineCap="Round"
+          IsHitTestVisible="False" Opacity="0" Visibility="Collapsed"/>
+
     <!-- Bottom-right resize grip for growing the conversation workspace -->
     <Border x:Name="ResizeGrip" Width="16" Height="16" Canvas.Right="0" Canvas.Bottom="0"
             Background="Transparent" Cursor="SizeNWSE" ToolTip="Resize"/>
@@ -348,6 +353,7 @@ $StatusDot = $window.FindName('StatusDot')
 $RouteBadge = $window.FindName('RouteBadge')
 $DragHandle = $window.FindName('DragHandle')
 $BodyPath = $window.FindName('BodyPath')
+$OutlinePath = $window.FindName('OutlinePath')
 $HeadHighlight = $window.FindName('HeadHighlight')
 $SettingsDot = $window.FindName('SettingsDot')
 $PinDot = $window.FindName('PinDot')
@@ -422,6 +428,17 @@ $script:WorkArea = [System.Windows.SystemParameters]::WorkArea
 $window.Left = 100
 $window.Top = 100
 
+function Set-SlopPetRectInWorkArea {
+    $wa = [System.Windows.SystemParameters]::WorkArea
+    $r = Get-SlopWorkAreaClampedRect -Left $window.Left -Top $window.Top `
+        -Width $window.ActualWidth -Height $window.ActualHeight -WorkArea $wa
+    if ([Math]::Abs($window.Left - $r.Left) -gt 0.5 -or [Math]::Abs($window.Top - $r.Top) -gt 0.5) {
+        $window.Left = $r.Left
+        $window.Top = $r.Top
+    }
+}
+$window.Add_LocationChanged({ Set-SlopPetRectInWorkArea })
+
 $DragHandle.Add_MouseLeftButtonDown({ $window.DragMove() })
 
 $script:resizeOrigin = $null
@@ -436,22 +453,26 @@ $ResizeGrip.Add_MouseMove({
     param($s, $e)
     if (-not $script:resizeOrigin) { return }
     $p = $e.GetPosition($window)
-    $window.Width  = [Math]::Max(468.0, [Math]::Min(1280.0, $script:resizeOrigin[2] + ($p.X - $script:resizeOrigin[0])))
-    $window.Height = [Math]::Max(314.0, [Math]::Min(1840.0, $script:resizeOrigin[3] + ($p.Y - $script:resizeOrigin[1])))
+    $wa = [System.Windows.SystemParameters]::WorkArea
+    $maxW = [Math]::Min(1280.0, [double]$wa.Width)
+    $maxH = [Math]::Min(1840.0, [double]$wa.Height)
+    $window.Width  = [Math]::Max(468.0, [Math]::Min($maxW, $script:resizeOrigin[2] + ($p.X - $script:resizeOrigin[0])))
+    $window.Height = [Math]::Max(314.0, [Math]::Min($maxH, $script:resizeOrigin[3] + ($p.Y - $script:resizeOrigin[1])))
 })
 $ResizeGrip.Add_MouseLeftButtonUp({
     param($s, $e)
     $script:resizeOrigin = $null
     $ResizeGrip.ReleaseMouseCapture()
+    Set-SlopPetRectInWorkArea
 })
 
 function Update-SlopFrameClip {
-    $Frame.Width = [Math]::Max(300.0, $window.ActualWidth - 36)
-    $Frame.Height = [Math]::Max(200.0, $window.ActualHeight - 36)
+    $Frame.Width = [Math]::Max(300.0, $window.ActualWidth - 20)
+    $Frame.Height = [Math]::Max(200.0, $window.ActualHeight - 20)
     # Keep rectangular content inside the organic rounded body. The body radius
     # tracks 0.11*min(W,H); asymmetry and dents can push the edge inward, so we
     # inset a bit more and shrink the clip radius to avoid top/bottom corner cuts.
-    $clipInset = 14.0
+    $clipInset = 8.0
     $clipRadius = [Math]::Max(24.0, 0.11 * [Math]::Min($Frame.Width, $Frame.Height) - 10.0)
     $clipRect = [System.Windows.Rect]::new($clipInset, $clipInset,
         [Math]::Max(10.0, $Frame.Width - 2*$clipInset), [Math]::Max(10.0, $Frame.Height - 2*$clipInset))
@@ -510,7 +531,7 @@ function Update-SlopFaceRegion {
 $window.Add_SizeChanged({
     param($s, $e)
     $script:WorkArea = [System.Windows.SystemParameters]::WorkArea
-    # 18 px of goo room on every side, matching the frame engine's margin.
+    # 10 px of goo room on every side, matching the frame engine's margin.
     Update-SlopFrameClip
     Update-PeaAnchor
     Update-SlopFaceRegion
@@ -721,7 +742,8 @@ function Apply-SlopMotion {
 
     # OpenPulse is already stepped in Update-SlopMotionState; render it here
     # instead of adding a new membrane/C# pulse API.
-    $BodyPath.StrokeThickness = 3.0 + 6.0 * $m.OpenPulse.Value
+    $BodyPath.StrokeThickness = 0.0
+    $OutlinePath.StrokeThickness = 3.0 + 6.0 * $m.OpenPulse.Value
 
     # The membrane owns its physics and emits window-space path data. The signal
     # stack only selects a mood; it never transforms the content layer.
@@ -738,6 +760,7 @@ function Apply-SlopMotion {
 
     if ($bodyClosed -and $script:Frame.Opacity -lt 0.02) {
         $BodyPath.Visibility = 'Collapsed'
+        $OutlinePath.Visibility = 'Collapsed'
         $HeadHighlight.Visibility = 'Collapsed'
         $Frame.Visibility = 'Collapsed'
         $PeaCanvas.Visibility = 'Visible'
@@ -747,6 +770,10 @@ function Apply-SlopMotion {
             $BodyPath.Data = [System.Windows.Media.Geometry]::Parse($script:Membrane.Path)
             $BodyPath.Opacity = 1.0
             $BodyPath.Visibility = 'Visible'
+            $OutlinePath.Data = $BodyPath.Data
+            # BodyPath is fill-only, so the outline keeps its own XAML stroke brush.
+            $OutlinePath.Opacity = 1.0
+            $OutlinePath.Visibility = 'Visible'
             $hl = $script:Membrane.Highlight
             if ($hl) {
                 $HeadHighlight.Data = [System.Windows.Media.Geometry]::Parse($hl)
@@ -801,6 +828,15 @@ function Open-SlopChatWindow {
     $script:ChatMode = 'Extended'
     Use-SlopChatControls -Target $chat
     Initialize-SlopChatControlHandlers -Target $chat
+    $chatRoot = $chat.FindName('ChatRoot')
+    $chatScroll = $chat.FindName('ChatScroll')
+    $chatRoot.Add_PreviewMouseWheel({
+        param($s,$e)
+        if ($s -ne $chatScroll) {
+            $chatScroll.ScrollToVerticalOffset($chatScroll.VerticalOffset - [Math]::Sign($e.Delta) * 48.0)
+            $e.Handled = $true
+        }
+    })
     Set-SlopChatWindowRect -Mode 'Extended'
     $chat.FindName('ChatModeButton').Add_Click({
         $newMode = if ($script:ChatMode -eq 'Full') { 'Extended' } else { 'Full' }
@@ -2099,7 +2135,7 @@ Set-SlopFrameTarget -State $script:Motion -Target 'closed'
 Set-SlopBaseCondition -State $script:Motion -Streaming $false -ChatOpen $false -Stalled $false
 Initialize-MotionVisuals
 Update-PeaAnchor
-$script:Membrane = [SlopFrame]::new([float]$Frame.Width, [float]$Frame.Height, 18.0, [Environment]::TickCount)
+$script:Membrane = [SlopFrame]::new([float]$Frame.Width, [float]$Frame.Height, 10.0, [Environment]::TickCount)
 $script:Membrane.SetMotionScale($(if ($script:ReducedMotion) { 0.0 } else { 1.0 }))
 $Stage = $window.FindName('Stage')
 $script:FaceLayer = New-SlopFaceLayer -Seed ([Environment]::TickCount)

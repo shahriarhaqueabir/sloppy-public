@@ -210,9 +210,11 @@ function Show-SlopOnboarding {
     $NameBox = $dlg.FindName('NameBox')
     $OwnerBox = $dlg.FindName('OwnerBox')
     $SwatchStrip = $dlg.FindName('SwatchStrip')
-    $PreviewPea = $dlg.FindName('PreviewPea')
+    # Event handlers cannot close over function locals, so the two live-preview
+    # controls are published to script scope before any handler is registered.
+    $script:PreviewPea = $dlg.FindName('PreviewPea')
     $PresetList = $dlg.FindName('PresetList')
-    $SampleLine = $dlg.FindName('SampleLine')
+    $script:SampleLine = $dlg.FindName('SampleLine')
     $CustomBox = $dlg.FindName('CustomBox')
     $EndpointRow = $dlg.FindName('EndpointRow')
     $EndpointBox = $dlg.FindName('EndpointBox')
@@ -283,11 +285,11 @@ function Show-SlopOnboarding {
         $swatch.Style = $dlg.Resources['SlopButton']
         $swatch.Add_Click({ param($s,$e)
             $script:SelectedColor = [string]$s.Tag
-            $PreviewPea.Fill = [System.Windows.Media.BrushConverter]::new().ConvertFromString((Get-SlopIdentityColor -ColorKey $script:SelectedColor))
+            $script:PreviewPea.Fill = [System.Windows.Media.BrushConverter]::new().ConvertFromString((Get-SlopIdentityColor -ColorKey $script:SelectedColor))
         })
         $SwatchStrip.Children.Add($swatch) | Out-Null
     }
-    $PreviewPea.Fill = [System.Windows.Media.BrushConverter]::new().ConvertFromString((Get-SlopIdentityColor -ColorKey $script:SelectedColor))
+    $script:PreviewPea.Fill = [System.Windows.Media.BrushConverter]::new().ConvertFromString((Get-SlopIdentityColor -ColorKey $script:SelectedColor))
 
     foreach ($preset in Get-SlopPersonaPresets) {
         $id = [string]$preset.Id
@@ -302,12 +304,12 @@ function Show-SlopOnboarding {
         $radio.Add_Checked({ param($s,$e)
             $script:SelectedPreset = [string]$s.Tag
             $sample = Get-SlopPersonaPresets | Where-Object { $_.Id -eq $script:SelectedPreset } | Select-Object -First 1
-            if ($sample) { $SampleLine.Text = $sample.Sample }
+            if ($sample) { $script:SampleLine.Text = $sample.Sample }
         })
         $PresetList.Children.Add($radio) | Out-Null
     }
     $initialSample = Get-SlopPersonaPresets | Where-Object { $_.Id -eq $script:SelectedPreset } | Select-Object -First 1
-    if ($initialSample) { $SampleLine.Text = $initialSample.Sample }
+    if ($initialSample) { $script:SampleLine.Text = $initialSample.Sample }
 
     function Update-SlopBrainFields {
         if ($BrainCustom.IsChecked) {

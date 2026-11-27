@@ -164,27 +164,26 @@ function Read-SlopSseStream {
     )
     $malformed = 0
     $tokens = 0
+    $thinking = ''
     while ($true) {
         if ($Token.IsCancellationRequested) {
-            return @{ Malformed = $malformed; Tokens = $tokens; Cancelled = $true }
+            return @{ Malformed = $malformed; Tokens = $tokens; Cancelled = $true; Thinking = $thinking }
         }
         try {
-            # ReadLine() cannot be interrupted. StreamReader's async read honours
-            # the token, so a stalled socket is released the moment Stop cancels.
             $line = $Reader.ReadLineAsync($Token).GetAwaiter().GetResult()
         }
         catch [System.OperationCanceledException] {
-            return @{ Malformed = $malformed; Tokens = $tokens; Cancelled = $true }
+            return @{ Malformed = $malformed; Tokens = $tokens; Cancelled = $true; Thinking = $thinking }
         }
         catch [System.ObjectDisposedException] {
             if ($Token.IsCancellationRequested) {
-                return @{ Malformed = $malformed; Tokens = $tokens; Cancelled = $true }
+                return @{ Malformed = $malformed; Tokens = $tokens; Cancelled = $true; Thinking = $thinking }
             }
             throw
         }
         if ($null -eq $line) {
             if ($Token.IsCancellationRequested) {
-                return @{ Malformed = $malformed; Tokens = $tokens; Cancelled = $true }
+                return @{ Malformed = $malformed; Tokens = $tokens; Cancelled = $true; Thinking = $thinking }
             }
             break
         }
@@ -199,11 +198,18 @@ function Read-SlopSseStream {
                 $Queue.Enqueue([string]$delta)
                 $tokens++
             }
+            $reasoning = $obj.choices[0].delta.reasoning_content
+            if ($reasoning) { $thinking += [string]$reasoning }
         } catch {
             $malformed++
         }
     }
-    return @{ Malformed = $malformed; Tokens = $tokens; Cancelled = $false }
+    # Only surface thinking when the model produced no visible answer. A real
+    # answer must never be replaced or prefixed by its hidden reasoning.
+    if ($tokens -eq 0 -and -not [string]::IsNullOrWhiteSpace($thinking)) {
+        $Queue.Enqueue('__THINK__' + $thinking)
+    }
+    return @{ Malformed = $malformed; Tokens = $tokens; Cancelled = $false; Thinking = $thinking }
 }
 
 function Resolve-SlopStreamToken {
@@ -220,6 +226,9 @@ function Resolve-SlopStreamToken {
                 elseif ($reason -like 'HTTP *') { 'http' }
                 else { 'error' }
         return @{ Kind = $kind; Reason = $reason; Text = $null }
+    }
+    if ($Token.StartsWith('__THINK__')) {
+        return @{ Kind = 'thinking'; Reason = $null; Text = $Token.Substring(9) }
     }
     # The OpenCode bridge marks its deltas so they cannot be confused with the
     # lifecycle control tokens above; strip the marker before rendering.
@@ -253,4 +262,11 @@ function Format-SlopEmptyResponse {
     param([string]$Text)
     if ([string]::IsNullOrWhiteSpace($Text)) { return '[empty response]' }
     return $null
+}
+
+function Format-SlopThinkingFallback {
+    param([string]$Thinking, [string]$VisibleText)
+    if (-not [string]::IsNullOrWhiteSpace($VisibleText)) { return $null }
+    if ([string]::IsNullOrWhiteSpace($Thinking)) { return $null }
+    return '[thinking] ' + $Thinking.Trim()
 }
