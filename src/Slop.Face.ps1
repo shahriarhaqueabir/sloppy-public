@@ -1,5 +1,9 @@
-# src/Slop.Face.ps1 — 12 alive pixels with switchable expression patterns.
+# src/Slop.Face.ps1 — a soft field of alive pixels with switchable expression patterns.
+# Geometry, colour and opacity come from the pure design-token layer.
 $ErrorActionPreference = 'Stop'
+
+$designModule = Join-Path $PSScriptRoot 'Slop.Design.ps1'
+if (Test-Path -LiteralPath $designModule) { . $designModule }
 
 $script:FaceDots = $null
 $script:FaceLastPattern = $null
@@ -11,17 +15,31 @@ $script:FaceToNx = @()
 $script:FaceToNy = @()
 
 function Initialize-SlopFaceDots {
-    param([int]$Count = 12, [int]$Seed = 1337)
+    param(
+        [int]$Count = ([int](Get-SlopDesignToken -Name 'face.count')),
+        [int]$Seed = 1337
+    )
     $rng = New-Object System.Random($Seed)
     $dots = @()
-    $palette = @('#93C5FD','#FDE68A','#86EFAC','#FCA5A5','#C4B5FD','#FFFFFF')
+    # Light text roles double as particle colours: they stay legible over the
+    # dark glass backplate and match the status palette used elsewhere.
+    $palette = @(
+        (Get-SlopDesignToken -Name 'text.focus'),
+        (Get-SlopDesignToken -Name 'text.thinking'),
+        (Get-SlopDesignToken -Name 'text.success'),
+        (Get-SlopDesignToken -Name 'text.error'),
+        (Get-SlopDesignToken -Name 'text.accent'),
+        (Get-SlopDesignToken -Name 'text.primary')
+    )
+    $minSize = [double](Get-SlopDesignToken -Name 'face.size.min')
+    $maxSize = [double](Get-SlopDesignToken -Name 'face.size.max')
     for ($i = 0; $i -lt $Count; $i++) {
         $dots += @{
             X = $rng.NextDouble()
             Y = $rng.NextDouble()
             Phase = $rng.NextDouble() * 6.283
             Freq = 0.6 + $rng.NextDouble() * 1.4
-            Size = 1.0 + $rng.NextDouble() * 1.2
+            Size = $minSize + $rng.NextDouble() * ($maxSize - $minSize)
             Color = $palette[$rng.Next($palette.Count)]
         }
     }
@@ -59,6 +77,7 @@ function Update-SlopFaceLayer {
     $w = [Math]::Max(10.0, $Width - 2 * $Inset)
     $h = [Math]::Max(10.0, $Height - 2 * $Inset)
     $count = [double]$script:FaceDots.Count
+    $scatter = [double](Get-SlopDesignToken -Name 'face.scatter')
 
     # Transition tracking: blend between pattern states over ~0.7s.
     $patternChanged = ($script:FaceLastPattern -ne $Pattern)
@@ -103,12 +122,12 @@ function Update-SlopFaceLayer {
             $driftY = 0.32 * [Math]::Cos($Time * $d.Freq * 0.7 * $Speed + $d.Phase)
         }
         switch ($Pattern) {
-            'ring' { $a=(6.2831853*$i/$count)+$phaseTime*0.15*$Speed; $nx=0.5+0.36*[Math]::Cos($a); $ny=0.5+0.32*[Math]::Sin($a) }
-            'spiral' { $a=$i*2.39996323+$phaseTime*0.12*$Speed; $r=0.40*[Math]::Sqrt(($i+0.5)/$count); $nx=0.5+$r*[Math]::Cos($a); $ny=0.5+$r*[Math]::Sin($a) }
+            'ring' { $a=(6.2831853*$i/$count)+$phaseTime*0.15*$Speed; $nx=0.5+$scatter*[Math]::Cos($a); $ny=0.5+$scatter*0.72*[Math]::Sin($a) }
+            'spiral' { $a=$i*2.39996323+$phaseTime*0.12*$Speed; $r=$scatter*[Math]::Sqrt(($i+0.5)/$count); $nx=0.5+$r*[Math]::Cos($a); $ny=0.5+$r*[Math]::Sin($a) }
             'cluster' { $nx=0.5+($d.X-0.5)*0.28+$driftX*0.3; $ny=0.5+($d.Y-0.5)*0.28+$driftY*0.3 }
             'line' { $nx=if($count -gt 1){0.16+0.68*($i/($count-1))}else{0.5}; $ny=0.46+$driftY*0.4 }
             'wave' { $nx=if($count -gt 1){0.10+0.80*($i/($count-1))}else{0.5}; $ny=0.5+0.22*[Math]::Sin($nx*6.283+$phaseTime*1.2*$Speed)+$driftY*0.3 }
-            'orbit' { $ring=if($i%2-eq 0){0}else{1}; $r=if($ring-eq 0){0.22}else{0.40}; $dir=if($ring-eq 0){1.0}else{-1.0}; $a=(6.2831853*[Math]::Floor($i/2)/([Math]::Ceiling($count/2.0)))+$phaseTime*0.2*$dir*$Speed; $nx=0.5+$r*[Math]::Cos($a); $ny=0.5+$r*0.85*[Math]::Sin($a) }
+            'orbit' { $ring=if($i%2-eq 0){0}else{1}; $r=if($ring-eq 0){0.22}else{$scatter}; $dir=if($ring-eq 0){1.0}else{-1.0}; $a=(6.2831853*[Math]::Floor($i/2)/([Math]::Ceiling($count/2.0)))+$phaseTime*0.2*$dir*$Speed; $nx=0.5+$r*[Math]::Cos($a); $ny=0.5+$r*0.85*[Math]::Sin($a) }
             'pulse' { $a=6.2831853*$i/$count; $r=0.18+0.22*(0.5+0.5*[Math]::Sin($phaseTime*2.0*$Speed)); $nx=0.5+$r*[Math]::Cos($a); $ny=0.5+$r*0.85*[Math]::Sin($a) }
             'double-ring' { $ring=if($i%2-eq 0){0}else{1}; $r=if($ring-eq 0){0.20}else{0.38}; $a=(6.2831853*[Math]::Floor($i/2)/([Math]::Ceiling($count/2.0)))+$phaseTime*0.15*$Speed; $nx=0.5+$r*[Math]::Cos($a); $ny=0.5+$r*0.85*[Math]::Sin($a) }
             'grid' { $cols=[Math]::Ceiling([Math]::Sqrt($count)); $row=[Math]::Floor($i/$cols); $col=$i%$cols; $nx=0.15+0.70*($col/[Math]::Max(1.0,$cols-1)); $ny=0.15+0.70*($row/[Math]::Max(1.0,$cols-1)) }
@@ -145,6 +164,15 @@ function Update-SlopFaceLayer {
         $py = $Inset + $ny * $h
         [System.Windows.Controls.Canvas]::SetLeft($el, $px - $el.Width / 2)
         [System.Windows.Controls.Canvas]::SetTop($el, $py - $el.Height / 2)
-        if ($el.Opacity -ne $opacity) { $el.Opacity = $opacity }
+
+        # Soft radial falloff: the field is brightest at the centre and fades
+        # toward the rim. Position is untouched, so all placement contracts
+        # stay valid, and a frozen field keeps a byte-identical opacity map.
+        $dx = $nx - 0.5
+        $dy = $ny - 0.5
+        $distance = [Math]::Sqrt($dx * $dx + $dy * $dy) / 0.5
+        if ($distance -gt 1.0) { $distance = 1.0 }
+        $dotOpacity = [Math]::Max(0.05, $opacity * (1.0 - 0.55 * $distance))
+        if ([Math]::Abs($el.Opacity - $dotOpacity) -gt 0.002) { $el.Opacity = $dotOpacity }
     }
 }
