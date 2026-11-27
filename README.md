@@ -54,6 +54,14 @@ You --> Sloppy UI --> OpenCode service (loopback HTTP)
 
 Everything above is wired in the WPF / PowerShell frontend; the capability and the safety policy live in OpenCode config.
 
+### Views, capabilities and exit
+
+- **Three views:** the pea alone, **Extended** chat (the pea stays visible at the exact click point), and **Full** chat — a large inset draggable preset, not a work-area-filling fullscreen. In Full the pea is hidden and restored at its exact stored coordinates when you leave.
+- **Movable panes:** both Extended and Full chat panes can be dragged by their top grip; the pet itself is never moved or resized by a pane drag.
+- **Control deck:** six sections — Overview, Settings, Data, Tools & Skills, Under the hood, Exit. All six capability toggles (workspace files, web access, shell commands, skills/plugins, subagents/tasks, external folders) are **off by default**.
+- **Conversation text is selectable only** — read-only, with no Copy button, clipboard action, or read-aloud.
+- **Exit:** say or type `Sloppy, shutdown`, then confirm with `yes`, `y`, or `confirm`. The deck Exit button and tray Exit menu use the same confirmation. Shutdown closes chat, stops timers, cancels any stream, rejects pending approvals, deletes the OpenCode session and shuts the app down cleanly — it never kills the process.
+
 ## Fun things you can do
 
 - Watch the pea react to your agent in real time — thinking, working, stalled, asking permission, finishing

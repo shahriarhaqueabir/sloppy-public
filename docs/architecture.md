@@ -305,6 +305,30 @@ reads (CPU, RAM, disk, TCP listeners/connections, process count, best-effort
 per-alert cooldown, and never takes action, spawns jobs, or contacts the network.
 Thought bubbles are reserved for these alerts — no canned facts, jokes or tips.
 
+### Pane views, capability deck and confirmed exit
+
+The WPF shell owns three views: the compact pea, `Extended` chat (the pet stays
+visible at the exact click point), and `Full` chat — a large preset inset from the work area,
+not a work-area-filling fullscreen. Both chat panes drag by a
+transparent top grip; `src/Slop.PaneMovement.ps1` clamps only the pane and stores
+and restores the pet rect, so entering Full hides the pea and leaving restores
+it exactly.
+
+The control deck (`src/Slop.ControlDeck.ps1`) has six sections — Overview,
+Settings, Data, Tools & Skills, Under the hood, Exit. Its six capability toggles
+map onto the existing deny-first OpenCode profile in `src/Slop.CapabilityToggles.ps1`
+and `src/Slop.OpenCodeProfile.ps1`; all are off by default. Conversation bubbles
+are read-only `TextBox` elements: selectable only with the caret, never editable,
+with no Copy, clipboard, or read-aloud affordance.
+
+`src/Slop.Shutdown.ps1` normalizes `Sloppy, shutdown` (case, punctuation and
+optional comma tolerant), asks `Are you sure? Say or type yes.`, and accepts
+`yes`, `y` or `confirm`. Chat text, voice text, the deck Exit button and the tray
+Exit menu all pass through that one resolver. Confirmation follows the existing
+`Add_Closed` teardown — stop timers, cancel the stream, reject pending approvals,
+delete the OpenCode session, close chat — then calls
+`[System.Windows.Application]::Current.Shutdown()`. No `Stop-Process` remains.
+
 ---
 
 ## What we deliberately do not build
