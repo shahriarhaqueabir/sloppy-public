@@ -94,4 +94,28 @@ Describe 'Slop.Onboarding' {
         $opts = @(Get-SlopBrainModelOptions -Brain 'opencode')
         $opts | Should -Be @('big-pickle','beam-free')
     }
+
+    It 'rounds colour swatches with a Button template instead of an unsupported CornerRadius property' {
+        $src = Get-Content (Join-Path $PSScriptRoot '../src/Slop.Onboarding.ps1') -Raw
+        $src | Should -Not -Match '\$swatch\.CornerRadius\s*='
+        $src | Should -Match 'x:Key="SlopSwatchButton"'
+        $src | Should -Match 'CornerRadius="15"'
+        $src | Should -Match '\$swatch\.Template = \$dlg\.Resources\[''SlopSwatchButton''\]'
+        $src | Should -Match '\$swatch\.Style = \$dlg\.Resources\[''SlopButton''\]'
+        $src | Should -Not -Match '\$swatch\.Style = \$window\.Resources'
+    }
+
+    It 'binds every named wizard control that code uses before touching it' {
+        $src = Get-Content (Join-Path $PSScriptRoot '../src/Slop.Onboarding.ps1') -Raw
+        $names = @([regex]::Matches($src, 'x:Name="([A-Za-z][A-Za-z0-9]*)"') | ForEach-Object { $_.Groups[1].Value } | Sort-Object -Unique)
+        $names.Count | Should -BeGreaterThan 20
+        $unbound = @()
+        foreach ($name in $names) {
+            if ($name -match '^Screen[1-4]$') { continue }
+            if ($src -notmatch ('\$' + [regex]::Escape($name) + '\b')) { continue }
+            $binding = '\${0}\s*=\s*\$dlg\.FindName\([\x27]{0}[\x27]\)' -f $name
+            if ($src -notmatch $binding) { $unbound += $name }
+        }
+        $unbound | Should -Be @()
+    }
 }

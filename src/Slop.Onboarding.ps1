@@ -70,6 +70,12 @@ function Show-SlopOnboarding {
         WindowStyle="None" AllowsTransparency="True" Background="Transparent"
         ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
   <Window.Resources>
+    <ControlTemplate x:Key="SlopSwatchButton" TargetType="Button">
+      <Border CornerRadius="15" Background="{TemplateBinding Background}"
+              BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
+        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+      </Border>
+    </ControlTemplate>
     <Style x:Key="SlopButton" TargetType="Button">
       <Setter Property="BorderThickness" Value="1"/>
       <Setter Property="BorderBrush" Value="Transparent"/>
@@ -212,6 +218,10 @@ function Show-SlopOnboarding {
     $EndpointBox = $dlg.FindName('EndpointBox')
     $ModelBox = $dlg.FindName('ModelBox')
     $OpenCodeRow = $dlg.FindName('OpenCodeRow')
+    $BrainBuiltIn = $dlg.FindName('BrainBuiltIn')
+    $BrainCustom = $dlg.FindName('BrainCustom')
+    $BrainOpenCodeLocal = $dlg.FindName('BrainOpenCodeLocal')
+    $BrainOpenCodeRemote = $dlg.FindName('BrainOpenCodeRemote')
     $ProviderBox = $dlg.FindName('ProviderBox')
     $RouteModelBox = $dlg.FindName('RouteModelBox')
     $AgentBox = $dlg.FindName('AgentBox')
@@ -224,6 +234,7 @@ function Show-SlopOnboarding {
     $ErrorText = $dlg.FindName('ErrorText')
     $BackBtn = $dlg.FindName('BackBtn')
     $NextBtn = $dlg.FindName('NextBtn')
+    $CloseBtn = $dlg.FindName('CloseBtn')
 
     $defaults = New-SlopDefaultConfig
     $NameBox.Text = if ($Config.name) { [string]$Config.name } else { [string]$defaults.name }
@@ -265,11 +276,11 @@ function Show-SlopOnboarding {
     foreach ($entry in (Get-SlopIdentityColors).GetEnumerator() | Sort-Object Key) {
         $key = [string]$entry.Key
         $swatch = New-Object System.Windows.Controls.Button
-        $swatch.Width = 30; $swatch.Height = 30; $swatch.CornerRadius = [System.Windows.CornerRadius]::new(15)
+        $swatch.Width = 30; $swatch.Height = 30; $swatch.Template = $dlg.Resources['SlopSwatchButton']
         $swatch.Background = [System.Windows.Media.BrushConverter]::new().ConvertFromString([string]$entry.Value)
         $swatch.Margin = [System.Windows.Thickness]::new(0,0,8,8)
         $swatch.Cursor = 'Hand'; $swatch.ToolTip = $key; $swatch.Tag = $key
-        $swatch.Style = $window.Resources['SlopButton']
+        $swatch.Style = $dlg.Resources['SlopButton']
         $swatch.Add_Click({ param($s,$e)
             $script:SelectedColor = [string]$s.Tag
             $PreviewPea.Fill = [System.Windows.Media.BrushConverter]::new().ConvertFromString((Get-SlopIdentityColor -ColorKey $script:SelectedColor))
