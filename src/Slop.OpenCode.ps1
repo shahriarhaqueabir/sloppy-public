@@ -30,8 +30,11 @@ function Test-SlopOpenCodeConfig {
     else {
         if ($agent.mode -ne 'primary') { $errors.Add('agent is not primary') }
         $system = [string]$agent.system
-        if (-not $system -or $system -notmatch '\{file:.*personality\.md\}' -or $system -notmatch 'Sloppy') {
-            $errors.Add('companion persona is not wired into the agent system prompt')
+        if (-not $system -or
+            $system -match '\{file:.*personality\.md\}' -or
+            $system -notmatch 'Sloppy' -or
+            $system -notmatch 'companion persona supplied in the request') {
+            $errors.Add('companion persona must be supplied in the request, not from a machine-level personality file')
         }
 
         $rules = @($agent.permissions)
