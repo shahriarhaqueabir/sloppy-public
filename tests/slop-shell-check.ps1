@@ -285,6 +285,9 @@ Assert-True ($src -match 'IsReadOnlyCaretVisible\s*=\s*\$true') 'bubble text is 
 Assert-True ($src -notmatch 'CopyButton|ReadAloud|Clipboard') 'no copy or read-aloud affordance'
 Assert-True ($src -notmatch 'AssistantBubbleText\.Focus\(\)') 'bubble creation does not steal focus'
 
+Assert-True ($src -match 'DeckShutdownButton\.Add_Click') 'deck exit routes through the shutdown resolver'
+Assert-True ($src -match '\$script:SlopShutdownState') 'shutdown confirmation state is owned by the shell'
+
 Describe 'Slop shell / XAML static checks' {
     foreach ($check in $script:SlopChecks) {
         $name = $check.Name
