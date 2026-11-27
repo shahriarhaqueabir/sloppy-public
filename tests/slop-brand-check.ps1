@@ -84,6 +84,25 @@ $fixture = @'
         }
     }
 
+    It 'handles empty XAML literal values' {
+        $temp = Join-Path ([IO.Path]::GetTempPath()) ('slop-brand-empty-' + [guid]::NewGuid().ToString('N'))
+        $dir = Join-Path $temp 'src'
+        $null = New-Item -ItemType Directory -Path $dir -Force
+        $lines = @(
+            '$xaml = @''',
+            '<Window xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation">',
+            '  <Border Margin="" />',
+            '</Window>',
+            '''@'
+        )
+        try {
+            Set-Content -LiteralPath (Join-Path $dir 'Empty.ps1') -Value $lines -Encoding utf8
+            { Get-SlopBrandFindings -Root $temp } | Should -Not -Throw
+        } finally {
+            Remove-Item -LiteralPath $temp -Recurse -Force
+        }
+    }
+
     It 'computes contrast deterministically' {
         Test-SlopBrandContrast -Foreground '#FFFFFF' -Background '#000000' |
             Should -BeGreaterThan 20.9
