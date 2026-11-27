@@ -65,19 +65,19 @@
     },
     {
       "file": "src/Slop.ps1",
-      "line": 2002,
+      "line": 2012,
       "title": "Chat Workflow: fail-closed Start-Stream",
       "description": "**Situation:** Start-Stream is the entry point for every send. **Mechanism:** it resolves a route plan first, sets the honest header badge, gates any remote route behind an explicit disclosure modal, then starts a generation and hands the plan to a thin adapter dispatcher. **Implication:** bad config produces a clean error bubble instead of a stuck Send button, and no remote message leaves before consent. **Gotcha:** the ordering is intentional; enqueueing an error with no timer left to drain the queue caused a real hang."
     },
     {
       "file": "src/Slop.ps1",
-      "line": 1856,
+      "line": 1866,
       "title": "Approval Workflow: in-chat allow / reject",
       "description": "**Situation:** permission.asked events become approval cards in chat. **Mechanism:** Add-SlopApprovalCard renders Allow / Allow once / Reject buttons wired to Send-SlopPermissionReply; Reject-SlopPendingApprovals clears leftovers on stop and close. **Implication:** the human stays in the loop without leaving the window; buttons disable on first click so a double-click cannot send twice. **Gotcha:** the Add_Click handler reads the button Tag, not function locals - PowerShell event scriptblocks do not close over locals, and GetNewClosure breaks script scope."
     },
     {
       "file": "src/Slop.ps1",
-      "line": 1182,
+      "line": 1187,
       "title": "Stop/Cancel: drive the UI, do not wait for the worker",
       "description": "**Situation:** the Stop button calls Request-StopStream. **Mechanism:** it cancels the token, rejects pending approvals, posts an interrupt to the OpenCode session, and queues cancellation plus completion so the dispatcher finalizes immediately. **Implication:** token growth freezes at once and the phase finalizes even if the backend is slow. **Gotcha:** the SSE reader must be token-aware or tokens can keep arriving after cancellation."
     },
@@ -89,19 +89,19 @@
     },
     {
       "file": "src/Slop.ps1",
-      "line": 1180,
+      "line": 1185,
       "title": "Window Workflow: expand, collapse, maximize, tray",
       "description": "**Situation:** the same pea becomes a 760x540 chat frame, a work-area-sized window, or a tray icon. **Mechanism:** Expand-Chat opens the membrane from the pea origin; Collapse-Chat reverses it; Minimize-ToTray creates the NotifyIcon. Header controls trigger these actions. **Implication:** manual resizes are remembered and compact size is restored after collapse. **Gotcha:** shortcut chips only insert text through Insert-SlopShortcut; they never execute a command."
     },
     {
       "file": "src/Slop.ps1",
-      "line": 2534,
+      "line": 2575,
       "title": "The Heartbeat: one 33ms dispatcher clock",
       "description": "**Situation:** one MotionTimer drives the frame-by-frame story. **Mechanism:** each tick computes a capped dt, accumulates time, runs fixed 1/120s physics substeps, then renders once; it also samples Sense once per minute and fades old bubbles. **Implication:** physics is framerate-independent while rendering stays adaptive. **Gotcha:** the timer cannot see function locals, so state must be published to script scope."
     },
     {
       "file": "src/Slop.ps1",
-      "line": 925,
+      "line": 927,
       "title": "Frame by Frame: Apply-SlopMotion is the draw call",
       "description": "**Situation:** Apply-SlopMotion is the last step before pixels. **Mechanism:** it syncs the effective signal and animates brushes/glyph visibility, maps springs to scale and angle, translates the pea, updates membrane mood and BodyPath, toggles pea versus body at closure, and drives bubble entrance springs. **Implication:** every layer above is visible here in one place. **Gotcha:** reduced motion snaps springs and sets membrane motion scale to zero, so the same draw call stays still on request."
     },

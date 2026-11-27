@@ -25,8 +25,10 @@ Add-Type -AssemblyName PresentationFramework, PresentationCore, WindowsBase, Sys
 . (Join-Path $PSScriptRoot 'Slop.Route.ps1')
 . (Join-Path $PSScriptRoot 'Slop.Disclosure.ps1')
 . (Join-Path $PSScriptRoot 'Slop.Surfaces.ps1')
+. (Join-Path $PSScriptRoot 'Slop.Shutdown.ps1')
 # Disclosure acceptance is per app lifetime; never persisted.
 $script:SlopDisclosureAccepted = $false
+$script:SlopShutdownState = New-SlopShutdownConfirmation
 $script:VoiceInstallRoot = Get-SlopVoiceInstallRoot -InstallRoot (Split-Path $PSScriptRoot -Parent)
 
 $xaml = @'
@@ -1119,7 +1121,10 @@ function Open-SlopChatWindow {
             $button.Tag = $entry.Value
         }
     }
-    # DeckShutdownButton is wired to the shared shutdown resolver in Task 5.
+    $deckShutdown = $chat.FindName('DeckShutdownButton')
+    if ($null -ne $deckShutdown) {
+        $deckShutdown.Add_Click({ Invoke-SlopShutdownRequest -Text 'Sloppy, shutdown' | Out-Null })
+    }
     # The grip is a transparent top strip over the chrome. Drag moves only the
     # chat pane through the pure clamped helper; the pet is never moved/resized.
     $chatGrip = $chat.FindName('ChatDragGrip')
@@ -1279,7 +1284,12 @@ function Minimize-ToTray {
     })
 
     $exit = $menu.Items.Add('Exit')
-    $exit.Add_Click({ if ($script:TrayIcon) { $script:TrayIcon.Visible = $false; $script:TrayIcon.Dispose() }; Stop-Process -Id $PID -Force })
+    $exit.Add_Click({
+        $window.Show()
+        $window.WindowState = 'Normal'
+        $window.Activate()
+        Invoke-SlopShutdownRequest -Text 'Sloppy, shutdown' | Out-Null
+    })
     $script:TrayIcon.ContextMenuStrip = $menu
     $script:TrayIcon.Visible = $true
     $script:TrayIcon.Add_DoubleClick({ $window.Show(); $window.WindowState = 'Normal'; $window.Activate(); Update-SlopFaceRegion })
@@ -2265,12 +2275,39 @@ function Start-Stream {
     $timer.Start()
 }
 
+# One resolver for every shutdown entry point: chat text, voice text, the deck
+# Exit button, and the tray menu. The resolver owns the pending confirmation
+# state; the normal send path is only reached when it returns $false.
+function Invoke-SlopShutdownRequest {
+    param([AllowEmptyString()][string]$Text)
+    $result = Resolve-SlopShutdownInput -State $script:SlopShutdownState -Text $Text
+    $script:SlopShutdownState = $result.State
+    if ($result.ConfirmationRequired) {
+        Add-Bubble -Text (Get-SlopShutdownPrompt) -IsUser $false
+        return $true
+    }
+    if ($result.ShouldShutdown) {
+        $script:SlopShutdownState = New-SlopShutdownConfirmation
+        if ($script:ChatWindow) { $script:ChatWindow.Close() }
+        if ($window) { $window.Close() }
+        [System.Windows.Application]::Current.Shutdown()
+        return $true
+    }
+    if ($result.Cancelled) {
+        $script:SlopShutdownState = New-SlopShutdownConfirmation
+        Add-Bubble -Text 'Shutdown cancelled.' -IsUser $false
+        if ([string]::IsNullOrWhiteSpace($result.TextForNormalHandling)) { return $true }
+    }
+    return $false
+}
+
 # Chat controls may belong to the pet or to the separate chat window. Handlers
 # live at script scope so both surfaces share one implementation.
 $script:SlopSendAction = {
     $text = $script:InputBox.Text.Trim()
     if ([string]::IsNullOrWhiteSpace($text)) { return }
     $script:InputBox.Text = ''
+    if (Invoke-SlopShutdownRequest -Text $text) { return }
     Start-Stream -UserText $text
 }
 $script:SlopStopAction = { Request-StopStream }
@@ -2384,8 +2421,12 @@ $script:VoiceTimer.Add_Tick({
     $tok = $null
     while ($q.TryDequeue([ref]$tok)) {
         if ($tok.StartsWith('__VOICE__')) {
+            # Voice text is plain text before it reaches the shared resolver.
             # Start-Stream already adds the user bubble; do not add it twice.
-            Start-Stream -UserText $tok.Substring(9)
+            $voiceText = $tok.Substring(9)
+            if (-not (Invoke-SlopShutdownRequest -Text $voiceText)) {
+                Start-Stream -UserText $voiceText
+            }
         }
         elseif ($tok.StartsWith('__VOICEERR__')) {
             Add-Bubble -Text "[error: $($tok.Substring(12))]" -IsUser $false

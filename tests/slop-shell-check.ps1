@@ -236,7 +236,7 @@ Assert-True ($iss -notmatch 'Filename: "\{sys\}\\pwsh\.exe"') 'installed shortcu
 Assert-True ($src -match 'function Start-SlopVoiceTranscription') 'voice transcription has a named worker starter'
 Assert-True ($src -match 'Invoke-SlopWhisperTranscription -Paths \$Paths -WavPath \$Wav') 'voice worker invokes the local Whisper wrapper'
 Assert-True ($src -match 'Start-ThreadJob -ScriptBlock \{[\s\S]{0,900}__VOICE__') 'voice job enqueues transcript markers'
-Assert-True ($src -match 'Start-Stream -UserText \$tok\.Substring\(9\)') 'transcript uses the existing text send path'
+Assert-True ($src -match 'Start-Stream -UserText \$voiceText') 'transcript uses the existing text send path'
 Assert-True ($src -notmatch '\$MicBtn[\s\S]{0,2400}New-SlopAttachmentFromFile -Path \$script:MicRecorderPath') 'Mic stop no longer attaches the WAV'
 Assert-True ($src -match '\$script:VoiceQueue = \[System\.Collections\.Concurrent\.ConcurrentQueue\[string\]\]::new\(\)') 'voice uses a dedicated dispatcher queue'
 Assert-True ($src -match '\$script:MicCapTimer\.Interval = \[TimeSpan\]::FromSeconds\(\$script:VoiceMaxSeconds\)') 'hard recording cap is configured from voiceMaxSeconds'
@@ -285,7 +285,7 @@ Assert-True ($src -match 'IsReadOnlyCaretVisible\s*=\s*\$true') 'bubble text is 
 Assert-True ($src -notmatch 'CopyButton|ReadAloud|Clipboard') 'no copy or read-aloud affordance'
 Assert-True ($src -notmatch 'AssistantBubbleText\.Focus\(\)') 'bubble creation does not steal focus'
 
-Assert-True ($src -match 'DeckShutdownButton\.Add_Click') 'deck exit routes through the shutdown resolver'
+Assert-True ($src -match 'deckShutdown\.Add_Click') 'deck exit routes through the shutdown resolver'
 Assert-True ($src -match '\$script:SlopShutdownState') 'shutdown confirmation state is owned by the shell'
 
 Describe 'Slop shell / XAML static checks' {

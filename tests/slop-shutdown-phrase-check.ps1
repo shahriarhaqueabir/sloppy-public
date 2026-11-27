@@ -38,7 +38,7 @@ Describe 'Slop confirmed shutdown' {
         $steps = @(Get-SlopShutdownTeardownSteps)
         $steps | Should -Be @('StopTimers','CancelStream','RejectPendingApprovals','DeleteOpenCodeSession','CloseChat','ShutdownApplication')
         $steps | Should -Not -Contain 'KillProcess'
-        $script:ShellSrc | Should -Match 'Application\.Current\.Shutdown\(\)'
+        $script:ShellSrc | Should -Match 'Application\]::Current\.Shutdown\(\)'
         $script:ShellSrc | Should -Not -Match 'Stop-Process'
     }
 }
