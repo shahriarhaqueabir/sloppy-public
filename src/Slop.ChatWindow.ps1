@@ -81,7 +81,8 @@ function Get-SlopChatWindowXaml {
     <!-- Readability comes from a dark backplate inside the transparent window,
          never from a system material that would replace the WPF surface. -->
     <Border x:Name="ChatBackplate" Grid.RowSpan="3" Margin="4" CornerRadius="12"
-            Background="#E612141C" IsHitTestVisible="False"/>
+            Background="#F212141C" BorderBrush="#8893A4BD" BorderThickness="2"
+            SnapsToDevicePixels="True" IsHitTestVisible="False"/>
     <Border x:Name="ChatChrome" Grid.Row="0" Background="#F21E293B"
             BorderBrush="#44FFFFFF" BorderThickness="1" CornerRadius="12,12,0,0">
       <Grid>
@@ -90,11 +91,11 @@ function Get-SlopChatWindowXaml {
                    IsHitTestVisible="False"/>
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,8,0">
           <Button x:Name="ChatModeButton" Width="22" Height="22" Content="□"
-                  ToolTip="Toggle chat size" Background="#33BFDBFE" Foreground="#EAEAEA"
+                  ToolTip="Toggle chat size" Background="#F24F46E5" Foreground="#FFFFFF"
                   BorderBrush="#55FFFFFF" BorderThickness="1" Cursor="Hand" FontSize="11"
                   AutomationProperties.Name="Toggle chat size"/>
           <Button x:Name="ChatCloseButton" Width="22" Height="22" Content="X"
-                  ToolTip="Close chat" Background="#33BFDBFE" Foreground="#EAEAEA"
+                  ToolTip="Close chat" Background="#F24F46E5" Foreground="#FFFFFF"
                   BorderBrush="#55FFFFFF" BorderThickness="1" Cursor="Hand" FontSize="11"
                   AutomationProperties.Name="Close chat"/>
         </StackPanel>
@@ -118,22 +119,22 @@ function Get-SlopChatWindowXaml {
             <ColumnDefinition Width="Auto"/>
           </Grid.ColumnDefinitions>
           <TextBox x:Name="InputBox" Height="32" FontSize="13" Padding="7,4"
-                   Background="#18FFFFFF" Foreground="#EAEAEA" BorderBrush="#44FFFFFF"
+                   Background="#F2263348" Foreground="#EAEAEA" BorderBrush="#8893A4BD"
                    VerticalContentAlignment="Center"/>
           <TextBlock x:Name="InputPlaceholder" Grid.Column="0" Text="Say something..."
                      Foreground="#93A4BD" FontSize="13" Margin="11,0,0,0"
                      VerticalAlignment="Center" IsHitTestVisible="False"/>
           <Button x:Name="MicBtn" Grid.Column="1" Content="🎤" Width="34" Height="32"
-                  Margin="6,0,0,0" Background="#33BFDBFE" Foreground="#EAEAEA"
+                  Margin="6,0,0,0" Background="#F24F46E5" Foreground="#FFFFFF"
                   BorderBrush="#55FFFFFF" BorderThickness="1" Cursor="Hand"
                   AutomationProperties.Name="Voice input"/>
           <Button x:Name="SendBtn" Grid.Column="2" Content="Send" Width="54" Height="32"
-                  Margin="6,0,0,0" Background="#33BFDBFE" Foreground="#EAEAEA"
+                  Margin="6,0,0,0" Background="#F24F46E5" Foreground="#FFFFFF"
                   BorderBrush="#55FFFFFF" BorderThickness="1" Cursor="Hand"
                   AutomationProperties.Name="Send message"/>
           <Button x:Name="StopBtn" Grid.Column="3" Content="Stop" Width="54" Height="32"
-                  Margin="6,0,0,0" Visibility="Collapsed" Background="#33BFDBFE"
-                  Foreground="#EAEAEA" BorderBrush="#55FFFFFF" BorderThickness="1"
+                  Margin="6,0,0,0" Visibility="Collapsed" Background="#F24F46E5"
+                  Foreground="#FFFFFF" BorderBrush="#55FFFFFF" BorderThickness="1"
                   Cursor="Hand" AutomationProperties.Name="Stop request"/>
         </Grid>
       </StackPanel>

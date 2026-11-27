@@ -1357,7 +1357,7 @@ foreach ($name in $script:SlopDestinations) {
     $btn.FontSize = 9
     $btn.Padding = [System.Windows.Thickness]::new(6,2,6,2)
     $btn.Margin = [System.Windows.Thickness]::new(0,0,5,4)
-    $btn.Background = [System.Windows.Media.BrushConverter]::new().ConvertFromString('#22FFFFFF')
+    $btn.Background = [System.Windows.Media.BrushConverter]::new().ConvertFromString('#F2263348')
     $btn.Foreground = [System.Windows.Media.Brushes]::White
     $btn.Tag = $name
     $btn.Add_Click({ param($s,$e) Show-SlopDestination -Name $s.Tag })
@@ -1382,7 +1382,7 @@ foreach ($cmd in $script:ShortcutCommands) {
     $chip.FontSize = 9
     $chip.Padding = [System.Windows.Thickness]::new(6,2,6,2)
     $chip.Margin = [System.Windows.Thickness]::new(0,0,5,4)
-    $chip.Background = [System.Windows.Media.BrushConverter]::new().ConvertFromString('#22FFFFFF')
+    $chip.Background = [System.Windows.Media.BrushConverter]::new().ConvertFromString('#F2263348')
     $chip.Foreground = [System.Windows.Media.Brushes]::White
     $chip.Tag = $cmd
     $chip.Add_Click({ param($s,$e) Insert-SlopShortcut -Command $s.Tag })
@@ -1513,7 +1513,7 @@ function Add-Bubble {
         $border.HorizontalAlignment = 'Right'
         $border.Margin = [System.Windows.Thickness]::new(48,0,0,10)
     } else {
-        $border.Background = [System.Windows.Media.BrushConverter]::new().ConvertFromString('#2AFFFFFF')
+        $border.Background = [System.Windows.Media.BrushConverter]::new().ConvertFromString('#F2263348')
         $border.BorderBrush = [System.Windows.Media.BrushConverter]::new().ConvertFromString('#44FFFFFF')
         $border.HorizontalAlignment = 'Left'
         $border.Margin = [System.Windows.Thickness]::new(0,0,48,10)
@@ -1552,7 +1552,7 @@ function Add-SlopApprovalCard {
     $border.CornerRadius = [System.Windows.CornerRadius]::new(8)
     $border.Padding = [System.Windows.Thickness]::new(8)
     $border.Margin = [System.Windows.Thickness]::new(0,0,40,6)
-    $border.Background = [System.Windows.Media.BrushConverter]::new().ConvertFromString('#2AFFFFFF')
+    $border.Background = [System.Windows.Media.BrushConverter]::new().ConvertFromString('#F2263348')
     $border.HorizontalAlignment = 'Left'
 
     $stack = New-Object System.Windows.Controls.StackPanel
