@@ -34,11 +34,17 @@ Describe 'Slop confirmed shutdown' {
         Get-SlopShutdownPrompt | Should -Be 'Are you sure? Say or type yes.'
     }
 
-    It 'composes clean teardown steps without killing processes' {
+    It 'stops only the verified Sloppy-owned local brain during teardown' {
         $steps = @(Get-SlopShutdownTeardownSteps)
-        $steps | Should -Be @('StopTimers','CancelStream','RejectPendingApprovals','DeleteOpenCodeSession','CloseChat','ShutdownApplication')
+        $steps | Should -Be @('StopTimers','CancelStream','RejectPendingApprovals','DeleteOpenCodeSession','CloseChat','StopOwnedLocalModel','ShutdownApplication')
         $steps | Should -Not -Contain 'KillProcess'
         $script:ShellSrc | Should -Match 'Application\]::Current\.Shutdown\(\)'
         $script:ShellSrc | Should -Not -Match 'Stop-Process'
+
+        $closed = [regex]::Match($script:ShellSrc, '(?s)\$window\.Add_Closed\(\{(?<body>.*?)\n\}\)')
+        $closed.Success | Should -BeTrue
+        $closedBody = $closed.Groups['body'].Value
+        $closedBody | Should -Match 'Test-SlopOwnedModelProcess -Paths \$shutdownPaths -Process \$script:LocalModelProcess'
+        $closedBody | Should -Match 'Stop-SlopLocalModel -Process \$script:LocalModelProcess'
     }
 }
