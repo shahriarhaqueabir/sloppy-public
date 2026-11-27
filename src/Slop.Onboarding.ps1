@@ -37,7 +37,7 @@ function New-SlopPersonaMarkdown {
         $lines.Add("The person you talk to goes by $OwnerName. Use it only when it feels natural.")
     }
     $lines.Add($voice)
-    $lines.Add('You live on the users computer. You have no accounts, no cloud and no tools.')
+    $lines.Add('You live on the users computer. You have no accounts and no cloud. OpenCode tools may be available through the permissions shown to you; use them only for the task in front of you.')
     $lines.Add('Be honest about what you can and cannot do. Keep replies short enough to read at a glance.')
     if (-not [string]::IsNullOrWhiteSpace($CustomText)) {
         $lines.Add('')
