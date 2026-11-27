@@ -309,6 +309,8 @@ Assert-True ($src -match 'if \(-not \$agentPack\.Ok\)') 'shell fails closed on a
 Assert-True ($src -match 'Sloppy identity could not be resolved') 'resolver failure produces a plain-language bubble'
 Assert-True ($src -match '-PersonaText \$agentPack\.Text') 'stream plan receives the resolved system prompt'
 
+Assert-True ($architecture -match 'agent/SLOPPY\.md') 'architecture documents the tracked identity pack'
+
 Describe 'Slop shell / XAML static checks' {
     foreach ($check in $script:SlopChecks) {
         $name = $check.Name

@@ -46,6 +46,14 @@ Describe 'Slop installer contracts' {
         $iss | Should -Match '/DIR=' # documented in the installer comment header
     }
 
+    It 'bundles the tracked identity pack in the app root' {
+        $iss = Get-Content (Join-Path $root 'installer/Sloppy.iss') -Raw
+        $iss | Should -Match 'Source: "\.\.\\agent\\\*"; DestDir: "\{app\}\\agent"; Flags: ignoreversion recursesubdirs createallsubdirs'
+        foreach ($rel in @('agent/SLOPPY.md', 'agent/BRAND.md', 'agent/abilities/companion-voice.md')) {
+            Test-Path -LiteralPath (Join-Path $root $rel) | Should -BeTrue
+        }
+    }
+
     It 'launches headlessly and protects user data on uninstall' {
         $iss = Get-Content (Join-Path $root 'installer/Sloppy.iss') -Raw
         $iss | Should -Match '\{sys\}\\wscript\.exe'
