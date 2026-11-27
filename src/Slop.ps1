@@ -1818,9 +1818,18 @@ function Add-Bubble {
     }
     $border.BorderThickness = [System.Windows.Thickness]::new(1)
 
-    $tb = New-Object System.Windows.Controls.TextBlock
+    # Read-only TextBox so conversation text can be selected with the mouse.
+    # Focusable allows caret selection, but Add-Bubble never calls Focus(), so
+    # creating a bubble never steals keyboard focus from the composer.
+    $tb = [System.Windows.Controls.TextBox]::new()
+    $tb.IsReadOnly = $true
+    $tb.IsReadOnlyCaretVisible = $true
+    $tb.Focusable = $true
     $tb.Text = "$Emoji$Text"
     $tb.Foreground = [System.Windows.Media.Brushes]::White
+    $tb.Background = [System.Windows.Media.Brushes]::Transparent
+    $tb.BorderThickness = [System.Windows.Thickness]::new(0,0,0,0)
+    $tb.Padding = [System.Windows.Thickness]::new(0,0,0,0)
     $tb.TextWrapping = 'Wrap'
     $tb.FontSize = 12
     if ($Text -match '^(>|&|\$)\s|^(startslop|stopslop|slopstatus|verify|review|kickoff|sign out)\b') {
