@@ -2290,7 +2290,7 @@ function Invoke-SlopShutdownRequest {
         $script:SlopShutdownState = New-SlopShutdownConfirmation
         if ($script:ChatWindow) { $script:ChatWindow.Close() }
         if ($window) { $window.Close() }
-        [System.Windows.Application]::Current.Shutdown()
+        if ($null -ne [System.Windows.Application]::Current) { [System.Windows.Application]::Current.Shutdown() }
         return $true
     }
     if ($result.Cancelled) {
@@ -2691,6 +2691,11 @@ $window.Add_Closed({
     }
     Remove-SlopCompletedSideJobs
     $script:OpenCodeSessionId = $null
+    [System.Windows.Threading.Dispatcher]::CurrentDispatcher.BeginInvokeShutdown([System.Windows.Threading.DispatcherPriority]::Normal)
 })
 
-$window.ShowDialog() | Out-Null
+# Full mode hides the pet while the chat window stays open. A modal ShowDialog
+# returns on Hide(), which would end this script and kill the whole app. Run
+# the dispatcher explicitly; only a real close or shutdown ends the loop.
+$window.Show()
+[System.Windows.Threading.Dispatcher]::Run()
