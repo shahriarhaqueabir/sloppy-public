@@ -288,6 +288,11 @@ Assert-True ($src -notmatch 'AssistantBubbleText\.Focus\(\)') 'bubble creation d
 Assert-True ($src -match 'deckShutdown\.Add_Click') 'deck exit routes through the shutdown resolver'
 Assert-True ($src -match '\$script:SlopShutdownState') 'shutdown confirmation state is owned by the shell'
 
+Assert-True ($readme -match 'All six capability toggles') 'README documents default-off capability toggles'
+Assert-True ($architecture -match 'selectable only') 'architecture documents selectable-only conversation text'
+Assert-True ($readme -match 'Sloppy, shutdown') 'README documents the shutdown phrase'
+Assert-True ($architecture -match 'inset from the work area') 'architecture describes Full as an inset preset'
+
 Describe 'Slop shell / XAML static checks' {
     foreach ($check in $script:SlopChecks) {
         $name = $check.Name
