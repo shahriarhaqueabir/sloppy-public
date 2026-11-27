@@ -114,7 +114,11 @@ Describe 'Slop transparent chat window contract' {
             if ($null -eq $plate) { throw 'ChatBackplate is missing from the chat XAML' }
             [System.Windows.Controls.Grid]::GetRowSpan($plate) | Should -Be 3
             $plate.Background | Should -BeOfType [System.Windows.Media.SolidColorBrush]
-            $plate.Background.Color.A | Should -BeGreaterOrEqual 0xD0
+            $plate.Background.Color.A | Should -BeGreaterOrEqual 0xF2
+            $plate.BorderBrush | Should -BeOfType [System.Windows.Media.SolidColorBrush]
+            $plate.BorderBrush.Color.A | Should -BeGreaterOrEqual 0x66
+            $plate.BorderThickness.Left | Should -BeGreaterOrEqual 1.5
+            $plate.SnapsToDevicePixels | Should -BeTrue
             $plate.IsHitTestVisible | Should -BeFalse
         } finally { $win.Close() }
     }
@@ -128,7 +132,26 @@ Describe 'Slop transparent chat window contract' {
             foreach ($name in @('ChatChrome','ChatInputChrome')) {
                 $el = $win.FindName($name)
                 if ($null -eq $el) { throw "$name is missing from the chat XAML" }
-                $el.Background.Color.A | Should -BeGreaterOrEqual 0xD0
+                $el.Background.Color.A | Should -BeGreaterOrEqual 0xF2
+            }
+        } finally { $win.Close() }
+    }
+
+    It 'uses near-opaque raised fills for message and approval overlays' {
+        $script:AppSrc | Should -Not -Match '#2AFFFFFF'
+        [regex]::Matches($script:AppSrc, "ConvertFromString\('#F2263348'\)").Count | Should -BeGreaterOrEqual 2
+    }
+
+    It 'uses readable fills for the composer field and chat buttons' {
+        $xaml = Get-SlopChatWindowXaml
+        $xaml | Should -Not -Match '#18FFFFFF'
+        $xaml | Should -Not -Match '#33BFDBFE'
+        Add-Type -AssemblyName PresentationFramework, PresentationCore, WindowsBase, System.Xaml
+        $win = [System.Windows.Markup.XamlReader]::Parse($xaml)
+        try {
+            $win.FindName('InputBox').Background.Color.A | Should -BeGreaterOrEqual 0xE6
+            foreach ($name in @('ChatModeButton','ChatCloseButton','MicBtn','SendBtn','StopBtn')) {
+                $win.FindName($name).Background.Color.A | Should -BeGreaterOrEqual 0xE6
             }
         } finally { $win.Close() }
     }
