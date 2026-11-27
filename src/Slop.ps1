@@ -649,6 +649,20 @@ function Use-SlopChatControls {
     $script:DeckOverviewText = $Target.FindName('DeckOverviewText')
     $script:DeckConversationLengthText = $Target.FindName('DeckConversationLengthText')
     $script:DeckUnderHoodText = $Target.FindName('DeckUnderHoodText')
+    $script:DeckBody = $Target.FindName('DeckBody')
+    $script:DeckCollapseButton = $Target.FindName('DeckCollapseButton')
+    $script:DeckVoiceEnabledCheck = $Target.FindName('DeckVoiceEnabledCheck')
+    $script:DeckVoiceLanguageCombo = $Target.FindName('DeckVoiceLanguageCombo')
+    $script:DeckVoiceMaxSecondsBox = $Target.FindName('DeckVoiceMaxSecondsBox')
+    $script:DeckVoiceReadyText = $Target.FindName('DeckVoiceReadyText')
+    $script:DeckVoiceSaveButton = $Target.FindName('DeckVoiceSaveButton')
+    $script:DeckModelRouteText = $Target.FindName('DeckModelRouteText')
+    $script:DeckModelBox = $Target.FindName('DeckModelBox')
+    $script:DeckModelSaveButton = $Target.FindName('DeckModelSaveButton')
+    $script:DeckDataPathText = $Target.FindName('DeckDataPathText')
+    foreach ($language in Get-SlopWhisperLanguages) {
+        $script:DeckVoiceLanguageCombo.Items.Add($language) | Out-Null
+    }
     Move-SlopChatBubbles -From $script:PetControls.ChatStack -To $script:ChatStack
 }
 
@@ -667,6 +681,17 @@ function Restore-SlopMainChatControls {
     $script:DeckOverviewText = $null
     $script:DeckConversationLengthText = $null
     $script:DeckUnderHoodText = $null
+    $script:DeckBody = $null
+    $script:DeckCollapseButton = $null
+    $script:DeckVoiceEnabledCheck = $null
+    $script:DeckVoiceLanguageCombo = $null
+    $script:DeckVoiceMaxSecondsBox = $null
+    $script:DeckVoiceReadyText = $null
+    $script:DeckVoiceSaveButton = $null
+    $script:DeckModelRouteText = $null
+    $script:DeckModelBox = $null
+    $script:DeckModelSaveButton = $null
+    $script:DeckDataPathText = $null
     Move-SlopChatBubbles -From $previousStack -To $script:ChatStack
 }
 
@@ -694,6 +719,96 @@ function Update-SlopControlDeckState {
     }
 }
 
+function Update-SlopDeckSettingsUi {
+    $cfg = $script:SlopConfigResult.Config
+    $route = if ($cfg) { Resolve-SlopRouteKind -Config $cfg } else { '' }
+    $ready = if ($cfg) { Get-SlopVoiceReadinessText -Config $cfg -InstallRoot $script:VoiceInstallRoot } else { '' }
+    $snapshot = Get-SlopDeckSettingsSnapshot -Config $cfg -ConfigPath (Get-SlopConfigPath) `
+        -Route $route -Readiness $ready
+    if ($script:DeckVoiceEnabledCheck) { $script:DeckVoiceEnabledCheck.IsChecked = $snapshot.VoiceEnabled }
+    if ($script:DeckVoiceLanguageCombo) { $script:DeckVoiceLanguageCombo.Text = $snapshot.VoiceLanguage }
+    if ($script:DeckVoiceMaxSecondsBox) { $script:DeckVoiceMaxSecondsBox.Text = [string]$snapshot.VoiceMaxSeconds }
+    if ($script:DeckVoiceReadyText) { $script:DeckVoiceReadyText.Text = 'Whisper readiness: ' + $snapshot.VoiceReadyText }
+    if ($script:DeckModelRouteText) { $script:DeckModelRouteText.Text = 'Route: ' + $snapshot.RouteText }
+    if ($script:DeckModelBox) { $script:DeckModelBox.Text = $snapshot.Model }
+    if ($script:DeckDataPathText) { $script:DeckDataPathText.Text = $snapshot.DataPath }
+}
+
+function Set-SlopDeckStatus {
+    param([Parameter(Mandatory)][AllowEmptyString()][string]$Text)
+    if ($script:DeckStatusText) { $script:DeckStatusText.Text = $Text }
+}
+
+function Save-SlopDeckVoice {
+    $edit = Get-SlopDeckVoiceEdit -Config $script:SlopConfigResult.Config `
+        -Language ([string]$script:DeckVoiceLanguageCombo.Text) `
+        -MaxSeconds ([string]$script:DeckVoiceMaxSecondsBox.Text)
+    if (-not $edit.Ok) {
+        Set-SlopDeckStatus -Text ($edit.Errors -join ' ')
+        return $false
+    }
+    $edit.Config.voiceEnabled = [bool]$script:DeckVoiceEnabledCheck.IsChecked
+    $check = Test-SlopConfig -Config $edit.Config
+    if (-not $check.Ok) {
+        Set-SlopDeckStatus -Text ("Settings invalid: " + ($check.Errors -join '; '))
+        return $false
+    }
+    try { Write-SlopConfig -Config $edit.Config }
+    catch {
+        Set-SlopDeckStatus -Text "Voice settings could not be saved: $($_.Exception.Message)"
+        return $false
+    }
+    $script:SlopConfigResult.Config = $edit.Config
+    $script:SlopConfigResult.Ok = $true
+    $script:SlopConfigResult.Exists = $true
+    Update-SlopVoiceReadinessUi
+    Initialize-SlopDestinationPanels
+    Update-SlopRouteBadgeFromConfig
+    Update-SlopDeckSettingsUi
+    Set-SlopDeckStatus -Text 'Voice settings saved.'
+    return $true
+}
+
+function Save-SlopDeckModel {
+    $edit = Get-SlopDeckModelEditArguments -Config $script:SlopConfigResult.Config `
+        -Model ([string]$script:DeckModelBox.Text)
+    if (-not $edit.Ok) {
+        Set-SlopDeckStatus -Text ($edit.Errors -join ' ')
+        return $false
+    }
+    $brainArgs = @{
+        Config            = $script:SlopConfigResult.Config
+        Brain             = $edit.Brain
+        Provider          = $edit.Provider
+        ProviderLocality  = $edit.ProviderLocality
+        EndpointUrl       = $edit.EndpointUrl
+        Model             = $edit.Model
+        AgentId           = $edit.AgentId
+        CapabilityProfile = $edit.CapabilityProfile
+    }
+    $result = Set-SlopConfigBrain @brainArgs
+    if (-not $result.Ok) {
+        Set-SlopDeckStatus -Text ("Model invalid: " + ($result.Errors -join '; '))
+        return $false
+    }
+    try { Write-SlopConfig -Config $result.Config }
+    catch {
+        Set-SlopDeckStatus -Text "Model could not be saved: $($_.Exception.Message)"
+        return $false
+    }
+    $script:SlopConfigResult.Config = $result.Config
+    $script:SlopConfigResult.Ok = $true
+    $script:SlopConfigResult.Exists = $true
+    $script:OpenCodeBaseUrl = Get-SlopEffectiveOpenCodeBaseUrl -Config $result.Config
+    Load-SlopSettings
+    Initialize-SlopDestinationPanels
+    Update-SlopRouteBadgeFromConfig
+    Update-SlopControlDeckState
+    Update-SlopDeckSettingsUi
+    Set-SlopDeckStatus -Text 'Model saved.'
+    return $true
+}
+
 function Set-SlopControlDeckSection {
     param([Parameter(Mandatory)][string]$Name)
     if (-not $script:ChatWindow) { return }
@@ -711,16 +826,46 @@ function Set-SlopControlDeckSection {
         $panel = $script:ChatWindow.FindName($entry.Value)
         if ($null -ne $panel) { $panel.Visibility = if ($entry.Key -eq $Name) { 'Visible' } else { 'Collapsed' } }
     }
+    $buttonMap = @{
+        Overview     = 'DeckOverviewButton'
+        Settings     = 'DeckSettingsButton'
+        Data         = 'DeckDataButton'
+        Tools        = 'DeckToolsButton'
+        UnderTheHood = 'DeckUnderHoodButton'
+        Exit         = 'DeckExitButton'
+    }
+    $converter = [System.Windows.Media.BrushConverter]::new()
+    $selectedBrush = $converter.ConvertFromString('#F24F46E5')
+    $idleBrush = $converter.ConvertFromString('#F2263348')
+    foreach ($entry in $buttonMap.GetEnumerator()) {
+        $button = $script:ChatWindow.FindName($entry.Value)
+        if ($null -eq $button) { continue }
+        $button.Background = if ($entry.Key -eq $Name) { $selectedBrush } else { $idleBrush }
+    }
     Update-SlopControlDeckState
 }
 
 function Update-SlopControlDeckVisibility {
     if (-not $script:ChatDeckPanel) { return }
-    $script:ChatDeckPanel.Visibility = if ($script:ChatDeckOpen) { 'Visible' } else { 'Collapsed' }
-    if ($script:ChatScroll) {
-        $script:ChatScroll.Visibility = if ($script:ChatDeckOpen) { 'Collapsed' } else { 'Visible' }
+    # The strip stays discoverable; only the body collapses.
+    $script:ChatDeckPanel.Visibility = 'Visible'
+    $heightSource = if ($script:ChatWindow -and $script:ChatWindow.ActualHeight -gt 0) {
+        [double]$script:ChatWindow.ActualHeight
+    } else {
+        [double]$script:ChatWindow.Height
     }
-    if ($script:ChatDeckOpen) { Set-SlopControlDeckSection -Name $script:ChatDeckSection }
+    $bodyHeight = Get-SlopDeckBodyHeight -WindowHeight $heightSource -DeckOpen ([bool]$script:ChatDeckOpen)
+    if ($script:DeckBody) {
+        $script:DeckBody.Height = $bodyHeight
+        $script:DeckBody.Visibility = if ($bodyHeight -gt 0) { 'Visible' } else { 'Collapsed' }
+    }
+    if ($script:DeckCollapseButton) {
+        $script:DeckCollapseButton.Content = if ($script:ChatDeckOpen) { '⌃' } else { '⌄' }
+    }
+    if ($script:ChatDeckOpen) {
+        Set-SlopControlDeckSection -Name $script:ChatDeckSection
+        Update-SlopDeckSettingsUi
+    }
 }
 
 function Initialize-SlopControlDeckToggles {
@@ -1095,6 +1240,10 @@ function Open-SlopChatWindow {
         $script:ChatDeckOpen = -not $script:ChatDeckOpen
         Update-SlopControlDeckVisibility
     })
+    $chat.FindName('DeckCollapseButton').Add_Click({
+        $script:ChatDeckOpen = -not $script:ChatDeckOpen
+        Update-SlopControlDeckVisibility
+    })
     foreach ($name in @('DeckOverviewButton','DeckSettingsButton','DeckDataButton','DeckToolsButton','DeckUnderHoodButton','DeckExitButton')) {
         $button = $chat.FindName($name)
         if ($null -eq $button) { continue }
@@ -1103,6 +1252,8 @@ function Open-SlopChatWindow {
             Set-SlopControlDeckSection -Name ([string]$s.Tag)
         })
     }
+    $chat.FindName('DeckVoiceSaveButton').Add_Click({ Save-SlopDeckVoice | Out-Null })
+    $chat.FindName('DeckModelSaveButton').Add_Click({ Save-SlopDeckModel | Out-Null })
     foreach ($name in @('WorkspaceFilesToggle','WebAccessToggle','ShellCommandsToggle','SkillsPluginsToggle','SubagentsTasksToggle','ExternalFoldersToggle')) {
         $toggle = $chat.FindName($name)
         if ($null -ne $toggle) { $toggle.Add_Click({ Save-SlopControlDeckToggles | Out-Null }) }
@@ -1177,6 +1328,10 @@ function Open-SlopChatWindow {
         }
         Set-SlopPetChatInteraction -ChatOpen $false
         Set-SlopBaseCondition -State $script:Motion -Streaming $false -ChatOpen $false -Stalled $false
+    })
+    $chat.Add_SizeChanged({
+        param($s, $e)
+        Update-SlopControlDeckVisibility
     })
     Set-SlopPetChatInteraction -ChatOpen $true
     Set-SlopBaseCondition -State $script:Motion -Streaming $script:IsStreaming -ChatOpen $true -Stalled $false
