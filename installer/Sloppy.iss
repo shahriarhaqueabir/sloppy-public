@@ -36,6 +36,7 @@ Name: "{app}\data"; Flags: uninsneveruninstall
 
 [Files]
 Source: "..\src\*"; DestDir: "{app}\src"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "..\agent\*"; DestDir: "{app}\agent"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "..\tools\*"; DestDir: "{app}\tools"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "..\assets\*"; DestDir: "{app}\assets"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "..\runtime\llama-b12676-bin-win-cpu-x64\*"; DestDir: "{app}\runtime\llama-b12676-bin-win-cpu-x64"; Flags: ignoreversion recursesubdirs createallsubdirs

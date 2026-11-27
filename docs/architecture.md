@@ -363,6 +363,17 @@ session should start from Phase 3, not from an audit of already-verified phases.
 
 ---
 
+## Bundled identity pack
+
+Sloppy resolves a tracked app-root identity pack at request time. `agent/SLOPPY.md`
+and `agent/BRAND.md` are hard requirements; `agent/abilities/*.md` are additive
+ability cards. `src/Slop.AgentPack.ps1` combines them with the Customize identity
+fields and the read-only `data/persona.md` overlay, caps the result at 8000
+characters, and sends it as the system prompt on both OpenCode and local routes.
+The overlay is user-owned: Sloppy reads it but never migrates or rewrites it
+implicitly. The bundled OpenCode fallback config expects this resolved persona in
+the request and does not depend on a machine-level personality file.
+
 ## Open questions
 
 - Is a cloud provider acceptable for complex reasoning, or must v1 stay fully local?

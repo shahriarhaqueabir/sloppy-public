@@ -1,8 +1,8 @@
 # Design: Sloppy identity pack and brand consistency audit
 
 Date: 2026-11-27
-Status: Design sections approved in brainstorming; written spec pending user
-review. Implementation not started.
+Status: Approved 2026-11-27. Phase 1 Identity Pack is planned separately;
+implementation is tracked in `2026-11-27-sloppy-identity-pack-plan.md`.
 
 Note on location: `docs/superpowers/` is gitignored in this public repo, so the
 canonical tracked copy of this spec lives in `docs/plans/`, matching the existing
