@@ -48,7 +48,7 @@ All `*-check.ps1` files are discovered by `tests/Slop.Tests.ps1` and by the CI c
 
 - Pure modules are dot-sourced directly; no WPF window is constructed in headless suites except where a type-only check is needed.
 - No live OpenCode service, microphone, model download, or network access in headless tests.
-- Temporary files go under `C:\Users\shahr\AppData\Local\Temp\opencode` (pre-created and approved), never inside `data/`.
+- Temporary files go under `$env:TEMP\opencode` (pre-created and approved), never inside `data/`.
 - No credential or personal value is written to a fixture. Use placeholders only.
 
 ## Live tests handed to the user

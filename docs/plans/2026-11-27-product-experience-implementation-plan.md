@@ -81,7 +81,7 @@ Each fix has one static assertion before and after:
 
 ### T6 — Repo hygiene
 
-- Replace `C:\Users\shahr\...` in the two tracked plan docs with `$HOME` or repo-relative equivalents.
+- Replace absolute user-home paths in tracked plan docs with `$HOME` or repo-relative equivalents.
 - Align `docs/architecture.md` and the Qwen plan with the tracked Whisper artifacts; keep `README.md:114` as the truth.
 - Add `/data/` to `.gitignore`; do not stage, edit, or delete any `data/` file.
 - Remove duplicate `Slop.LocalModel.ps1` / `Slop.Route.ps1` dot-sources from `src/Slop.Provider.ps1`.

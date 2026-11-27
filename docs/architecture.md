@@ -120,7 +120,7 @@ opencode serve --port 28894 (Basic auth; password from ~/.config/opencode/servic
   sessions · agents · tools · permissions · MCP · websearch · events
 ```
 
-Tier 1 runs locally through `runtime/llama-b12676-bin-win-cuda-13.5-x64/llama-server.exe` and the LFS-tracked `runtime/models/Qwen3.5-2B-Q4_K_M.gguf` (1.3 GB, Apache-2.0); `--jinja` uses the GGUF's embedded chat template. An mmproj is optional and unused by default. HF download cache under `runtime/models/.cache/` is ignored. Text requests use the existing llama.cpp adapter. Opt-in voice input records a short WAV with WinMM, transcribes it locally with bundled Whisper small through `src/Slop.Audio.ps1` once the CLI and model are supplied, and sends the transcript through the same text path. LFS rules for bundled Whisper small artifacts are present, but this checkout does not include `whisper-cli.exe` or `ggml-small.bin`; supply them under `runtime/whisper/` (live mic smoke deferred). No audio leaves the machine, and there is no TTS or VAD. `mmproj` and `localVisionReady` stay unused readiness hooks; Tier 1 makes no image claim.
+Tier 1 runs locally through `runtime/llama-b12676-bin-win-cuda-13.5-x64/llama-server.exe` and the LFS-tracked `runtime/models/Qwen3.5-2B-Q4_K_M.gguf` (1.3 GB, Apache-2.0); `--jinja` uses the GGUF's embedded chat template. An mmproj is optional and unused by default. HF download cache under `runtime/models/.cache/` is ignored. Text requests use the existing llama.cpp adapter. Opt-in voice input records a short WAV with WinMM; the Whisper CLI and DLLs are bundled under `runtime/whisper/`. `ggml-small.bin` is downloaded and checksum-verified during setup, so the bundled Whisper small setup is complete. `src/Slop.Audio.ps1` transcribes locally and sends the transcript through the same text path. No audio leaves the machine, and there is no TTS or VAD. `mmproj` and `localVisionReady` stay unused readiness hooks; Tier 1 makes no image claim.
 
 The bridge creates **one OpenCode session per Slop conversation** and sends only new
 user text on each turn. Slop must stop resending its 12-message history — OpenCode
@@ -254,12 +254,13 @@ main-OpenCode behavior, not a Slop bypass: the bridge only ever replies `once`
 or `reject`, so Sloppy itself never creates a saved grant. An action with no
 saved grant still resolves to `ask` and renders the card.
 
-The stronger top-level `policies` layer from the original design is retained as
-`.opencode/opencode.jsonc.muted`. It is deliberately inactive: OpenCode applied
-those denies to *every* agent in the repo, including the development session, and a
-`deny` policy has no approval path. Tool permissions are defence in depth; the
-loopback bind and Basic-auth password remain the primary barrier because several
-HTTP routes (shell, fs, credential) bypass the agent tool layer.
+The stronger top-level `policies` layer from the original design was removed from
+the active config and is not shipped in this checkout; a guarded test still validates
+a `.opencode/opencode.jsonc.muted` fixture if one is present. It was inactive in
+practice: OpenCode applied those denies to *every* agent in the repo, including the
+development session, and a `deny` policy has no approval path. Tool permissions are
+defence in depth; the loopback bind and Basic-auth password remain the primary barrier
+because several HTTP routes (shell, fs, credential) bypass the agent tool layer.
 
 ---
 

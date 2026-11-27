@@ -120,7 +120,7 @@ Onboarding is a one-time setup surface: it may write initial values for identity
 | 19 | Preflight / readiness | `slop-preflight.ps1` reporter. | Keep; surface readiness in Settings with plain wording. |
 | 20 | Tray / autostart | Tray icon, autostart button. | Keep; label from token copy. |
 | 21 | Tour / docs / tests | 38-step tour, Pester suites, verify gate. | Update anchors and contracts as part of each change. |
-| 22 | Docs: machine paths | Four `C:\Users\shahr\...` paths in two tracked plan docs. | Replace with portable `$HOME` / repo-relative wording. |
+| 22 | Docs: machine paths | Absolute user-home paths in tracked plan docs. | Replace with portable `$HOME` / repo-relative wording. |
 | 23 | Docs: Whisper claim | `docs/architecture.md:123` says artifacts are absent; `README.md:114` says bundled; both are tracked. | Correct architecture + plan to match the tracked files. |
 | 24 | App data exposure | `data/config.json`, `.bak`, `persona.md` untracked and unignored; contain user state. | Add `/data/` to `.gitignore`; do not touch the files. |
 | 25 | Module load order | `Slop.LocalModel.ps1` and `Slop.Route.ps1` dot-sourced twice via Provider. | Remove Provider's duplicate dot-sources; rely on the documented order in `Slop.ps1`. |

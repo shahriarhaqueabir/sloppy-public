@@ -3,6 +3,7 @@ Describe 'Slop.Provider' {
     BeforeAll {
         . (Join-Path $PSScriptRoot '../src/Slop.Config.ps1')
         . (Join-Path $PSScriptRoot '../src/Slop.Lifecycle.ps1')
+        . (Join-Path $PSScriptRoot '../src/Slop.LocalModel.ps1')
         . (Join-Path $PSScriptRoot '../src/Slop.Provider.ps1')
         . (Join-Path $PSScriptRoot '../src/Slop.OpenCode.ps1')
         . (Join-Path $PSScriptRoot '../src/Slop.OpenCodeProfile.ps1')
@@ -36,7 +37,8 @@ Describe 'Slop.Provider' {
         $plain = New-SlopChatRequestBody -SystemPrompt '' -UserText 'hi' | ConvertFrom-Json
         $plain.PSObject.Properties.Name | Should -Not -Contain 'chat_template_kwargs'
         $routeSrc = Get-Content (Join-Path $PSScriptRoot '../src/Slop.Route.ps1') -Raw
-        $routeSrc | Should -Match 'DisableThinking \$true'
+        $routeSrc | Should -Match '(?m)-DisableThinking\s*$'
+        $routeSrc | Should -Not -Match 'DisableThinking\s+\$true'
     }
 
     It 'builds a streaming request body with and without a persona' {

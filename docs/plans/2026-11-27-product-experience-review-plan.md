@@ -26,7 +26,7 @@ git status --short
 Canonical review ritual (machine-local, used when available):
 
 ```powershell
-& 'C:\Users\shahr\.agents\scripts\review.ps1'
+& "$HOME/.agents/scripts/review.ps1"
 ```
 
 If the ritual path is unavailable, use `git diff --check` plus the focused test command for the changed area and record the substitution in the work log. Never claim the ritual ran when it did not.

@@ -67,7 +67,7 @@ Expected: no machine paths in tracked files; no material APIs in tracked source;
 ### 6. Canonical verify ritual
 
 ```powershell
-& 'C:\Users\shahr\.agents\scripts\verify.ps1'
+& "$HOME/.agents/scripts/verify.ps1"
 ```
 
 Expected: exit code 0 and `All gates passed`. If unavailable, substitute the repo CI command and record the substitution.
@@ -75,7 +75,7 @@ Expected: exit code 0 and `All gates passed`. If unavailable, substitute the rep
 ### 7. Review ritual
 
 ```powershell
-& 'C:\Users\shahr\.agents\scripts\review.ps1'
+& "$HOME/.agents/scripts/review.ps1"
 ```
 
 Expected: exit code 0 or findings recorded per the review plan.

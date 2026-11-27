@@ -1423,7 +1423,7 @@ Invoke-Pester -Path tests/slop-tour-check.ps1 -Output Detailed
 # diff check
 git diff --check
 # review ritual
-powershell -NoProfile -File C:\Users\shahr\.agents\scripts\review.ps1
+pwsh -NoProfile -File "$HOME/.agents/scripts/review.ps1"
 # status
 git status --short
 git rev-list --count --left-right origin/main...HEAD
@@ -1445,7 +1445,7 @@ git commit -m "docs: refresh architecture tour and chat window description"
 - **Spec coverage:** separate window (T1, T2, T4, T8), pet stays put + interaction gate (T2, T4), work-area clamp (T1, T5), visible answers (T2), wizard preview (T3), wheel scroll (T8), padding + outline (T6), settings shape/contrast (T7), proof + gates (all tasks, T9). No spec requirement lacks a task.
 - **Placeholder scan:** no `TBD`/`TODO`/"similar to"; every code step contains complete code. The only non-code area is Task 9's anchor table, which is generated from the actual file with the supplied commands.
 - **Type consistency:** `Get-SlopWorkAreaClampedRect`, `Get-SlopChatWindowRect`, `Get-SlopPetInteractionState`, `Get-SlopChatWindowXaml`, `Set-SlopPetChatInteraction`, `Open-SlopChatWindow`, `Collapse-Chat`, `Set-SlopChatWindowRect`, `Initialize-SlopChatControlHandlers`, `Format-SlopThinkingFallback`, `__THINK__` are each defined once and used with the same names/signatures in all later tasks.
-- **Validated snippets:** the pure geometry, interaction state, thinking fallback and SSE reasoning logic in Task 1/2 were executed in `C:\Users\shahr\AppData\Local\Temp\opencode\sloppy-companion-probe.ps1` and returned `PROBE OK` on 2026-11-27 before this plan was written.
+- **Validated snippets:** the pure geometry, interaction state, thinking fallback and SSE reasoning logic in Task 1/2 were executed in `$env:TEMP\opencode\sloppy-companion-probe.ps1` and returned `PROBE OK` on 2026-11-27 before this plan was written.
 
 ## Execution handoff
 

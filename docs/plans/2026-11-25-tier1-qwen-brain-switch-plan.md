@@ -46,7 +46,7 @@ Not touched: `src/Slop.Adapter.OpenAi.ps1`, `src/Slop.Lifecycle.ps1`, `src/Slop.
 - In `src/Slop.ps1`, replace strings **in place**. Do not add or remove lines above tour anchors unless you refresh the tour in the same pass.
 - Use single-quoted PowerShell regexes. Double-quoted regexes containing `$` will interpolate and silently fail.
 - Do not reuse `$args` as a local variable name; it is an automatic variable.
-- Canonical gate is `C:\Users\shahr\.agents\scripts\verify.ps1`. This repo has no `verify.ps1` of its own.
+- Canonical gate is `$HOME/.agents/scripts/verify.ps1`. This repo has no `verify.ps1` of its own.
 
 ---
 
@@ -534,7 +534,7 @@ Local-only, never committed: `.git/info/exclude` (keeps the old Gemma blob ignor
 - Line 94, replace with (keep the exact phrase `opt-in push-to-talk audio is transcribed locally`):
 
   ```text
-  Sloppy prefers whatever OpenCode config you already have. If there is none, it installs a minimal zero-trust config; it never overwrites an active one. The Qwen3.5-2B brain answers text locally from the LFS-tracked GGUF under `runtime/models/`, and opt-in push-to-talk audio is transcribed locally by Whisper small (CLI and model supplied by you) before being sent through the same text path. Nothing is uploaded for Tier 1. Image capture and `mmproj` remain unused readiness hooks; there are no spoken replies.
+  Sloppy prefers whatever OpenCode config you already have. If there is none, it installs a minimal zero-trust config; it never overwrites an active one. The Qwen3.5-2B brain answers text locally from the LFS-tracked GGUF under `runtime/models/`, and opt-in push-to-talk audio is transcribed locally by the bundled Whisper small setup before being sent through the same text path. The Whisper CLI and DLLs are bundled; `ggml-small.bin` is downloaded and checksum-verified during setup. Nothing is uploaded for Tier 1. Image capture and `mmproj` remain unused readiness hooks; there are no spoken replies.
   ```
 
 Do not add image, audio-input-to-model, VAD, TTS, or thinking-mode claims.
@@ -546,7 +546,7 @@ Do not add image, audio-input-to-model, VAD, TTS, or thinking-mode claims.
 - Line 123, replace the paragraph with:
 
   ```text
-  Tier 1 runs locally through `runtime/llama-b12676-bin-win-cuda-13.5-x64/llama-server.exe` and the LFS-tracked `runtime/models/Qwen3.5-2B-Q4_K_M.gguf` (1.3 GB, Apache-2.0); `--jinja` uses the GGUF's embedded chat template. An mmproj is optional and unused by default. HF download cache under `runtime/models/.cache/` is ignored. Text requests use the existing llama.cpp adapter. Opt-in voice input records a short WAV with WinMM, transcribes it locally with bundled Whisper small through `src/Slop.Audio.ps1` once the CLI and model are supplied, and sends the transcript through the same text path. LFS rules for bundled Whisper small artifacts are present, but this checkout does not include `whisper-cli.exe` or `ggml-small.bin`; supply them under `runtime/whisper/` (live mic smoke deferred). No audio leaves the machine, and there is no TTS or VAD. `mmproj` and `localVisionReady` stay unused readiness hooks; Tier 1 makes no image claim.
+  Tier 1 runs locally through `runtime/llama-b12676-bin-win-cuda-13.5-x64/llama-server.exe` and the LFS-tracked `runtime/models/Qwen3.5-2B-Q4_K_M.gguf` (1.3 GB, Apache-2.0); `--jinja` uses the GGUF's embedded chat template. An mmproj is optional and unused by default. HF download cache under `runtime/models/.cache/` is ignored. Text requests use the existing llama.cpp adapter. Opt-in voice input records a short WAV with WinMM; the Whisper CLI and DLLs are bundled under `runtime/whisper/`. `ggml-small.bin` is downloaded and checksum-verified during setup, so the bundled Whisper small setup is complete. `src/Slop.Audio.ps1` transcribes locally and sends the transcript through the same text path. No audio leaves the machine, and there is no TTS or VAD. `mmproj` and `localVisionReady` stay unused readiness hooks; Tier 1 makes no image claim.
   ```
 
 The exact phrase `bundled Whisper small` is asserted by `tests/slop-shell-check.ps1`; keep it.
@@ -681,7 +681,7 @@ No source change except a tour refresh if an anchor drifts.
 - [ ] **Step 6.1: canonical gates**
 
 ```powershell
-& 'C:\Users\shahr\.agents\scripts\verify.ps1'
+& "$HOME/.agents/scripts/verify.ps1"
 ```
 
 Expected exit 0. Read the full output; do not accept a pass count from `-Output None`. If a nested-worktree WPF discovery failure appears, confirm whether it is the known pre-existing one before reporting it.

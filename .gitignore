@@ -29,6 +29,9 @@ docs/superpowers/
 # Test artifacts
 /testResults.xml
 
+# Local companion data
+/data/
+
 # Bundled runtime/model caches (large binaries/models are tracked via LFS)
 runtime/models/.cache/
 runtime/models/**/.cache/

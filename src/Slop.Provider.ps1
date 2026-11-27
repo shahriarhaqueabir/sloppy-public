@@ -3,7 +3,6 @@ $ErrorActionPreference = 'Stop'
 if (-not (Get-Command Get-SlopIdentityColors -ErrorAction SilentlyContinue)) {
     throw 'Slop.Config.ps1 must be dot-sourced before Slop.Provider.ps1'
 }
-. (Join-Path $PSScriptRoot 'Slop.LocalModel.ps1')
 
 function Get-SlopAdapterContract {
     return @{
@@ -147,7 +146,6 @@ function Get-SlopStreamPlan {
         [Parameter(Mandatory)][string]$ScriptRootPath,
         [Parameter(Mandatory)][string]$RepoRootPath
     )
-    . (Join-Path $PSScriptRoot 'Slop.Route.ps1')
     return Get-SlopRoutePlan -Config $Config -UserText $UserText -PersonaText $PersonaText `
         -History $History -Attachments $Attachments -ObservedProviderEndpointUrl $ObservedProviderEndpointUrl `
         -OpenCodePermissionEvidence $OpenCodePermissionEvidence `
