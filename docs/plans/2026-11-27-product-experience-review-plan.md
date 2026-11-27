@@ -44,7 +44,7 @@ If the ritual path is unavailable, use `git diff --check` plus the focused test 
 ### Security and privacy
 
 - No credential, token, or password value in source, tests, docs, or commit messages.
-- No machine-specific user path in tracked files (`shahr`, `C:\Users\`, `E:\Projects\`, `AppData\Local\Temp`).
+- No machine-specific user path in tracked files: no user-profile path, project-drive root, or hard-coded temp directory.
 - No contents of `data/` staged, printed, or referenced by a test fixture.
 - Loopback-only base URL validation still holds.
 - Permission grants unchanged unless the spec explicitly authorises them.
