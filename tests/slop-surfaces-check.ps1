@@ -25,7 +25,7 @@ Describe 'Slop.Surfaces' {
     }
     It 'exposes status, editable, and action IDs for all four destinations' {
         $expected = @{
-            Settings  = @{ Status='SettingsStatusText';  Editable=@('SettingsInstructionsBox','SettingsModelBox','SettingsBaseUrlBox','SettingsAgentIdBox','VoiceEnabledCheck','VoiceLanguageCombo','VoiceMaxSecondsBox'); Actions=@('SettingsSaveButton','AutostartButton','VoiceRepairButton','SettingsBack') }
+            Settings  = @{ Status='SettingsStatusText';  Editable=@('VoiceEnabledCheck','VoiceLanguageCombo','VoiceMaxSecondsBox'); Actions=@('SettingsSaveButton','AutostartButton','VoiceRepairButton','SettingsBack') }
             Customize = @{ Status='CustomizeStatusText'; Editable=@('CustomizeNameBox','CustomizeColourCombo','CustomizePersonalityCombo','CustomizePersonaBox'); Actions=@('CustomizeSaveButton','CustomizeBack') }
             Brain     = @{ Status='BrainStatusText';     Editable=@('BrainTypeCombo','BrainProviderBox','BrainEndpointBox','BrainModelBox','BrainAgentIdBox','BrainProfileCombo'); Actions=@('BrainSaveButton','BrainBack') }
             Privacy   = @{ Status='PrivacyStatusText';   Editable=@(); Actions=@('DeleteConversationButton','DeleteSessionButton','DeleteLocalDataButton','PrivacyBack') }

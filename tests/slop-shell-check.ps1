@@ -78,7 +78,7 @@ if ($m.Success) {
     Assert-True ($verifier -notmatch 'Wait-DotBlue -TimeoutMs 45000') 'chat opening no longer samples a hidden pet status dot'
     Assert-True ($verifier -match 'for \(\$i=0; \$i -lt 400; \$i\+\+\)[\s\S]{0,200}\$chatAfter = Get-ChatText') 'send poll waits for rendered chat text through slow local brain startup'
     Assert-True ($verifier -match 'function Set-UiaCombo') 'live verifier can select ComboBox items'
-    Assert-True ($verifier -match 'Set-UiaValue ''SettingsAgentIdBox'' ''probe-agent''') 'live verifier edits Settings'
+    Assert-True ($verifier -match 'Set-UiaValue ''VoiceMaxSecondsBox'' ''45''') 'live verifier edits the voice value Settings owns'
     Assert-True ($verifier -match 'Set-UiaCombo ''CustomizeColourCombo'' ''plum''') 'live verifier edits Customize'
     Assert-True ($verifier -match 'Set-UiaCombo ''BrainTypeCombo'' ''opencode''') 'live verifier edits Brain'
     Assert-True ($verifier -match 'Get-UiaText ''PrivacyRouteText''') 'live verifier reads the Privacy route after a Brain save'

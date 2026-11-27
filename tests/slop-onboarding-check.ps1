@@ -69,6 +69,8 @@ Describe 'Slop.Onboarding' {
         $src | Should -Match 'x:Name="VoiceReadyText"'
         $src | Should -Match 'Get-SlopWhisperLanguages'
         $src | Should -Match 'Get-SlopVoiceReadinessText -Config \$Config'
+        $src | Should -Match '<Expander Header="Advanced setup"'
+        $src | Should -Match 'open Advanced setup'
         $src | Should -Not -Match 'ValidateRange\(1,5\)'
     }
 
