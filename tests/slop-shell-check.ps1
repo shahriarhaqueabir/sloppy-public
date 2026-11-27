@@ -293,6 +293,12 @@ Assert-True ($architecture -match 'selectable only') 'architecture documents sel
 Assert-True ($readme -match 'Sloppy, shutdown') 'README documents the shutdown phrase'
 Assert-True ($architecture -match 'inset from the work area') 'architecture describes Full as an inset preset'
 
+# Full mode hides the pet window. A modal ShowDialog main loop returns as soon
+# as that window is hidden, ending the script and killing the whole app.
+Assert-True ($src -notmatch '\$window\.ShowDialog\(\)') 'main pet window is not a modal dialog'
+Assert-True ($src -match '\[System\.Windows\.Threading\.Dispatcher\]::Run\(\)') 'main loop stays alive while the pet window is hidden'
+Assert-True ($src -match '\$window\.Add_Closed\(\{[\s\S]{0,2400}BeginInvokeShutdown\(\)') 'closing the pet window shuts down the dispatcher'
+
 Describe 'Slop shell / XAML static checks' {
     foreach ($check in $script:SlopChecks) {
         $name = $check.Name
