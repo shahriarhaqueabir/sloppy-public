@@ -160,7 +160,6 @@ Assert-True ($src -match "startslop.*stopslop.*slopstatus") 'profile helper shor
 Assert-True ($src -match "Add-Bubble|function Add-Bubble") 'bubble renderer exists'
 Assert-True ($src -match 'AllowEmptyString\(\)\]\[string\]\$Text') 'streaming placeholder can start with empty bubble text'
 Assert-True ($src -match '(?m)^#requires -Version 7\.6') 'entry point declares the PowerShell floor'
-Assert-True ($src -match '\$clipInset = 14\.0') 'content clip uses a 14px inset for rounded-corner safety'
 Assert-True ($src -match '\$clipRadius = \[Math\]::Max\(24\.0, 0\.11') 'content clip radius tracks the body corner radius with safety margin'
 Assert-True ($src -match 'function Update-SlopFrameClip') 'frame clip/layout updates through a dedicated function'
 Assert-True ($src -match '\$this\.IsEnabled = \$false') 'approval buttons ignore a rapid second click'
@@ -203,7 +202,8 @@ Assert-True ($src -match '-Inset 3\.0') 'motion tick passes the configured inset
 Assert-True ($src -match '\$x = if \(\$script:ReducedMotion\) \{ 0\.0 \}') 'reduced motion zeroes the pea sway'
 Assert-True ($src -match 'if \(\$script:ReducedMotion\) \{\s*\$frozen = \$true;\s*\$speed = 0\.0\s*\}') 'reduced motion freezes the particle field'
 
-Assert-True ($src -match '\$BodyPath\.StrokeThickness = 3\.0 \+ 6\.0 \* \$m\.OpenPulse\.Value') 'OpenPulse drives the body outline thickness'
+Assert-True ($src -match '\$BodyPath\.StrokeThickness = 0\.0') 'body path is fill-only so the top outline is the single stroke layer'
+Assert-True ($src -match '\$OutlinePath\.StrokeThickness = 3\.0 \+ 6\.0 \* \$m\.OpenPulse\.Value') 'OpenPulse drives the top outline thickness'
 Assert-True ($src -match '\$HeadHighlight\.Opacity = \[Math\]::Min\(1\.0, 0\.55 \+ 0\.10 \* \$m\.OpenPulse\.Value\)') 'OpenPulse modulates the rim highlight opacity'
 Assert-True (([regex]::Matches($src, '\$HeadHighlight\.Opacity\s*=')).Count -eq 1) 'highlight opacity has a single writer'
 

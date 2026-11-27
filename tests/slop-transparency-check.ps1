@@ -127,4 +127,10 @@ Describe 'Slop shell chat-window wiring' {
         $script:AppSrc | Should -Match 'ChatRoot\.Add_PreviewMouseWheel|ChatWindow\.Add_PreviewMouseWheel'
         $script:AppSrc | Should -Match 'ScrollToVerticalOffset\(\$chatScroll\.VerticalOffset'
     }
+
+    It 'clamps every pet position write to the work area' {
+        $script:AppSrc | Should -Match '\$window\.Add_LocationChanged'
+        $script:AppSrc | Should -Match 'Get-SlopWorkAreaClampedRect -Left \$window\.Left'
+        $script:AppSrc | Should -Match '\$window\.Left = \$r\.Left'
+    }
 }
