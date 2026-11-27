@@ -125,7 +125,7 @@ Describe 'Slop transparent chat window contract' {
         try {
             $plate = $win.FindName('ChatBackplate')
             if ($null -eq $plate) { throw 'ChatBackplate is missing from the chat XAML' }
-            [System.Windows.Controls.Grid]::GetRowSpan($plate) | Should -Be 3
+            [System.Windows.Controls.Grid]::GetRowSpan($plate) | Should -Be 4
             $plate.Background | Should -BeOfType [System.Windows.Media.SolidColorBrush]
             $plate.Background.Color.A | Should -BeGreaterOrEqual 0xF2
             $plate.BorderBrush | Should -BeOfType [System.Windows.Media.SolidColorBrush]
@@ -172,6 +172,38 @@ Describe 'Slop transparent chat window contract' {
     It 'uses readable fills for dynamically created chat shortcut chips' {
         $script:AppSrc | Should -Not -Match "ConvertFromString\('#22FFFFFF'\)"
         [regex]::Matches($script:AppSrc, "ConvertFromString\('#F2263348'\)").Count | Should -BeGreaterOrEqual 4
+    }
+
+    It 'hosts the deck in its own row and keeps transcript and composer in separate rows' {
+        $xaml = Get-SlopChatWindowXaml
+        $xaml | Should -Match '<RowDefinition Height="34"/>\s*<RowDefinition Height="Auto"/>\s*<RowDefinition Height="\*"/>\s*<RowDefinition Height="Auto"/>'
+        $xaml | Should -Match 'x:Name="ChatBackplate" Grid.RowSpan="4"'
+        $xaml | Should -Match 'x:Name="ChatDeckPanel" Grid.Row="1" Visibility="Visible"'
+        $xaml | Should -Not -Match 'x:Name="ChatDeckPanel"[^>]*Visibility="Collapsed"'
+        $xaml | Should -Match '<Grid Grid.Row="2" Margin="12,6,12,6">\s*<ScrollViewer x:Name="ChatScroll"'
+        $xaml | Should -Match 'x:Name="ChatInputChrome" Grid.Row="3"'
+        $xaml | Should -Not -Match 'Voice and model settings live in the main Settings panel'
+    }
+
+    It 'keeps the deck strip visible and collapses only the body' {
+        $xaml = Get-SlopChatWindowXaml
+        $xaml | Should -Match 'x:Name="DeckStrip"'
+        $xaml | Should -Match 'x:Name="DeckCollapseButton"'
+        $xaml | Should -Match 'x:Name="DeckBody"[^>]*Height="220"'
+        $xaml | Should -Match 'x:Name="DeckStatusText"'
+        foreach ($name in @('DeckOverviewButton','DeckSettingsButton','DeckDataButton','DeckToolsButton','DeckUnderHoodButton','DeckExitButton')) {
+            $xaml | Should -Match ([regex]::Escape($name + '"'))
+        }
+    }
+
+    It 'exposes Voice, Model and read-only Data cards in the deck Settings section' {
+        $xaml = Get-SlopChatWindowXaml
+        foreach ($name in @('DeckVoiceEnabledCheck','DeckVoiceLanguageCombo','DeckVoiceMaxSecondsBox',
+                            'DeckVoiceReadyText','DeckVoiceSaveButton','DeckModelRouteText',
+                            'DeckModelBox','DeckModelSaveButton','DeckDataPathText')) {
+            $xaml | Should -Match ([regex]::Escape('x:Name="' + $name + '"'))
+        }
+        $xaml | Should -Not -Match 'DeckCopyButton|DeckOpenFolderButton|DeckMoveDataButton'
     }
 }
 

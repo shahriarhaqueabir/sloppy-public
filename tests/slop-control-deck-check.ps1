@@ -145,4 +145,36 @@ Describe 'Slop control deck' {
         (Get-SlopDeckModelEditArguments -Config $cfg -Model '').Ok | Should -BeFalse
         (Get-SlopDeckModelEditArguments -Config $null -Model 'new-model').Ok | Should -BeFalse
     }
+
+    It 'keeps the deck strip and transcript visible when the body changes' {
+        $visibility = [regex]::Match($script:ShellSrc,
+            'function Update-SlopControlDeckVisibility[\s\S]{0,1400}(?=\r?\nfunction )').Value
+        $visibility | Should -Not -Match 'ChatScroll\.Visibility'
+        $visibility | Should -Match 'ChatDeckPanel\.Visibility\s*=\s*''Visible'''
+        $visibility | Should -Not -Match 'ChatDeckPanel\.Visibility[^\r\n]*Collapsed'
+        $visibility | Should -Match 'DeckBody\.Visibility\s*='
+        $visibility | Should -Match 'Get-SlopDeckBodyHeight'
+    }
+
+    It 'opens the deck body in Full and keeps section switches away from transcript visibility' {
+        $script:ShellSrc | Should -Match '\$script:ChatDeckOpen\s*=\s*\(\$Mode -eq ''Full''\)'
+        $section = [regex]::Match($script:ShellSrc,
+            'function Set-SlopControlDeckSection[\s\S]{0,2400}(?=\r?\nfunction )').Value
+        $section | Should -Not -Match 'ChatScroll\.Visibility'
+        $section | Should -Match 'DeckOverviewButton'
+        $section | Should -Match 'Background'
+    }
+
+    It 'wires deck collapse, voice save and model save handlers' {
+        foreach ($fragment in @('DeckCollapseButton','DeckVoiceSaveButton','DeckModelSaveButton',
+                                'Save-SlopDeckVoice','Save-SlopDeckModel','Update-SlopDeckSettingsUi')) {
+            $script:ShellSrc | Should -Match ([regex]::Escape($fragment))
+        }
+        $voiceSave = [regex]::Match($script:ShellSrc,
+            'function Save-SlopDeckVoice[\s\S]{0,2400}(?=\r?\nfunction )').Value
+        $modelSave = [regex]::Match($script:ShellSrc,
+            'function Save-SlopDeckModel[\s\S]{0,2400}(?=\r?\nfunction )').Value
+        $voiceSave | Should -Not -Match 'Show-SlopDestination|Open-SlopChatWindow'
+        $modelSave | Should -Not -Match 'Show-SlopDestination|Open-SlopChatWindow'
+    }
 }
