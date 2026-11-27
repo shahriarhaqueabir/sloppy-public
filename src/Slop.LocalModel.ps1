@@ -166,6 +166,33 @@ function Test-SlopPortAvailable {
     finally { if ($listener) { $listener.Stop() } }
 }
 
+function Get-SlopOwnedModelProcessOnPort {
+    param(
+        [Parameter(Mandatory)][hashtable]$Paths,
+        [object[]]$Connections,
+        [scriptblock]$ProcessResolver,
+        [scriptblock]$Verifier
+    )
+    if ($null -eq $Connections) {
+        $Connections = @(Get-NetTCPConnection -State Listen -LocalPort $Paths.Port -ErrorAction SilentlyContinue)
+    }
+    if (-not $ProcessResolver) {
+        $ProcessResolver = { param($id) Get-Process -Id $id -ErrorAction SilentlyContinue }
+    }
+    if (-not $Verifier) {
+        $Verifier = { param($process) Test-SlopOwnedModelProcess -Paths $Paths -Process $process }
+    }
+    $ownerIds = @($Connections | Where-Object {
+        $_ -and $_.OwningProcess -gt 0 -and $_.LocalAddress -in @('127.0.0.1','::1')
+    } | Select-Object -ExpandProperty OwningProcess -Unique)
+    foreach ($id in $ownerIds) {
+        $process = & $ProcessResolver $id
+        if ($null -eq $process) { continue }
+        if (& $Verifier $process) { return $process }
+    }
+    return $null
+}
+
 function Start-SlopLocalModel {
     # This readiness loop may wait up to 90 seconds. Call it from a worker, never
     # from the WPF dispatcher thread.
@@ -184,6 +211,10 @@ function Start-SlopLocalModel {
         return @{ Ok = $false; Reason = 'the existing local brain is no longer the Sloppy-owned model process; restart the brain before continuing'; Process = $null }
     }
     if (-not (Test-SlopPortAvailable -Port $Paths.Port)) {
+        $adopted = Get-SlopOwnedModelProcessOnPort -Paths $Paths
+        if ($adopted) {
+            return @{ Ok = $true; Reason = $null; Process = $adopted }
+        }
         return @{ Ok = $false; Reason = 'another program is using the local brain port; Sloppy will not send prompts to an unverified local service'; Process = $null }
     }
     $ContextSize = Resolve-SlopLocalContextSize -ContextSize $ContextSize
