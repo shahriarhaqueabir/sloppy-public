@@ -48,6 +48,12 @@ Describe 'Slop.Route' {
         { Get-SlopRouteBadge -Kind 'magic' -Provider 'x' -Model 'y' } | Should -Throw
     }
 
+    It 'passes DisableThinking as a bare switch without positional leakage' {
+        $src = Get-Content (Join-Path $PSScriptRoot '../src/Slop.Route.ps1') -Raw
+        $src | Should -Not -Match '-DisableThinking\s+\$true'
+        $src | Should -Match '(?m)-DisableThinking\s*$'
+    }
+
     It 'marks only remote routes as requiring disclosure' {
         (Get-SlopRouteCatalog)['opencode-remote'].TermsRequired | Should -BeTrue
         (Get-SlopRouteCatalog)['local-bundled'].TermsRequired | Should -BeFalse
