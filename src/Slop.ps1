@@ -9,6 +9,7 @@ Add-Type -AssemblyName PresentationFramework, PresentationCore, WindowsBase, Sys
 . (Join-Path $PSScriptRoot 'Slop.Frame.ps1')
 . (Join-Path $PSScriptRoot 'Slop.Face.ps1')
 . (Join-Path $PSScriptRoot 'Slop.ChatWindow.ps1')
+. (Join-Path $PSScriptRoot 'Slop.PaneMovement.ps1')
 . (Join-Path $PSScriptRoot 'Slop.Lifecycle.ps1')
 . (Join-Path $PSScriptRoot 'Slop.OpenCode.ps1')
 # Sloppy companion modules. Order matters: Provider/Onboarding/Route depend on
@@ -456,7 +457,11 @@ function Set-SlopPetRectInWorkArea {
     $wa = [System.Windows.SystemParameters]::WorkArea
     $r = Get-SlopWorkAreaClampedRect -Left $window.Left -Top $window.Top `
         -Width $window.ActualWidth -Height $window.ActualHeight -WorkArea $wa
-    if ([Math]::Abs($window.Left - $r.Left) -gt 0.5 -or [Math]::Abs($window.Top - $r.Top) -gt 0.5) {
+    $leftNeeded = Test-SlopPaneClampNeeded -Value ([double]$window.Left) -Minimum ([double]$wa.X) `
+        -Maximum ([double]($wa.X + $wa.Width - $window.ActualWidth)) -Tolerance 4
+    $topNeeded = Test-SlopPaneClampNeeded -Value ([double]$window.Top) -Minimum ([double]$wa.Y) `
+        -Maximum ([double]($wa.Y + $wa.Height - $window.ActualHeight)) -Tolerance 4
+    if ($leftNeeded -or $topNeeded) {
         $window.Left = $r.Left
         $window.Top = $r.Top
     }
@@ -564,15 +569,38 @@ $window.Add_SizeChanged({
 # and position; these variables are the only owners of chat-window state.
 $script:ChatWindow = $null
 $script:ChatMode = 'Extended'
+$script:ChatStoredPetRect = $null
+$script:ChatDragLast = $null
 $script:PetControls = @{}
+
+function Get-SlopCurrentPetRect {
+    return @{
+        Left = $window.Left; Top = $window.Top
+        Width = $window.ActualWidth; Height = $window.ActualHeight
+    }
+}
+
+function Restore-SlopPetRect {
+    param([Parameter(Mandatory)][hashtable]$Rect)
+    $r = Get-SlopRestoredPetRect -StoredRect $Rect
+    $window.Left = $r.Left
+    $window.Top = $r.Top
+    $window.Width = $r.Width
+    $window.Height = $r.Height
+}
 
 function Set-SlopPetChatInteraction {
     param([bool]$ChatOpen)
-    $state = Get-SlopPetInteractionState -ChatOpen $ChatOpen
-    $PeaCanvas.IsHitTestVisible = [bool]$state.IsHitTestVisible
+    $state = Get-SlopPanePetState -ChatMode $script:ChatMode -ChatOpen $ChatOpen
+    $PeaCanvas.IsHitTestVisible = [bool]$state.Interactive
     $window.Topmost = [bool]$state.Topmost
-    $DragHandle.Cursor = $state.Cursor
-    $ControlDots.IsHitTestVisible = [bool]$state.IsHitTestVisible
+    $DragHandle.Cursor = if ($state.Interactive) { 'Hand' } else { 'Arrow' }
+    $ControlDots.IsHitTestVisible = [bool]$state.Interactive
+    if ($state.Visible) {
+        if (-not $window.IsVisible) { $window.Show() }
+    } elseif ($window.IsVisible) {
+        $window.Hide()
+    }
 }
 
 function Save-SlopMainChatControls {
@@ -827,14 +855,43 @@ function Apply-SlopMotion {
 function Set-SlopChatWindowRect {
     param([ValidateSet('Extended','Full')][string]$Mode)
     if (-not $script:ChatWindow) { return }
-    $r = Get-SlopChatWindowRect -PetLeft $window.Left -PetTop $window.Top -PetWidth $window.Width `
-        -PetHeight $window.Height -WorkArea ([System.Windows.SystemParameters]::WorkArea) -Mode $Mode
+    $wa = [System.Windows.SystemParameters]::WorkArea
+
+    if ($Mode -eq 'Full' -and -not $script:ChatStoredPetRect) {
+        # Store once on the way in; the pet rect is never derived from chat.
+        $script:ChatStoredPetRect = Get-SlopPetRectDuringChat -PetRect (Get-SlopCurrentPetRect) -ChatMode Full
+    }
+    if ($Mode -eq 'Extended' -and $script:ChatStoredPetRect) {
+        Restore-SlopPetRect -Rect $script:ChatStoredPetRect
+        $script:ChatStoredPetRect = $null
+    }
+
+    $requested = Get-SlopChatWindowRect -PetLeft $window.Left -PetTop $window.Top -PetWidth $window.Width `
+        -PetHeight $window.Height -WorkArea $wa -Mode $Mode
+    if ($Mode -eq 'Extended') {
+        # Pin-aware only at open/mode-switch invariants; deliberate drags may overlap.
+        $r = Get-SlopPinnedAwareChatRect -PetRect (Get-SlopCurrentPetRect) `
+            -RequestedRect $requested -WorkArea @{
+                X = [int]$wa.X; Y = [int]$wa.Y
+                Width = [int]$wa.Width; Height = [int]$wa.Height
+            }
+    } else {
+        $r = $requested
+    }
     $script:ChatWindow.Left = $r.Left
     $script:ChatWindow.Top = $r.Top
     $script:ChatWindow.Width = $r.Width
     $script:ChatWindow.Height = $r.Height
     $script:ChatMode = $Mode
     $script:ChatWindow.FindName('ChatModeButton').Content = if ($Mode -eq 'Full') { '_' } else { '□' }
+    Set-SlopPetChatInteraction -ChatOpen $true
+}
+
+function Convert-SlopDevicePointToWpf {
+    param([double]$X, [double]$Y, [Parameter(Mandatory)]$Visual)
+    $source = [System.Windows.PresentationSource]::FromVisual($Visual)
+    if ($null -eq $source) { return [System.Windows.Point]::new($X, $Y) }
+    return $source.CompositionTarget.TransformFromDevice.Transform([System.Windows.Point]::new($X, $Y))
 }
 
 function Open-SlopChatWindow {
@@ -866,10 +923,52 @@ function Open-SlopChatWindow {
         $newMode = if ($script:ChatMode -eq 'Full') { 'Extended' } else { 'Full' }
         Set-SlopChatWindowRect -Mode $newMode
     })
+    # The grip is a transparent top strip over the chrome. Drag moves only the
+    # chat pane through the pure clamped helper; the pet is never moved/resized.
+    $chatGrip = $chat.FindName('ChatDragGrip')
+    if ($chatGrip) {
+        $chatGrip.Add_MouseLeftButtonDown({
+            param($s, $e)
+            $p = $s.PointToScreen($e.GetPosition($s))
+            $script:ChatDragLast = @{
+                X = $p.X; Y = $p.Y
+                Left = $script:ChatWindow.Left; Top = $script:ChatWindow.Top
+            }
+            $s.CaptureMouse() | Out-Null
+        })
+        $chatGrip.Add_MouseMove({
+            param($s, $e)
+            if (-not $script:ChatDragLast -or -not $s.IsMouseCaptured) { return }
+            $p = $s.PointToScreen($e.GetPosition($s))
+            $dx = [int][Math]::Round($p.X - $script:ChatDragLast.X)
+            $dy = [int][Math]::Round($p.Y - $script:ChatDragLast.Y)
+            $wa = [System.Windows.SystemParameters]::WorkArea
+            $r = Get-SlopMovedPaneRect -Rect @{
+                Left = $script:ChatDragLast.Left; Top = $script:ChatDragLast.Top
+                Width = $script:ChatWindow.ActualWidth; Height = $script:ChatWindow.ActualHeight
+            } -DeltaX $dx -DeltaY $dy -WorkArea @{
+                X = [int]$wa.X; Y = [int]$wa.Y
+                Width = [int]$wa.Width; Height = [int]$wa.Height
+            }
+            $script:ChatWindow.Left = $r.Left
+            $script:ChatWindow.Top = $r.Top
+        })
+        $chatGrip.Add_MouseLeftButtonUp({
+            param($s, $e)
+            if ($s.IsMouseCaptured) { $s.ReleaseMouseCapture() }
+            $script:ChatDragLast = $null
+        })
+    }
     $chat.FindName('ChatCloseButton').Add_Click({ Collapse-Chat })
     $script:ChatWindow.Add_Closed({
         $script:ChatWindow = $null
+        $script:ChatDragLast = $null
         Restore-SlopMainChatControls
+        if ($script:ChatStoredPetRect) {
+            # Closing from Full restores the pet at its exact stored rect.
+            Restore-SlopPetRect -Rect $script:ChatStoredPetRect
+            $script:ChatStoredPetRect = $null
+        }
         Set-SlopPetChatInteraction -ChatOpen $false
         Set-SlopBaseCondition -State $script:Motion -Streaming $false -ChatOpen $false -Stalled $false
     })

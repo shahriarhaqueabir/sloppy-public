@@ -3,6 +3,26 @@
 # objects; callers parse the XAML when they actually open the window.
 $ErrorActionPreference = 'Stop'
 
+# Pure pane geometry is owned by Slop.PaneMovement.ps1. Dot-source it here so
+# the chat window module resolves Full preset, pin-aware placement, tolerant
+# clamp and drag-grip contracts when it is loaded on its own.
+$paneMovementModule = Join-Path $PSScriptRoot 'Slop.PaneMovement.ps1'
+if (Test-Path -LiteralPath $paneMovementModule) { . $paneMovementModule }
+
+function Get-SlopChatDragGripGeometry {
+    param([int]$Width = 760, [int]$Height = 540)
+    # The grip occupies the top strip of the chat chrome; the pure helper owns
+    # the size contract so shell handlers cannot invent a second geometry.
+    return Get-SlopChatDragGripRect -Width $Width -Height $Height
+}
+
+function Test-SlopChatPaneClampNeeded {
+    param([double]$Value, [double]$Minimum, [double]$Maximum, [int]$Tolerance = 4)
+    return Test-SlopPaneClampNeeded -Value ([int][Math]::Round($Value)) `
+        -Minimum ([int][Math]::Round($Minimum)) -Maximum ([int][Math]::Round($Maximum)) `
+        -Tolerance $Tolerance
+}
+
 function Get-SlopWorkAreaClampedRect {
     param(
         [Parameter(Mandatory)][double]$Left,
@@ -34,8 +54,13 @@ function Get-SlopChatWindowRect {
         [double]$ExtendedHeight = 540.0
     )
     if ($Mode -eq 'Full') {
-        return Get-SlopWorkAreaClampedRect -Left ([double]$WorkArea.X) -Top ([double]$WorkArea.Y) `
-            -Width ([double]$WorkArea.Width) -Height ([double]$WorkArea.Height) -WorkArea $WorkArea
+        # A large inset preset, never a work-area-filling pseudo-maximize.
+        $full = Get-SlopFullPaneRect -WorkArea @{
+            X = [int]$WorkArea.X; Y = [int]$WorkArea.Y
+            Width = [int]$WorkArea.Width; Height = [int]$WorkArea.Height
+        }
+        return Get-SlopWorkAreaClampedRect -Left ([double]$full.Left) -Top ([double]$full.Top) `
+            -Width ([double]$full.Width) -Height ([double]$full.Height) -WorkArea $WorkArea
     }
     $left = $PetLeft + $PetWidth + 24.0
     $top = $PetTop + ($PetHeight - $ExtendedHeight) / 2.0
@@ -83,6 +108,9 @@ function Get-SlopChatWindowXaml {
     <Border x:Name="ChatBackplate" Grid.RowSpan="3" Margin="4" CornerRadius="12"
             Background="#F212141C" BorderBrush="#8893A4BD" BorderThickness="2"
             SnapsToDevicePixels="True" IsHitTestVisible="False"/>
+    <Border x:Name="ChatDragGrip" Grid.Row="0" Margin="0,0,96,0" Background="Transparent"
+            Cursor="SizeAll" ToolTip="Drag chat pane" AutomationProperties.Name="Drag chat pane"
+            Panel.ZIndex="2"/>
     <Border x:Name="ChatChrome" Grid.Row="0" Background="#F21E293B"
             BorderBrush="#44FFFFFF" BorderThickness="1" CornerRadius="12,12,0,0">
       <Grid>
