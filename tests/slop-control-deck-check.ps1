@@ -112,12 +112,20 @@ Describe 'Slop control deck' {
 
     It 'builds model edit arguments that preserve other brain fields' {
         . (Join-Path $PSScriptRoot '../src/Slop.Config.ps1')
-        $cfg = @{
-            brain = 'opencode'; provider = 'opencode-go'; providerLocality = 'remote'
-            endpointUrl = 'http://127.0.0.1:28894'; model = 'old'; modelName = 'old'
-            agentId = 'sloppy'; capabilityProfile = 'companion'
-            voiceEnabled = $true; whisperLanguage = 'de'; voiceMaxSeconds = 45
-        }
+        # Set-SlopConfigBrain validates the whole config, so start from the real default
+        # and override only route/voice fields under test.
+        $cfg = New-SlopDefaultConfig
+        $cfg.brain = 'opencode'
+        $cfg.provider = 'opencode-go'
+        $cfg.providerLocality = 'remote'
+        $cfg.endpointUrl = 'http://127.0.0.1:28894'
+        $cfg.model = 'old'
+        $cfg.modelName = 'old'
+        $cfg.agentId = 'sloppy'
+        $cfg.capabilityProfile = 'companion'
+        $cfg.voiceEnabled = $true
+        $cfg.whisperLanguage = 'de'
+        $cfg.voiceMaxSeconds = 45
         $edit = Get-SlopDeckModelEditArguments -Config $cfg -Model 'new-model'
         $edit.Ok | Should -BeTrue
         $edit.Brain | Should -Be 'opencode'
