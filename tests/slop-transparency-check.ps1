@@ -2,13 +2,12 @@
 $ErrorActionPreference = 'Stop'
 Import-Module Pester -MinimumVersion 6.0
 
-$module = Join-Path $PSScriptRoot '../src/Slop.ChatWindow.ps1'
-if (Test-Path -LiteralPath $module) { . $module }
-$appSourcePath = Join-Path $PSScriptRoot '../src/Slop.ps1'
-
 Describe 'Slop transparent chat window contract' {
     BeforeAll {
-        $script:AppSrc = Get-Content -Raw -LiteralPath $appSourcePath
+        # Pester isolates file scope from It blocks: define the pure functions
+        # inside BeforeAll, where the container can see them.
+        . (Join-Path $PSScriptRoot '../src/Slop.ChatWindow.ps1')
+        $script:AppSrc = Get-Content -Raw -LiteralPath (Join-Path $PSScriptRoot '../src/Slop.ps1')
     }
 
     It 'clamps a requested rect inside the work area' {
@@ -82,8 +81,8 @@ Describe 'Slop transparent chat window contract' {
         $xaml | Should -Match 'WindowStyle="None"'
         $xaml | Should -Match 'AllowsTransparency="True"'
         $xaml | Should -Match 'Background="Transparent"'
-        $xaml | Should -Not -Match 'Mica|Acrylic|Backdrop|DwmSetWindowAttribute|SetWindowCompositionAttribute'
-        $script:AppSrc | Should -Not -Match 'Mica|Acrylic|DwmSetWindowAttribute|SetWindowCompositionAttribute'
+        $xaml | Should -Not -Match '\bMica\b|\bAcrylic\b|\bBackdrop\b|DwmSetWindowAttribute|SetWindowCompositionAttribute'
+        $script:AppSrc | Should -Not -Match '\bMica\b|\bAcrylic\b|DwmSetWindowAttribute|SetWindowCompositionAttribute'
     }
 
     It 'uses accessible text colours in the chat window' {
@@ -91,5 +90,36 @@ Describe 'Slop transparent chat window contract' {
         $xaml | Should -Not -Match '8A8A96'
         $xaml | Should -Match '93A4BD'
         $xaml | Should -Not -Match 'FontSize="9"'
+    }
+}
+
+Describe 'Slop shell chat-window wiring' {
+    BeforeAll {
+        $script:AppSrc = Get-Content -Raw -LiteralPath (Join-Path $PSScriptRoot '../src/Slop.ps1')
+    }
+
+    It 'dot-sources the chat window module before it is used' {
+        $script:AppSrc | Should -Match 'Slop\.ChatWindow\.ps1'
+    }
+
+    It 'opens one chat window, activates an existing one, and never resizes the pet' {
+        $script:AppSrc | Should -Match 'function Open-SlopChatWindow'
+        $script:AppSrc | Should -Match '\$script:ChatWindow\.Activate\(\)'
+        $script:AppSrc | Should -Not -Match '\$window\.Width = \$script:ExpandedSize\.Width'
+    }
+
+    It 'rebinds all shared chat controls to the chat window' {
+        foreach ($id in @('ChatScroll','ChatStack','ShortcutsStrip','InputBox','InputPlaceholder','MicBtn','SendBtn','StopBtn')) {
+            $script:AppSrc | Should -Match "FindName\('$id'\)"
+        }
+    }
+
+    It 'uses the open-chat automation name on the pet button' {
+        $script:AppSrc | Should -Match 'Content="□" ToolTip="Open chat window" AutomationProperties.Name="Open chat window"'
+    }
+
+    It 'restores pet interaction when the chat closes' {
+        $script:AppSrc | Should -Match 'Set-SlopPetChatInteraction -ChatOpen \$false'
+        $script:AppSrc | Should -Match '\$script:ChatWindow\.Add_Closed'
     }
 }

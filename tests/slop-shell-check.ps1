@@ -74,8 +74,9 @@ if ($m.Success) {
     Assert-True ($src -match "tok\.StartsWith\('__SLOPMODEL__'\)") 'UI thread records the worker-started model process for clean shutdown'
     $verifier = Get-Content (Join-Path $PSScriptRoot '../tools/verify-motion.ps1') -Raw
     Assert-True ($verifier -match 'function Wait-DotBlue') 'live verifier waits for the header dot fade after expand'
-    Assert-True ($verifier -match 'if \(-not \(Wait-DotBlue -TimeoutMs \d+\)\)') 'expanded-dot check uses the fade-aware wait'
-    Assert-True ($verifier -match 'for \(\$i=0; \$i -lt 400; \$i\+\+\)[\s\S]{0,200}\$dotColors\[\$c\] = \$true') 'send poll allows slow local brain startup'
+    Assert-True ($verifier -match 'if \(Get-ChatWin\) \{ \$expanded = \$true') 'chat opening is detected by window presence'
+    Assert-True ($verifier -notmatch 'Wait-DotBlue -TimeoutMs 45000') 'chat opening no longer samples a hidden pet status dot'
+    Assert-True ($verifier -match 'for \(\$i=0; \$i -lt 400; \$i\+\+\)[\s\S]{0,200}\$chatAfter = Get-ChatText') 'send poll waits for rendered chat text through slow local brain startup'
     Assert-True ($verifier -match 'function Set-UiaCombo') 'live verifier can select ComboBox items'
     Assert-True ($verifier -match 'Set-UiaValue ''SettingsAgentIdBox'' ''probe-agent''') 'live verifier edits Settings'
     Assert-True ($verifier -match 'Set-UiaCombo ''CustomizeColourCombo'' ''plum''') 'live verifier edits Customize'

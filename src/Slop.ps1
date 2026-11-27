@@ -8,6 +8,7 @@ Add-Type -AssemblyName PresentationFramework, PresentationCore, WindowsBase, Sys
 . (Join-Path $PSScriptRoot 'Slop.Sense.ps1')
 . (Join-Path $PSScriptRoot 'Slop.Frame.ps1')
 . (Join-Path $PSScriptRoot 'Slop.Face.ps1')
+. (Join-Path $PSScriptRoot 'Slop.ChatWindow.ps1')
 . (Join-Path $PSScriptRoot 'Slop.Lifecycle.ps1')
 . (Join-Path $PSScriptRoot 'Slop.OpenCode.ps1')
 # Sloppy companion modules. Order matters: Provider/Onboarding/Route depend on
@@ -109,7 +110,7 @@ $xaml = @'
           <Button x:Name="SettingsDot" Width="18" Height="18" Margin="0,0,4,0"
                   Style="{StaticResource SlopButton}" Background="#33BFDBFE"
                   BorderThickness="1" BorderBrush="#55FFFFFF" Cursor="Hand" FontSize="9" FontWeight="Bold"
-                  Content="□" ToolTip="Full screen" AutomationProperties.Name="Maximize Slop to work area"/>
+                  Content="□" ToolTip="Open chat window" AutomationProperties.Name="Open chat window"/>
           <Button x:Name="PinDot" Width="18" Height="18" Margin="0,0,4,0"
                   Style="{StaticResource SlopButton}" Background="#33BFDBFE"
                   BorderThickness="1" BorderBrush="#55FFFFFF" Cursor="Hand" FontSize="9" FontWeight="Bold"
@@ -437,7 +438,6 @@ $ResizeGrip.Add_MouseMove({
     $p = $e.GetPosition($window)
     $window.Width  = [Math]::Max(468.0, [Math]::Min(1280.0, $script:resizeOrigin[2] + ($p.X - $script:resizeOrigin[0])))
     $window.Height = [Math]::Max(314.0, [Math]::Min(1840.0, $script:resizeOrigin[3] + ($p.Y - $script:resizeOrigin[1])))
-    if ($script:Expanded) { $script:ExpandedSize = [System.Windows.Size]::new($window.Width, $window.Height) }
 })
 $ResizeGrip.Add_MouseLeftButtonUp({
     param($s, $e)
@@ -490,31 +490,21 @@ function Update-SlopFaceRegion {
         if ($idx -lt 0) { $idx = 0 }
         $Stage.Children.Insert($idx, $layer)
     }
-    if ($script:Expanded) {
-        $layer.Width = [Math]::Max(10.0, $window.ActualWidth)
-        $layer.Height = [Math]::Max(10.0, $window.ActualHeight)
-        [System.Windows.Controls.Canvas]::SetLeft($layer, 0.0)
-        [System.Windows.Controls.Canvas]::SetTop($layer, 0.0)
-        # The body path is only rebuilt while open; never install a null clip.
-        if ($BodyPath.Data) { $layer.Clip = $BodyPath.Data }
-        $script:FaceRegion = @{ Width = $layer.Width; Height = $layer.Height }
-    }
-    else {
-        # Slightly larger compact region gives particles room without leaving the pea.
-        $w = 72.0
-        $h = 72.0
-        $px = [System.Windows.Controls.Canvas]::GetLeft($PeaCanvas)
-        $py = [System.Windows.Controls.Canvas]::GetTop($PeaCanvas)
-        if ([double]::IsNaN($px)) { $px = ([Math]::Max(26.0, $window.ActualWidth) - 26.0) / 2.0 }
-        if ([double]::IsNaN($py)) { $py = [Math]::Max(0.0, [Math]::Max(26.0, $window.ActualHeight) - 38.0) }
-        $layer.Width = $w
-        $layer.Height = $h
-        [System.Windows.Controls.Canvas]::SetLeft($layer, $px + 13.0 - $w / 2.0)
-        [System.Windows.Controls.Canvas]::SetTop($layer, $py + 13.0 - $h / 2.0)
-        $layer.Clip = [System.Windows.Media.RectangleGeometry]::new(
-            [System.Windows.Rect]::new(0.0, 0.0, $w, $h), 12.0, 12.0)
-        $script:FaceRegion = @{ Width = $w; Height = $h }
-    }
+    # The pea is the pet's only face surface now; chat has its own window, so
+    # the particle field always uses the compact aura around the pea.
+    $w = 72.0
+    $h = 72.0
+    $px = [System.Windows.Controls.Canvas]::GetLeft($PeaCanvas)
+    $py = [System.Windows.Controls.Canvas]::GetTop($PeaCanvas)
+    if ([double]::IsNaN($px)) { $px = ([Math]::Max(26.0, $window.ActualWidth) - 26.0) / 2.0 }
+    if ([double]::IsNaN($py)) { $py = [Math]::Max(0.0, [Math]::Max(26.0, $window.ActualHeight) - 38.0) }
+    $layer.Width = $w
+    $layer.Height = $h
+    [System.Windows.Controls.Canvas]::SetLeft($layer, $px + 13.0 - $w / 2.0)
+    [System.Windows.Controls.Canvas]::SetTop($layer, $py + 13.0 - $h / 2.0)
+    $layer.Clip = [System.Windows.Media.RectangleGeometry]::new(
+        [System.Windows.Rect]::new(0.0, 0.0, $w, $h), 12.0, 12.0)
+    $script:FaceRegion = @{ Width = $w; Height = $h }
 }
 
 $window.Add_SizeChanged({
@@ -525,31 +515,67 @@ $window.Add_SizeChanged({
     Update-PeaAnchor
     Update-SlopFaceRegion
 })
-$script:PseudoMaximized = $false
-$script:RestoreRect = $null
-$SettingsDot.Add_Click({
-    if ($script:PseudoMaximized) {
-        $script:PseudoMaximized = $false
-        $r = $script:RestoreRect
-        if ($r) {
-            $window.Left   = $r[0]
-            $window.Top    = $r[1]
-            $window.Width  = $r[2]
-            $window.Height = $r[3]
-        }
-        $script:RestoreRect = $null
+# Chat lives in its own transparent window. The pet keeps its compact surface
+# and position; these variables are the only owners of chat-window state.
+$script:ChatWindow = $null
+$script:ChatMode = 'Extended'
+$script:PetControls = @{}
+
+function Set-SlopPetChatInteraction {
+    param([bool]$ChatOpen)
+    $state = Get-SlopPetInteractionState -ChatOpen $ChatOpen
+    $PeaCanvas.IsHitTestVisible = [bool]$state.IsHitTestVisible
+    $window.Topmost = [bool]$state.Topmost
+    $DragHandle.Cursor = $state.Cursor
+    $ControlDots.IsHitTestVisible = [bool]$state.IsHitTestVisible
+}
+
+function Save-SlopMainChatControls {
+    $script:PetControls = @{
+        ChatScroll = $ChatScroll; ChatStack = $ChatStack
+        ShortcutsStrip = $ShortcutsStrip; InputBox = $InputBox
+        InputPlaceholder = $InputPlaceholder; MicBtn = $MicBtn
+        SendBtn = $SendBtn; StopBtn = $StopBtn
     }
-    else {
-        $script:RestoreRect = @($window.Left, $window.Top, $window.Width, $window.Height)
-        $script:PseudoMaximized = $true
-        $wa = [System.Windows.SystemParameters]::WorkArea
-        $window.Left   = $wa.X
-        $window.Top    = $wa.Y
-        $window.Width  = $wa.Width
-        $window.Height = $wa.Height
+}
+Save-SlopMainChatControls
+
+function Move-SlopChatBubbles {
+    param([Parameter(Mandatory)]$From, [Parameter(Mandatory)]$To)
+    if ($From -eq $To) { return }
+    foreach ($child in @($From.Children)) {
+        $From.Children.Remove($child) | Out-Null
+        $To.Children.Add($child) | Out-Null
     }
-    Update-SlopFaceRegion
-})
+}
+
+function Use-SlopChatControls {
+    param([Parameter(Mandatory)]$Target)
+    $script:ChatScroll = $Target.FindName('ChatScroll')
+    $script:ChatStack = $Target.FindName('ChatStack')
+    $script:ShortcutsStrip = $Target.FindName('ShortcutsStrip')
+    $script:InputBox = $Target.FindName('InputBox')
+    $script:InputPlaceholder = $Target.FindName('InputPlaceholder')
+    $script:MicBtn = $Target.FindName('MicBtn')
+    $script:SendBtn = $Target.FindName('SendBtn')
+    $script:StopBtn = $Target.FindName('StopBtn')
+    Move-SlopChatBubbles -From $script:PetControls.ChatStack -To $script:ChatStack
+}
+
+function Restore-SlopMainChatControls {
+    $previousStack = $script:ChatStack
+    $script:ChatScroll = $script:PetControls.ChatScroll
+    $script:ChatStack = $script:PetControls.ChatStack
+    $script:ShortcutsStrip = $script:PetControls.ShortcutsStrip
+    $script:InputBox = $script:PetControls.InputBox
+    $script:InputPlaceholder = $script:PetControls.InputPlaceholder
+    $script:MicBtn = $script:PetControls.MicBtn
+    $script:SendBtn = $script:PetControls.SendBtn
+    $script:StopBtn = $script:PetControls.StopBtn
+    Move-SlopChatBubbles -From $previousStack -To $script:ChatStack
+}
+
+$SettingsDot.Add_Click({ Open-SlopChatWindow })
 $PinDot.Add_Click({ Collapse-Chat })
 $CloseDot.Add_Click({ Minimize-ToTray })
 $ControlDots.Add_MouseEnter({ $ControlDots.Opacity = 0.95 })
@@ -571,10 +597,7 @@ if ($env:SLOP_REQUEST_TIMEOUT_SECONDS) {
         $script:RequestTimeoutSeconds = $parsedTimeout
     }
 }
-$script:Expanded = $false
 $script:Pinned = $false
-$script:ExpandedSize = $null
-$script:RestoreCompact = $false
 # canonical order matches $SlopShapeIndex: circle, square, triangle, rect
 $script:Shapes = @($ShapeCircle,$ShapeSquare,$ShapeTri,$ShapeRect)
 
@@ -713,14 +736,7 @@ function Apply-SlopMotion {
     elseif ($m.Mood -eq 'error')    { $frameMood = [SlopFrame]::Alert }
     $script:Membrane.SetMood($frameMood)
 
-    if ($bodyClosed -and -not $script:Expanded -and $script:Frame.Opacity -lt 0.02) {
-        if ($script:RestoreCompact) {
-            $script:RestoreCompact = $false
-            if ($window.WindowState -ne 'Maximized' -and -not $script:PseudoMaximized) {
-                $window.Width = 484.0
-                $window.Height = 330.0
-            }
-        }
+    if ($bodyClosed -and $script:Frame.Opacity -lt 0.02) {
         $BodyPath.Visibility = 'Collapsed'
         $HeadHighlight.Visibility = 'Collapsed'
         $Frame.Visibility = 'Collapsed'
@@ -757,24 +773,53 @@ function Apply-SlopMotion {
     }
 }
 
-function Expand-Chat {
-    if ($script:Expanded) { return }
-    $script:Expanded = $true
-    $script:RestoreCompact = $false
-    if (-not $script:ExpandedSize) { $script:ExpandedSize = [System.Windows.Size]::new(760.0, 540.0) }
-    if ($window.WindowState -ne 'Maximized' -and -not $script:PseudoMaximized) {
-        $window.Width = $script:ExpandedSize.Width
-        $window.Height = $script:ExpandedSize.Height
-    }
-    $PeaCanvas.Visibility = 'Collapsed'
-    $BodyPath.Visibility = 'Visible'
-    $origin = Get-SlopPeaOrigin
-    $script:Membrane.Expand($origin[0], $origin[1])
-    Update-SlopFaceRegion
-    Set-SlopFrameTarget -State $script:Motion -Target 'open'
-    Set-SlopBaseCondition -State $script:Motion -Streaming $script:IsStreaming -ChatOpen $true -Stalled $false
-    $InputBox.Focus() | Out-Null
+function Set-SlopChatWindowRect {
+    param([ValidateSet('Extended','Full')][string]$Mode)
+    if (-not $script:ChatWindow) { return }
+    $r = Get-SlopChatWindowRect -PetLeft $window.Left -PetTop $window.Top `
+        -WorkArea ([System.Windows.SystemParameters]::WorkArea) -Mode $Mode
+    $script:ChatWindow.Left = $r.Left
+    $script:ChatWindow.Top = $r.Top
+    $script:ChatWindow.Width = $r.Width
+    $script:ChatWindow.Height = $r.Height
+    $script:ChatMode = $Mode
+    $script:ChatWindow.FindName('ChatModeButton').Content = if ($Mode -eq 'Full') { '_' } else { '□' }
 }
+
+function Open-SlopChatWindow {
+    if ($script:ChatWindow -and $script:ChatWindow.IsLoaded) {
+        $script:ChatWindow.Activate()
+        return
+    }
+    try {
+        $chat = [System.Windows.Markup.XamlReader]::Parse((Get-SlopChatWindowXaml))
+    } catch {
+        Add-Bubble -Text "[error: chat window could not open: $($_.Exception.Message)]" -IsUser $false
+        return
+    }
+    $script:ChatWindow = $chat
+    $script:ChatMode = 'Extended'
+    Use-SlopChatControls -Target $chat
+    Initialize-SlopChatControlHandlers -Target $chat
+    Set-SlopChatWindowRect -Mode 'Extended'
+    $chat.FindName('ChatModeButton').Add_Click({
+        $newMode = if ($script:ChatMode -eq 'Full') { 'Extended' } else { 'Full' }
+        Set-SlopChatWindowRect -Mode $newMode
+    })
+    $chat.FindName('ChatCloseButton').Add_Click({ Collapse-Chat })
+    $script:ChatWindow.Add_Closed({
+        $script:ChatWindow = $null
+        Restore-SlopMainChatControls
+        Set-SlopPetChatInteraction -ChatOpen $false
+        Set-SlopBaseCondition -State $script:Motion -Streaming $false -ChatOpen $false -Stalled $false
+    })
+    Set-SlopPetChatInteraction -ChatOpen $true
+    Set-SlopBaseCondition -State $script:Motion -Streaming $script:IsStreaming -ChatOpen $true -Stalled $false
+    $chat.Show()
+    $chat.FindName('InputBox').Focus() | Out-Null
+}
+
+function Expand-Chat { Open-SlopChatWindow }
 
 function Request-StopStream {
     $gen = $script:RequestState.Generation
@@ -805,15 +850,16 @@ function Request-StopStream {
 }
 
 function Collapse-Chat {
-    if (-not $script:Expanded) { return }
     Request-StopStream
-    $script:Expanded = $false
-    $script:RestoreCompact = $true
-    $origin = Get-SlopPeaOrigin
-    $script:Membrane.Collapse($origin[0], $origin[1])
-    Update-SlopFaceRegion
+    if ($script:ChatWindow) {
+        $chat = $script:ChatWindow
+        $script:ChatWindow = $null
+        $chat.Close()
+    }
+    Restore-SlopMainChatControls
+    Set-SlopPetChatInteraction -ChatOpen $false
     Set-SlopFrameTarget -State $script:Motion -Target 'closed'
-    Set-SlopBaseCondition -State $script:Motion -Streaming $script:IsStreaming -ChatOpen $false -Stalled $false
+    Set-SlopBaseCondition -State $script:Motion -Streaming $false -ChatOpen $false -Stalled $false
 }
 
 function Minimize-ToTray {
@@ -895,14 +941,14 @@ function Finish-Stream {
     if ($script:Cts) { $script:Cts.Dispose(); $script:Cts = $null }
     $script:IsStreaming = $false
     $script:StreamTextSpring = $null
-    Set-SlopBaseCondition -State $script:Motion -Streaming $false -ChatOpen $script:Expanded -Stalled $false
+    Set-SlopBaseCondition -State $script:Motion -Streaming $false -ChatOpen ([bool]$script:ChatWindow) -Stalled $false
     $SendBtn.Visibility = 'Visible'
     $StopBtn.Visibility = 'Collapsed'
     $SendBtn.IsEnabled = $true
     Set-SlopMicUiState -State idle
     $InputBox.IsEnabled = $true
     # Do not pull focus back into a chat the user has already collapsed.
-    if ($script:Expanded) { $InputBox.Focus() | Out-Null }
+    if ($script:ChatWindow) { $InputBox.Focus() | Out-Null }
 }
 
 # Minimize to tray: hide the window and keep a NotifyIcon for restore.
@@ -952,9 +998,8 @@ function Set-SlopRouteBadge {
 # Thought bubbles are reserved for System Sense alerts only. No canned trivia.
 function Add-SlopThoughtBubble {
     param([Parameter(Mandatory)][string]$Text)
-    $expanded = $script:Expanded
-    $maxWidth = if ($expanded) { 320.0 } else { 190.0 }
-    $fontSize = if ($expanded) { 10 } else { 8 }
+    $maxWidth = 190.0
+    $fontSize = 8
 
     $b = New-Object System.Windows.Controls.Border
     $b.CornerRadius = [System.Windows.CornerRadius]::new(10)
@@ -977,17 +1022,11 @@ function Add-SlopThoughtBubble {
     $b.Measure([System.Windows.Size]::new($maxWidth, 400.0))
     $bw = $b.DesiredSize.Width
     $bh = $b.DesiredSize.Height
-    if ($expanded) {
-        $x = 42.0
-        $y = 62.0
-    }
-    else {
-        $pea = Get-SlopPeaOrigin
-        $x = $pea[0] - ($bw / 2.0)
-        $y = $pea[1] - $bh - 18.0
-        $x = [Math]::Max(8.0, [Math]::Min($x, $window.ActualWidth - $bw - 8.0))
-        $y = [Math]::Max(8.0, $y)
-    }
+    $pea = Get-SlopPeaOrigin
+    $x = $pea[0] - ($bw / 2.0)
+    $y = $pea[1] - $bh - 18.0
+    $x = [Math]::Max(8.0, [Math]::Min($x, $window.ActualWidth - $bw - 8.0))
+    $y = [Math]::Max(8.0, $y)
     [System.Windows.Controls.Canvas]::SetLeft($b, $x)
     [System.Windows.Controls.Canvas]::SetTop($b, $y)
     $b.Tag = @{ Born = [DateTime]::UtcNow }
@@ -1666,7 +1705,7 @@ function Start-Stream {
     $StopBtn.Visibility = 'Visible'
     Clear-SlopSignalEvents -State $script:Motion -Prefix 'request:'
     Clear-SlopSignalEvents -State $script:Motion -Prefix 'completion:'
-    Set-SlopBaseCondition -State $script:Motion -Streaming $true -ChatOpen $script:Expanded -Stalled $false
+    Set-SlopBaseCondition -State $script:Motion -Streaming $true -ChatOpen ([bool]$script:ChatWindow) -Stalled $false
     Set-SlopSignalEvent -State $script:Motion -Id "request:${generation}:phase" -Kind thinking `
         -Status $streamPlan.StatusText -Sticky
     Clear-SlopSignalEvent -State $script:Motion -Id 'request:preflight' | Out-Null
@@ -1732,7 +1771,7 @@ function Start-Stream {
         $script:StalledNow = $script:IsStreaming -and `
             ((([DateTime]::UtcNow) - $script:LastTokenAt).TotalSeconds -gt 3)
         Set-SlopBaseCondition -State $script:Motion -Streaming $script:IsStreaming `
-            -ChatOpen $script:Expanded -Stalled $script:StalledNow
+            -ChatOpen ([bool]$script:ChatWindow) -Stalled $script:StalledNow
         $tok = $null
         while ($q.TryDequeue([ref]$tok)) {
             if ($script:RequestState.Generation -ne $gen -or
@@ -1844,7 +1883,7 @@ function Start-Stream {
                     $script:StalledNow = $false
                     Clear-SlopSignalEvent -State $script:Motion -Id "request:${gen}:phase" | Out-Null
                     Set-SlopBaseCondition -State $script:Motion -Streaming $true `
-                        -ChatOpen $script:Expanded -Stalled $false
+                        -ChatOpen ([bool]$script:ChatWindow) -Stalled $false
                     $tb = $script:CurrentAssistantBlock.Child
                     if (-not $script:StreamTextSpring) {
                         $script:StreamTextSpring = New-SlopSpring 0.70 240 24
@@ -1863,11 +1902,33 @@ function Start-Stream {
     $timer.Start()
 }
 
-$sendAction = {
-    $text = $InputBox.Text.Trim()
+# Chat controls may belong to the pet or to the separate chat window. Handlers
+# live at script scope so both surfaces share one implementation.
+$script:SlopSendAction = {
+    $text = $script:InputBox.Text.Trim()
     if ([string]::IsNullOrWhiteSpace($text)) { return }
-    $InputBox.Text = ''
+    $script:InputBox.Text = ''
     Start-Stream -UserText $text
+}
+$script:SlopStopAction = { Request-StopStream }
+$script:SlopInputChangedAction = {
+    $script:InputPlaceholder.Visibility = if ([string]::IsNullOrWhiteSpace($script:InputBox.Text)) { 'Visible' } else { 'Collapsed' }
+}
+$script:SlopInputKeyDownAction = {
+    param($s, $e)
+    if ($e.Key -eq [System.Windows.Input.Key]::Enter -and -not $e.KeyboardDevice.Modifiers) {
+        & $script:SlopSendAction
+        $e.Handled = $true
+    }
+}
+
+function Initialize-SlopChatControlHandlers {
+    param([Parameter(Mandatory)]$Target)
+    $Target.FindName('MicBtn').Add_Click($script:SlopMicAction)
+    $Target.FindName('SendBtn').Add_Click($script:SlopSendAction)
+    $Target.FindName('StopBtn').Add_Click($script:SlopStopAction)
+    $Target.FindName('InputBox').Add_TextChanged($script:SlopInputChangedAction)
+    $Target.FindName('InputBox').Add_KeyDown($script:SlopInputKeyDownAction)
 }
 
 $script:MicRecording = $false
@@ -1980,7 +2041,7 @@ $script:MicCapTimer.Add_Tick({
     }
 })
 
-$MicBtn.Add_Click({
+$script:SlopMicAction = {
     try {
         if ($script:VoiceBusy) { return }
         if ($script:IsStreaming) {
@@ -2025,21 +2086,9 @@ public static class SlopWinMM {
         Set-SlopMicUiState -State idle
         Add-Bubble -Text "[error: mic recording unavailable: $($_.Exception.Message)]" -IsUser $false
     }
-})
+}
 
-$SendBtn.Add_Click($sendAction)
-$StopBtn.Add_Click({ Request-StopStream })
-
-$InputBox.Add_TextChanged({
-    $InputPlaceholder.Visibility = if ([string]::IsNullOrEmpty($InputBox.Text)) { 'Visible' } else { 'Collapsed' }
-})
-$InputBox.Add_KeyDown({
-    param($s,$e)
-    if ($e.Key -eq [System.Windows.Input.Key]::Enter -and -not $e.KeyboardDevice.Modifiers) {
-        & $sendAction
-        $e.Handled = $true
-    }
-})
+Initialize-SlopChatControlHandlers -Target $window
 
 # single dispatcher-owned motion clock: ~30 fps render, fixed 1/120 s physics substeps
 $script:Motion = New-SlopMotionState
@@ -2128,7 +2177,7 @@ $script:MotionTimer.Add_Tick({
     $moving = ($left -ne $script:LastWindowLeft) -or ($top -ne $script:LastWindowTop)
     $script:LastWindowLeft = $left
     $script:LastWindowTop = $top
-    $wantMs = Get-SlopMotionIntervalMs -State $script:Motion -WindowMoving:$moving -Large:$script:PseudoMaximized
+    $wantMs = Get-SlopMotionIntervalMs -State $script:Motion -WindowMoving:$moving -Large:($script:ChatMode -eq 'Full')
     if ($wantMs -ne $script:MotionIntervalMs) {
         $script:MotionIntervalMs = $wantMs
         $script:MotionTimer.Interval = [TimeSpan]::FromMilliseconds($wantMs)
@@ -2153,7 +2202,7 @@ $script:MotionTimer.Add_Tick({
     }
     Apply-SlopMotion -Dt $dt
     # idle wander: nudge horizontally, but never off the visible work area
-    if ($script:Motion.Phase -eq 'wander' -and -not $script:Expanded) {
+    if ($script:Motion.Phase -eq 'wander' -and -not $script:ChatWindow) {
         $wa = $script:WorkArea
         $maxLeft = [Math]::Max($wa.X, $wa.Right - $window.ActualWidth)
         $nextLeft = $window.Left + ($script:Motion.WanderDx / 4.0) * $dt
@@ -2216,6 +2265,7 @@ $script:MotionTimer.Add_Tick({
 $script:MotionTimer.Start()
 
 $window.Add_Closed({
+    if ($script:ChatWindow) { $script:ChatWindow.Close() }
     if ($script:Timer) { $script:Timer.Stop() }
     if ($script:MotionTimer) { $script:MotionTimer.Stop() }
     if ($script:Cts) { $script:Cts.Cancel() }

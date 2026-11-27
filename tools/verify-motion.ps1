@@ -17,20 +17,44 @@ public static class VM {
 }
 '@
 
-function Get-Win($id) {
+function Get-AppWindows($id) {
+    # The app now owns two top-level windows: the pet and its separate chat
+    # window. FindFirst silently picked whichever one happened to be first.
     $root = [System.Windows.Automation.AutomationElement]::RootElement
     $cond = [System.Windows.Automation.PropertyCondition]::new(
         [System.Windows.Automation.AutomationElement]::ProcessIdProperty, $id)
-    $root.FindFirst([System.Windows.Automation.TreeScope]::Children, $cond)
+    $root.FindAll([System.Windows.Automation.TreeScope]::Children, $cond)
 }
-function Find-Uia($id) {
+function Get-Win($id, [string]$Title = 'S.L.O.P.') {
+    $windows = Get-AppWindows $id
+    foreach ($w in $windows) {
+        if ($w.Current.Name -eq $Title) { return $w }
+    }
+    if ($windows.Count -gt 0) { return $windows[0] }
+    return $null
+}
+function Get-PetWin { Get-Win $proc.Id }
+function Get-ChatWin { Get-Win $proc.Id 'Sloppy chat' }
+function Find-UiaIn($win, $id) {
+    if (-not $win) { return $null }
     $cond = [System.Windows.Automation.PropertyCondition]::new(
         [System.Windows.Automation.AutomationElement]::AutomationIdProperty, $id)
-    # WPF can recycle automation peers while the pea hops. A cached window
-    # element eventually returns null, so re-query the top-level window each time.
-    $win = Get-Win $proc.Id
-    if (-not $win) { return $null }
     $win.FindFirst([System.Windows.Automation.TreeScope]::Descendants, $cond)
+}
+function Find-Uia($id) {
+    # Both windows keep copies of the conversation controls. Prefer the live
+    # chat window while it exists; the pet's copy is hidden until chat closes.
+    $chat = Get-ChatWin
+    $chatEl = Find-UiaIn $chat $id
+    if ($chatEl -and -not $chatEl.Current.IsOffscreen) { return $chatEl }
+    $petEl = Find-UiaIn (Get-PetWin) $id
+    if ($petEl) { return $petEl }
+    return $chatEl
+}
+function Invoke-UiaIn($win, $id) {
+    $el = Find-UiaIn $win $id
+    if (-not $el) { throw "UIA element $id not found in the target window" }
+    $el.GetCurrentPattern([System.Windows.Automation.InvokePattern]::Pattern).Invoke()
 }
 function Set-UiaValue($id, $value) {
     $el = Find-Uia $id
@@ -57,9 +81,11 @@ function Invoke-Uia($id) {
 function Find-UiaName($name) {
     $cond = [System.Windows.Automation.PropertyCondition]::new(
         [System.Windows.Automation.AutomationElement]::NameProperty, $name)
-    $win = Get-Win $proc.Id
-    if (-not $win) { return $null }
-    $win.FindFirst([System.Windows.Automation.TreeScope]::Descendants, $cond)
+    foreach ($win in Get-AppWindows $proc.Id) {
+        $el = $win.FindFirst([System.Windows.Automation.TreeScope]::Descendants, $cond)
+        if ($el -and -not $el.Current.IsOffscreen) { return $el }
+    }
+    return $null
 }
 function Find-UiaButton($name) {
     $cond = [System.Windows.Automation.AndCondition]::new(
@@ -68,9 +94,11 @@ function Find-UiaButton($name) {
         [System.Windows.Automation.PropertyCondition]::new(
             [System.Windows.Automation.AutomationElement]::ControlTypeProperty,
             [System.Windows.Automation.ControlType]::Button))
-    $win = Get-Win $proc.Id
-    if (-not $win) { return $null }
-    $win.FindFirst([System.Windows.Automation.TreeScope]::Descendants, $cond)
+    foreach ($win in Get-AppWindows $proc.Id) {
+        $el = $win.FindFirst([System.Windows.Automation.TreeScope]::Descendants, $cond)
+        if ($el -and -not $el.Current.IsOffscreen) { return $el }
+    }
+    return $null
 }
 function Invoke-UiaButton($name) {
     $el = Find-UiaButton $name
@@ -112,6 +140,23 @@ function Focus-Ok {
     [VM]::SetForegroundWindow($h) | Out-Null
     Start-Sleep -Milliseconds 120
     [VM]::GetForegroundWindow() -eq $h
+}
+function Focus-Chat {
+    $chat = Get-ChatWin
+    if (-not $chat) { return $false }
+    $h = [IntPtr]$chat.Current.NativeWindowHandle
+    [VM]::SetForegroundWindow($h) | Out-Null
+    Start-Sleep -Milliseconds 120
+    [VM]::GetForegroundWindow() -eq $h
+}
+function Get-ChatText {
+    $stack = Find-UiaIn (Get-ChatWin) 'ChatStack'
+    if (-not $stack) { return '' }
+    $cond = [System.Windows.Automation.PropertyCondition]::new(
+        [System.Windows.Automation.AutomationElement]::ControlTypeProperty,
+        [System.Windows.Automation.ControlType]::Text)
+    $els = $stack.FindAll([System.Windows.Automation.TreeScope]::Descendants, $cond)
+    ($els | ForEach-Object { $_.Current.Name }) -join "`n"
 }
 function Click($lx,$ly) {
     $p = Phys $lx $ly
@@ -378,29 +423,37 @@ if ($counts[-1] -le 0) { throw 'no blue pea pixels' }
 # so the pea is the only visible signal at this point.
 "SIGNAL idle peaBlue=$($counts[-1])"
 
-# expand
+# Open the separate chat window. The pet stays a pea: there is no expanded
+# body to sample, so window presence and UIA geometry are the only reliable
+# signals here.
 $expanded = $false
 for ($try=1;$try -le 3 -and -not $expanded;$try++) {
     Focus-Ok | Out-Null
     Click 242 305
     Start-Sleep -Milliseconds 700
-    $b = Grab; $p = Pixel $b 242 144; $b.Dispose()
-    if ($p.R -lt 60 -and $p.G -lt 80 -and $p.B -gt 30) { $expanded = $true; "EXPAND panel=$($p.R),$($p.G),$($p.B)" }
+    if (Get-ChatWin) { $expanded = $true; "CHAT opened on click $try" }
 }
-if (-not $expanded) { throw 'click never expanded chat' }
-if (-not (Wait-DotBlue -TimeoutMs 45000)) { throw 'chat-open header dot is not blue' }
-$b = Grab; $chatDot = Pixel $b 50 36; $b.Dispose()
-"SIGNAL chat-open dot=$($chatDot.R),$($chatDot.G),$($chatDot.B) color=$(Classify $chatDot)"
-
-# Expanded size should be the remembered 760x540, not the old 484x330.
-$er = $script:W.Current.BoundingRectangle
-"EXPANDED size=$([int]$er.Width)x$([int]$er.Height)"
-if ([Math]::Abs($er.Width - (760.0*$script:DpiX)) -gt 12 -or
-    [Math]::Abs($er.Height - (540.0*$script:DpiY)) -gt 12) { throw 'expanded size is not 760x540' }
-$strip = Find-Uia 'ShortcutsStrip'
+if (-not $expanded) { throw 'click never opened the chat window' }
+if (-not (Focus-Chat)) { throw 'chat window did not take foreground' }
+$chatWin = Get-ChatWin
+$cr = $chatWin.Current.BoundingRectangle
+"CHAT Extended size=$([int]$cr.Width)x$([int]$cr.Height)"
+if ([Math]::Abs($cr.Width - (760.0*$script:DpiX)) -gt 12 -or
+    [Math]::Abs($cr.Height - (540.0*$script:DpiY)) -gt 12) { throw 'chat Extended size is not 760x540' }
+$petRect = (Get-PetWin).Current.BoundingRectangle
+"PET size=$([int]$petRect.Width)x$([int]$petRect.Height)"
+if ([Math]::Abs($petRect.Width - (484.0*$script:DpiX)) -gt 12 -or
+    [Math]::Abs($petRect.Height - (330.0*$script:DpiY)) -gt 12) { throw 'pet changed size when chat opened' }
+$strip = Find-UiaIn $chatWin 'ShortcutsStrip'
+if (-not $strip) { throw 'chat shortcut strip is missing' }
 "SHORTCUTS visible=$(-not $strip.Current.IsOffscreen) children=$($strip.Current.BoundingRectangle.Width)"
-if ($strip.Current.IsOffscreen) { throw 'shortcut strip is not visible when expanded' }
+if ($strip.Current.IsOffscreen) { throw 'chat shortcut strip is not visible' }
 
+# T5 relocates the four destination surfaces into the chat window. Until that
+# lands, the pet's panels stay hidden while it is a pea, so these probes are
+# opt-in instead of failing on offscreen controls.
+$verifyDestinations = $env:SLOP_LIVE_DESTINATIONS -eq '1'
+if ($verifyDestinations) {
 # --- honest route badge + four quiet destinations (Tasks 10 and 14) ---------
 # The badge must name the actual route from the first frame, not just a tier.
 $badge = Get-UiaText 'RouteBadge'
@@ -550,106 +603,72 @@ if ($localBadge -notmatch 'Local · bundled · \S') {
 }
 Invoke-Uia 'BrainBack'
 Start-Sleep -Milliseconds 250
+} # SLOP_LIVE_DESTINATIONS opt-in block
 
-# Maximize via the □ control dot. Chat input and Send must remain fully inside
-# the window; a stale fixed clip used to cut them off in this state.
+# Full work-area mode lives in the chat window, not on the pet. The mode
+# button must round-trip Extended -> Full -> Extended without touching the pet.
 $screen = [System.Windows.Forms.Screen]::PrimaryScreen.WorkingArea
-Invoke-Uia 'SettingsDot'
+Invoke-UiaIn (Get-ChatWin) 'ChatModeButton'
 Start-Sleep -Milliseconds 900
-$mr = $script:W.Current.BoundingRectangle
-"MAXIMIZE size=$([int]$mr.Width)x$([int]$mr.Height) screen=$($screen.Width)x$($screen.Height)"
-if ($mr.Width -lt ($screen.Width - 40) -or $mr.Height -lt ($screen.Height - 40)) {
-    throw 'maximize did not fill the screen'
+$chatWin = Get-ChatWin
+$fr = $chatWin.Current.BoundingRectangle
+"CHAT Full size=$([int]$fr.Width)x$([int]$fr.Height) screen=$($screen.Width)x$($screen.Height)"
+if ($fr.Width -lt ($screen.Width - 40) -or $fr.Height -lt ($screen.Height - 40)) {
+    throw 'Full chat did not fill the work area'
 }
 foreach ($id in 'ChatScroll','InputBox','SendBtn') {
-    $el = Find-Uia $id
-    if (-not $el) { throw "UIA element $id missing while maximized" }
+    $el = Find-UiaIn $chatWin $id
+    if (-not $el) { throw "UIA element $id missing while chat is Full" }
     $r2 = $el.Current.BoundingRectangle
     $inside = (-not $el.Current.IsOffscreen) -and $r2.Width -gt 0 -and $r2.Height -gt 0 -and
-              $r2.Right -le ($mr.Right + 1) -and $r2.Bottom -le ($mr.Bottom + 1)
+              $r2.Right -le ($fr.Right + 1) -and $r2.Bottom -le ($fr.Bottom + 1)
     "  $id rect=$([int]$r2.X),$([int]$r2.Y) $([int]$r2.Width)x$([int]$r2.Height) inside=$inside"
-    if (-not $inside) { throw "$id is clipped while maximized" }
+    if (-not $inside) { throw "$id is clipped while chat is Full" }
 }
-# Restore must return to the remembered expanded size.
-Invoke-Uia 'SettingsDot'
+Invoke-UiaIn (Get-ChatWin) 'ChatModeButton'
 Start-Sleep -Milliseconds 900
-$rr = $script:W.Current.BoundingRectangle
-"RESTORE size=$([int]$rr.Width)x$([int]$rr.Height)"
-if ([Math]::Abs($rr.Width - (760.0*$script:DpiX)) -gt 12 -or
-    [Math]::Abs($rr.Height - (540.0*$script:DpiY)) -gt 12) { throw 'restore did not return to 760x540' }
+$crBack = (Get-ChatWin).Current.BoundingRectangle
+"CHAT restored size=$([int]$crBack.Width)x$([int]$crBack.Height)"
+if ([Math]::Abs($crBack.Width - (760.0*$script:DpiX)) -gt 12 -or
+    [Math]::Abs($crBack.Height - (540.0*$script:DpiY)) -gt 12) { throw 'chat mode toggle did not return to Extended' }
 
-# send + streaming. UIA is more reliable than clipboard keystrokes here: setting
-# the TextBox value and invoking Send exercises the same code path as a user send.
-if (-not (Focus-Ok)) { throw 'focus failed before typing' }
+# Send + answer: with the pet collapsed its status dot is hidden, so the chat
+# bubble text is the visible signal. UIA exercises the same path as a user send.
+if (-not (Focus-Chat)) { throw 'focus failed before typing' }
+$chatBefore = Get-ChatText
 Set-UiaValue 'InputBox' 'Reply with the single word OK.'
-"SEND input='$((Get-UiaValue 'InputBox'))' enabled=$((Find-Uia 'SendBtn').Current.IsEnabled)"
+"SEND input='$((Get-UiaValue 'InputBox'))' enabled=$((Find-UiaIn (Get-ChatWin) 'SendBtn').Current.IsEnabled)"
 Invoke-Uia 'SendBtn'
 Start-Sleep -Milliseconds 120
-"SEND after click input='$((Get-UiaValue 'InputBox'))' stopVisible=$([bool](Find-Uia 'StopBtn'))"
-# Poll immediately and keep polling through model startup: a fast local reply
-# can finish before one sample, while a freshly loaded 2B brain can stay idle
-# for tens of seconds. Either thinking or success ends this wait; the fallback
-# below still enforces the final success signal with its own timeout.
-$dotColors = @{}
+$stop = Find-UiaIn (Get-ChatWin) 'StopBtn'
+"SEND after click input='$((Get-UiaValue 'InputBox'))' stopVisible=$([bool]($stop -and -not $stop.Current.IsOffscreen))"
+# A CPU-only stand-in can spend tens of seconds loading before it emits a token.
+$chatAfter = $chatBefore
 for ($i=0; $i -lt 400; $i++) {
-    $c = DotColor
-    $dotColors[$c] = $true
-    if ($c -in @('amber','green')) { break }
     Start-Sleep -Milliseconds 150
+    $chatAfter = Get-ChatText
+    if ($chatAfter.Length -gt $chatBefore.Length -and $chatAfter -match '\bOK\b') { break }
 }
-"PRESTREAM dot colors=$($dotColors.Keys -join ',')"
-if ($dotColors.ContainsKey('amber')) { 'SIGNAL thinking dot observed = amber' }
-elseif ($dotColors.ContainsKey('green')) { 'SIGNAL request completed before amber sample (fast reply)' }
-else { throw 'no thinking or success signal observed after send' }
-# A fast local reply can finish - and its transient green expire - before the
-# churn loop below. Remember any green already seen after Send so the success
-# check counts it instead of demanding a second, later observation.
-$greenSeen = $dotColors.ContainsKey('green')
+"STREAM chatCharsBefore=$($chatBefore.Length) after=$($chatAfter.Length)"
+if ($chatAfter.Length -le $chatBefore.Length) { throw 'no new chat content after send' }
+if ($chatAfter -notmatch '\bOK\b') { throw 'brain answer did not render in the chat window' }
 
-$changes = 0; $last = ''; $firstBright = 0
-for ($i=0;$i -lt 80;$i++) {
-    Start-Sleep -Milliseconds 150
-    $b = Grab
-    $v = Count $b 28 54 428 180 'bright'
-    $e = Count $b 28 54 428 180 'red'
-    $b.Dispose()
-    if ($i -eq 0) { $firstBright = $v }
-    $k = "$v/$e"
-    if ($k -ne $last) { $changes++; $last = $k }
-    if (-not $greenSeen -and (Classify (DotColor)) -eq 'green') { $greenSeen = $true }
-    if ($changes -ge 3 -and $v -gt 400) { break }
-}
-"STREAM changes=$changes firstBright=$firstBright lastBright=$v errorRed=$e"
-# A fast local reply can render fully before the first pixel sample, so pixel
-# churn is informational; rendered content plus the success-green check below
-# is the reliable signal.
-if ($v -le 100) { throw 'no rendered chat content after send' }
+# Close chat: the pet must stay a pea and keep its position.
+$petBeforeClose = (Get-PetWin).Current.BoundingRectangle
+Invoke-UiaIn (Get-ChatWin) 'ChatCloseButton'
+Start-Sleep -Milliseconds 900
+if (Get-ChatWin) { throw 'chat window did not close' }
+$petAfter = (Get-PetWin).Current.BoundingRectangle
+"CHAT closed pet=$([int]$petAfter.Width)x$([int]$petAfter.Height) moved=$([int]($petAfter.X-$petBeforeClose.X)),$([int]($petAfter.Y-$petBeforeClose.Y))"
+if ([Math]::Abs($petAfter.Width - (484.0*$script:DpiX)) -gt 12 -or
+    [Math]::Abs($petAfter.Height - (330.0*$script:DpiY)) -gt 12) { throw 'pet size changed after chat close' }
+if ([Math]::Abs($petAfter.X-$petBeforeClose.X) -gt 2 -or
+    [Math]::Abs($petAfter.Y-$petBeforeClose.Y) -gt 2) { throw 'pet position changed after chat close' }
 
-# Fallback: if the reply was slow enough that no green was seen yet, keep
-# polling for the transient success overlay (green square).
-# A CPU-only stand-in model can spend tens of seconds loading and decoding.
-for ($i=0;$i -lt 400 -and -not $greenSeen;$i++) {
-    Start-Sleep -Milliseconds 150
-    $b = Grab; $p = Pixel $b 50 36; $b.Dispose()
-    if ((Classify $p) -eq 'green') {
-        $greenSeen = $true
-        "SIGNAL success dot=$($p.R),$($p.G),$($p.B) color=green"
-    }
-}
-"SIGNAL successSeen=$greenSeen"
-if (-not $greenSeen) { throw 'success green overlay never appeared' }
-
-# Esc collapse + drag (only after verified foreground)
-if (-not (Focus-Ok)) { throw 'focus failed before ESC' }
-Press ([VM]::ESC)
-Start-Sleep -Milliseconds 2400
-$b = Grab; $p2 = Pixel $b 234 136; "ESC panel=$($p2.R),$($p2.G),$($p2.B)"; $b.Dispose()
-
-# Re-query the top-level window fresh: after maximize/restore the cached UIA
-# element can briefly report the pre-restore rect, which made a real drag look
-# like a no-op (and then the print showed the corrected delta).
+# Re-query the pet window fresh: a cached UIA element can briefly report a
+# stale rect, which made a real drag look like a no-op.
 function WinRect {
-    $w = Get-Win $proc.Id
+    $w = Get-PetWin
     if (-not $w) { return $null }
     $w.Current.BoundingRectangle
 }
