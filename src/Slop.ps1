@@ -2084,7 +2084,7 @@ $script:VoiceTimer.Add_Tick({
             Add-Bubble -Text "[error: $($tok.Substring(12))]" -IsUser $false
             Set-SlopMicUiState -State idle
         }
-        elseif ($tok -eq '__VOICEDONE__') { Set-SlopMicUiState -State idle }
+        elseif ($tok -eq '__VOICEDONE__') { $script:VoiceBusy = $false; Set-SlopMicUiState -State idle }
     }
 })
 $script:VoiceTimer.Start()
