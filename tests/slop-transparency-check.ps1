@@ -91,6 +91,33 @@ Describe 'Slop transparent chat window contract' {
         $xaml | Should -Match '93A4BD'
         $xaml | Should -Not -Match 'FontSize="9"'
     }
+
+    It 'gives the message pane a readable dark backplate inside the transparent window' {
+        Add-Type -AssemblyName PresentationFramework, PresentationCore, WindowsBase, System.Xaml
+        $win = [System.Windows.Markup.XamlReader]::Parse((Get-SlopChatWindowXaml))
+        try {
+            $plate = $win.FindName('ChatBackplate')
+            if ($null -eq $plate) { throw 'ChatBackplate is missing from the chat XAML' }
+            [System.Windows.Grid]::GetRowSpan($plate) | Should -Be 3
+            $plate.Background | Should -BeOfType [System.Windows.Media.SolidColorBrush]
+            $plate.Background.Color.A | Should -BeGreaterOrEqual 0xD0
+            $plate.IsHitTestVisible | Should -BeFalse
+        } finally { $win.Close() }
+    }
+
+    It 'uses opaque panel fills for chat chrome and composer' {
+        $xaml = Get-SlopChatWindowXaml
+        $xaml | Should -Not -Match '#221E293B'
+        Add-Type -AssemblyName PresentationFramework, PresentationCore, WindowsBase, System.Xaml
+        $win = [System.Windows.Markup.XamlReader]::Parse($xaml)
+        try {
+            foreach ($name in @('ChatChrome','ChatInputChrome')) {
+                $el = $win.FindName($name)
+                if ($null -eq $el) { throw "$name is missing from the chat XAML" }
+                $el.Background.Color.A | Should -BeGreaterOrEqual 0xD0
+            }
+        } finally { $win.Close() }
+    }
 }
 
 Describe 'Slop shell chat-window wiring' {
