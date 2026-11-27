@@ -32,6 +32,7 @@ Issue 2 has a likely cause in the same class as a previously confirmed PowerShel
 
 ## Non-goals
 
+- No Mica, Acrylic, or DWM backdrop material anywhere in Sloppy. The chat window and the pet both keep the existing transparent WPF surface (`WindowStyle="None"`, `AllowsTransparency="True"`, `Background="Transparent"`), including in full-work-area mode. This is a hard visual contract, not a default that can be themed away.
 - No third tier, brain, provider, or route-policy change.
 - No installer, release workflow, tag, push, deploy, or remote/visibility change.
 - No change to the voice transcription path; the user reports mic input works.
@@ -51,7 +52,7 @@ The pet gets one small **open** button in place of the current □ full-screen b
 - Only one chat window exists. Pressing the pet's open button while it is already open brings that window to the front instead of creating a second one.
 - Closing it disposes the window and returns control to the pet.
 
-Alternatives rejected: two separate windows (redundant modes), and resizing the pet in place (the reported position bug).
+Alternatives rejected: two separate windows (redundant modes), and resizing the pet in place (the reported position bug). A Mica/DWM-backed full-screen surface was also rejected: the transparent window reads better and is the established Sloppy look, and the same transparent surface is used in both extended and full-work-area modes.
 
 ### Pet behaviour while the chat window is open
 
