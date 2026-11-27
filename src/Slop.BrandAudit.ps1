@@ -332,7 +332,7 @@ function New-SlopBrandReport {
     $lines.Add("- Total findings: $($Findings.Count)")
     $lines.Add('- By surface: ' + (($bySurface | ForEach-Object { "$($_.Name)=$($_.Count)" }) -join ', '))
     $lines.Add('- By rule: ' + (($byRule | ForEach-Object { "$($_.Name)=$($_.Count)" }) -join ', '))
-    $lines.Add('- Accepted baseline: see `tests/slop-brand-baseline.json`.')
+    $lines.Add(('- Accepted baseline: {0} entries (see `tests/slop-brand-baseline.json`).' -f $Findings.Count))
     $lines.Add('- Hard failures: ' + @($Findings | Where-Object { $_.Severity -eq 'hard' }).Count)
     $lines.Add('')
 

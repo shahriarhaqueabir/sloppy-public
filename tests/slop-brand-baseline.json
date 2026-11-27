@@ -1,0 +1,5159 @@
+[
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 108,
+    "Rule": "token.literal",
+    "Value": "4",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 108,
+    "Rule": "token.literal",
+    "Value": "12",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 109,
+    "Rule": "token.literal",
+    "Value": "#F212141C",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 109,
+    "Rule": "token.literal",
+    "Value": "#8893A4BD",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 111,
+    "Rule": "token.literal",
+    "Value": "0,0,124,0",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 112,
+    "Rule": "copy.literal",
+    "Value": "Drag chat pane",
+    "Severity": "baselined",
+    "Reason": "static copy not mapped to canonical key"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 114,
+    "Rule": "token.literal",
+    "Value": "#F21E293B",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 115,
+    "Rule": "token.literal",
+    "Value": "#44FFFFFF",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 115,
+    "Rule": "token.literal",
+    "Value": "12,12,0,0",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 117,
+    "Rule": "copy.literal",
+    "Value": "S.L.O.P. chat",
+    "Severity": "baselined",
+    "Reason": "static copy not mapped to canonical key"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 118,
+    "Rule": "token.literal",
+    "Value": "12",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 118,
+    "Rule": "token.literal",
+    "Value": "12,0,0,0",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 120,
+    "Rule": "token.literal",
+    "Value": "0,0,8,0",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 122,
+    "Rule": "token.literal",
+    "Value": "#F24F46E5",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 122,
+    "Rule": "token.literal",
+    "Value": "#FFFFFF",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 122,
+    "Rule": "copy.literal",
+    "Value": "Toggle control deck",
+    "Severity": "baselined",
+    "Reason": "static copy not mapped to canonical key"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 123,
+    "Rule": "token.literal",
+    "Value": "#55FFFFFF",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 123,
+    "Rule": "token.literal",
+    "Value": "11",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 126,
+    "Rule": "token.literal",
+    "Value": "#F24F46E5",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 126,
+    "Rule": "token.literal",
+    "Value": "#FFFFFF",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 126,
+    "Rule": "copy.literal",
+    "Value": "Toggle chat size",
+    "Severity": "baselined",
+    "Reason": "static copy not mapped to canonical key"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 127,
+    "Rule": "token.literal",
+    "Value": "#55FFFFFF",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 127,
+    "Rule": "token.literal",
+    "Value": "11",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 129,
+    "Rule": "copy.literal",
+    "Value": "X",
+    "Severity": "baselined",
+    "Reason": "static copy not mapped to canonical key"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 130,
+    "Rule": "token.literal",
+    "Value": "#F24F46E5",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 130,
+    "Rule": "token.literal",
+    "Value": "#FFFFFF",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 130,
+    "Rule": "copy.literal",
+    "Value": "Close chat",
+    "Severity": "baselined",
+    "Reason": "static copy not mapped to canonical key"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 131,
+    "Rule": "token.literal",
+    "Value": "#55FFFFFF",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 131,
+    "Rule": "token.literal",
+    "Value": "11",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 136,
+    "Rule": "token.literal",
+    "Value": "12,6,12,6",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 141,
+    "Rule": "token.literal",
+    "Value": "10",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 142,
+    "Rule": "token.literal",
+    "Value": "#F212141C",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 142,
+    "Rule": "token.literal",
+    "Value": "#8893A4BD",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 150,
+    "Rule": "token.literal",
+    "Value": "0,0,0,8",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 151,
+    "Rule": "copy.literal",
+    "Value": "Overview",
+    "Severity": "baselined",
+    "Reason": "static copy not mapped to canonical key"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 152,
+    "Rule": "token.literal",
+    "Value": "0,0,4,4",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 152,
+    "Rule": "type.floor",
+    "Value": "10",
+    "Severity": "baselined",
+    "Reason": "font size below type.floor token"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 152,
+    "Rule": "token.literal",
+    "Value": "#F24F46E5",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 152,
+    "Rule": "token.literal",
+    "Value": "#FFFFFF",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 153,
+    "Rule": "token.literal",
+    "Value": "#55FFFFFF",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 155,
+    "Rule": "copy.literal",
+    "Value": "Settings",
+    "Severity": "baselined",
+    "Reason": "static copy not mapped to canonical key"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 156,
+    "Rule": "token.literal",
+    "Value": "0,0,4,4",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 156,
+    "Rule": "type.floor",
+    "Value": "10",
+    "Severity": "baselined",
+    "Reason": "font size below type.floor token"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 156,
+    "Rule": "token.literal",
+    "Value": "#F2263348",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 157,
+    "Rule": "token.literal",
+    "Value": "#55FFFFFF",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 159,
+    "Rule": "copy.literal",
+    "Value": "Data",
+    "Severity": "baselined",
+    "Reason": "static copy not mapped to canonical key"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 160,
+    "Rule": "token.literal",
+    "Value": "0,0,4,4",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 160,
+    "Rule": "type.floor",
+    "Value": "10",
+    "Severity": "baselined",
+    "Reason": "font size below type.floor token"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 160,
+    "Rule": "token.literal",
+    "Value": "#F2263348",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 161,
+    "Rule": "token.literal",
+    "Value": "#55FFFFFF",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 163,
+    "Rule": "copy.literal",
+    "Value": "Tools &amp; Skills",
+    "Severity": "baselined",
+    "Reason": "static copy not mapped to canonical key"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 164,
+    "Rule": "token.literal",
+    "Value": "0,0,4,4",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 164,
+    "Rule": "type.floor",
+    "Value": "10",
+    "Severity": "baselined",
+    "Reason": "font size below type.floor token"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 164,
+    "Rule": "token.literal",
+    "Value": "#F2263348",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 165,
+    "Rule": "token.literal",
+    "Value": "#55FFFFFF",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 167,
+    "Rule": "copy.literal",
+    "Value": "Under the hood",
+    "Severity": "baselined",
+    "Reason": "static copy not mapped to canonical key"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 168,
+    "Rule": "token.literal",
+    "Value": "0,0,4,4",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 168,
+    "Rule": "type.floor",
+    "Value": "10",
+    "Severity": "baselined",
+    "Reason": "font size below type.floor token"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 168,
+    "Rule": "token.literal",
+    "Value": "#F2263348",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 169,
+    "Rule": "token.literal",
+    "Value": "#55FFFFFF",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 171,
+    "Rule": "copy.literal",
+    "Value": "Exit",
+    "Severity": "baselined",
+    "Reason": "static copy not mapped to canonical key"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 172,
+    "Rule": "token.literal",
+    "Value": "0,0,4,4",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 172,
+    "Rule": "type.floor",
+    "Value": "10",
+    "Severity": "baselined",
+    "Reason": "font size below type.floor token"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 172,
+    "Rule": "token.literal",
+    "Value": "#F2263348",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 173,
+    "Rule": "token.literal",
+    "Value": "#55FFFFFF",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 179,
+    "Rule": "token.literal",
+    "Value": "13",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 179,
+    "Rule": "token.literal",
+    "Value": "0,0,0,6",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 179,
+    "Rule": "copy.literal",
+    "Value": "Overview",
+    "Severity": "baselined",
+    "Reason": "static copy not mapped to canonical key"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 180,
+    "Rule": "copy.literal",
+    "Value": "Route, brain, session and signal state appear here.",
+    "Severity": "baselined",
+    "Reason": "static copy not mapped to canonical key"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 181,
+    "Rule": "token.literal",
+    "Value": "#DADAE2",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 181,
+    "Rule": "token.literal",
+    "Value": "11",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 181,
+    "Rule": "token.literal",
+    "Value": "0,0,0,8",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 183,
+    "Rule": "copy.literal",
+    "Value": "Conversation length: 0 messages",
+    "Severity": "baselined",
+    "Reason": "static copy not mapped to canonical key"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 184,
+    "Rule": "token.literal",
+    "Value": "11",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 184,
+    "Rule": "token.literal",
+    "Value": "0,0,0,8",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 187,
+    "Rule": "token.literal",
+    "Value": "13",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 187,
+    "Rule": "token.literal",
+    "Value": "0,0,0,6",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 187,
+    "Rule": "copy.literal",
+    "Value": "Settings",
+    "Severity": "baselined",
+    "Reason": "static copy not mapped to canonical key"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 188,
+    "Rule": "copy.literal",
+    "Value": "Voice and model settings live in the main Settings panel.",
+    "Severity": "baselined",
+    "Reason": "static copy not mapped to canonical key"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 189,
+    "Rule": "token.literal",
+    "Value": "11",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 189,
+    "Rule": "token.literal",
+    "Value": "0,0,0,8",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 193,
+    "Rule": "token.literal",
+    "Value": "13",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 193,
+    "Rule": "token.literal",
+    "Value": "0,0,0,6",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 193,
+    "Rule": "copy.literal",
+    "Value": "Data",
+    "Severity": "baselined",
+    "Reason": "static copy not mapped to canonical key"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 194,
+    "Rule": "copy.literal",
+    "Value": "Deletion scopes are confirmed before anything is removed.",
+    "Severity": "baselined",
+    "Reason": "static copy not mapped to canonical key"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 195,
+    "Rule": "token.literal",
+    "Value": "11",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 195,
+    "Rule": "token.literal",
+    "Value": "0,0,0,8",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 197,
+    "Rule": "copy.literal",
+    "Value": "Delete conversation",
+    "Severity": "baselined",
+    "Reason": "static copy not mapped to canonical key"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 198,
+    "Rule": "token.literal",
+    "Value": "0,0,0,6",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 198,
+    "Rule": "token.literal",
+    "Value": "11",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 198,
+    "Rule": "token.literal",
+    "Value": "#F24F46E5",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 198,
+    "Rule": "token.literal",
+    "Value": "#FFFFFF",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 199,
+    "Rule": "token.literal",
+    "Value": "#55FFFFFF",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 201,
+    "Rule": "copy.literal",
+    "Value": "Delete OpenCode session",
+    "Severity": "baselined",
+    "Reason": "static copy not mapped to canonical key"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 202,
+    "Rule": "token.literal",
+    "Value": "0,0,0,6",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 202,
+    "Rule": "token.literal",
+    "Value": "11",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 202,
+    "Rule": "token.literal",
+    "Value": "#F2263348",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 203,
+    "Rule": "token.literal",
+    "Value": "#55FFFFFF",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 205,
+    "Rule": "copy.literal",
+    "Value": "Delete local data",
+    "Severity": "baselined",
+    "Reason": "static copy not mapped to canonical key"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 206,
+    "Rule": "token.literal",
+    "Value": "0,0,0,8",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 206,
+    "Rule": "token.literal",
+    "Value": "11",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 206,
+    "Rule": "token.literal",
+    "Value": "#F2263348",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 207,
+    "Rule": "token.literal",
+    "Value": "#55FFFFFF",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 211,
+    "Rule": "token.literal",
+    "Value": "13",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 211,
+    "Rule": "token.literal",
+    "Value": "0,0,0,6",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 211,
+    "Rule": "copy.literal",
+    "Value": "Tools &amp; Skills",
+    "Severity": "baselined",
+    "Reason": "static copy not mapped to canonical key"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 212,
+    "Rule": "token.literal",
+    "Value": "#DADAE2",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 212,
+    "Rule": "token.literal",
+    "Value": "11",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 212,
+    "Rule": "token.literal",
+    "Value": "0,0,0,4",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 212,
+    "Rule": "copy.literal",
+    "Value": "Workspace files",
+    "Severity": "baselined",
+    "Reason": "static copy not mapped to canonical key"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 213,
+    "Rule": "token.literal",
+    "Value": "#DADAE2",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 213,
+    "Rule": "token.literal",
+    "Value": "11",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 213,
+    "Rule": "token.literal",
+    "Value": "0,0,0,2",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 213,
+    "Rule": "copy.literal",
+    "Value": "Web access",
+    "Severity": "baselined",
+    "Reason": "static copy not mapped to canonical key"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 215,
+    "Rule": "copy.literal",
+    "Value": "Can fetch web content; requests can reach beyond this PC.",
+    "Severity": "baselined",
+    "Reason": "static copy not mapped to canonical key"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 216,
+    "Rule": "type.floor",
+    "Value": "10",
+    "Severity": "baselined",
+    "Reason": "font size below type.floor token"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 216,
+    "Rule": "token.literal",
+    "Value": "18,0,0,6",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 218,
+    "Rule": "token.literal",
+    "Value": "#DADAE2",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 218,
+    "Rule": "token.literal",
+    "Value": "11",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 218,
+    "Rule": "token.literal",
+    "Value": "0,0,0,2",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 218,
+    "Rule": "copy.literal",
+    "Value": "Shell commands",
+    "Severity": "baselined",
+    "Reason": "static copy not mapped to canonical key"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 220,
+    "Rule": "copy.literal",
+    "Value": "Can run shell commands that may change files on this PC.",
+    "Severity": "baselined",
+    "Reason": "static copy not mapped to canonical key"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 221,
+    "Rule": "type.floor",
+    "Value": "10",
+    "Severity": "baselined",
+    "Reason": "font size below type.floor token"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 221,
+    "Rule": "token.literal",
+    "Value": "18,0,0,6",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 223,
+    "Rule": "token.literal",
+    "Value": "#DADAE2",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 223,
+    "Rule": "token.literal",
+    "Value": "11",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 223,
+    "Rule": "token.literal",
+    "Value": "0,0,0,4",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 223,
+    "Rule": "copy.literal",
+    "Value": "Skills and plugins",
+    "Severity": "baselined",
+    "Reason": "static copy not mapped to canonical key"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 224,
+    "Rule": "token.literal",
+    "Value": "#DADAE2",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 224,
+    "Rule": "token.literal",
+    "Value": "11",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 224,
+    "Rule": "token.literal",
+    "Value": "0,0,0,4",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 224,
+    "Rule": "copy.literal",
+    "Value": "Subagents and tasks",
+    "Severity": "baselined",
+    "Reason": "static copy not mapped to canonical key"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 225,
+    "Rule": "token.literal",
+    "Value": "#DADAE2",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 225,
+    "Rule": "token.literal",
+    "Value": "11",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 225,
+    "Rule": "token.literal",
+    "Value": "0,0,0,8",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 225,
+    "Rule": "copy.literal",
+    "Value": "External folders",
+    "Severity": "baselined",
+    "Reason": "static copy not mapped to canonical key"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 228,
+    "Rule": "token.literal",
+    "Value": "13",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 228,
+    "Rule": "token.literal",
+    "Value": "0,0,0,6",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 228,
+    "Rule": "copy.literal",
+    "Value": "Under the hood",
+    "Severity": "baselined",
+    "Reason": "static copy not mapped to canonical key"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 230,
+    "Rule": "type.floor",
+    "Value": "10",
+    "Severity": "baselined",
+    "Reason": "font size below type.floor token"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 231,
+    "Rule": "token.literal",
+    "Value": "#F2263348",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 231,
+    "Rule": "token.literal",
+    "Value": "#44FFFFFF",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 232,
+    "Rule": "copy.literal",
+    "Value": "Effective route and state appear here.",
+    "Severity": "baselined",
+    "Reason": "static copy not mapped to canonical key"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 235,
+    "Rule": "token.literal",
+    "Value": "13",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 235,
+    "Rule": "token.literal",
+    "Value": "0,0,0,6",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 235,
+    "Rule": "copy.literal",
+    "Value": "Exit",
+    "Severity": "baselined",
+    "Reason": "static copy not mapped to canonical key"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 236,
+    "Rule": "copy.literal",
+    "Value": "Say or type 'Sloppy, shutdown' to confirm before leaving.",
+    "Severity": "baselined",
+    "Reason": "static copy not mapped to canonical key"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 237,
+    "Rule": "token.literal",
+    "Value": "11",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 237,
+    "Rule": "token.literal",
+    "Value": "0,0,0,8",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 239,
+    "Rule": "copy.literal",
+    "Value": "Sloppy, shutdown",
+    "Severity": "baselined",
+    "Reason": "static copy not mapped to canonical key"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 240,
+    "Rule": "token.literal",
+    "Value": "0,0,0,6",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 240,
+    "Rule": "token.literal",
+    "Value": "11",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 240,
+    "Rule": "token.literal",
+    "Value": "#F24F46E5",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 240,
+    "Rule": "token.literal",
+    "Value": "#FFFFFF",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 241,
+    "Rule": "token.literal",
+    "Value": "#55FFFFFF",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 246,
+    "Rule": "type.floor",
+    "Value": "10",
+    "Severity": "baselined",
+    "Reason": "font size below type.floor token"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 247,
+    "Rule": "token.literal",
+    "Value": "0,6,0,0",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 251,
+    "Rule": "token.literal",
+    "Value": "12,0,12,12",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 251,
+    "Rule": "token.literal",
+    "Value": "10",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 252,
+    "Rule": "token.literal",
+    "Value": "#F21E293B",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 252,
+    "Rule": "token.literal",
+    "Value": "#44FFFFFF",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 254,
+    "Rule": "token.literal",
+    "Value": "0,0,0,6",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 262,
+    "Rule": "token.literal",
+    "Value": "13",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 263,
+    "Rule": "token.literal",
+    "Value": "#F2263348",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 263,
+    "Rule": "token.literal",
+    "Value": "#8893A4BD",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 266,
+    "Rule": "token.literal",
+    "Value": "13",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 266,
+    "Rule": "token.literal",
+    "Value": "11,0,0,0",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 269,
+    "Rule": "token.literal",
+    "Value": "6,0,0,0",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 269,
+    "Rule": "token.literal",
+    "Value": "#F24F46E5",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 269,
+    "Rule": "token.literal",
+    "Value": "#FFFFFF",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 270,
+    "Rule": "token.literal",
+    "Value": "#55FFFFFF",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 272,
+    "Rule": "copy.literal",
+    "Value": "Send",
+    "Severity": "baselined",
+    "Reason": "static copy not mapped to canonical key"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 273,
+    "Rule": "token.literal",
+    "Value": "6,0,0,0",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 273,
+    "Rule": "token.literal",
+    "Value": "#F24F46E5",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 273,
+    "Rule": "token.literal",
+    "Value": "#FFFFFF",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 274,
+    "Rule": "token.literal",
+    "Value": "#55FFFFFF",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 276,
+    "Rule": "copy.literal",
+    "Value": "Stop",
+    "Severity": "baselined",
+    "Reason": "static copy not mapped to canonical key"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 277,
+    "Rule": "token.literal",
+    "Value": "6,0,0,0",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 277,
+    "Rule": "token.literal",
+    "Value": "#F24F46E5",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 278,
+    "Rule": "token.literal",
+    "Value": "#FFFFFF",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.ChatWindow",
+    "File": "src/Slop.ChatWindow.ps1",
+    "Line": 278,
+    "Rule": "token.literal",
+    "Value": "#55FFFFFF",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.Onboarding",
+    "File": "src/Slop.Onboarding.ps1",
+    "Line": 74,
+    "Rule": "token.literal",
+    "Value": "15",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.Onboarding",
+    "File": "src/Slop.Onboarding.ps1",
+    "Line": 84,
+    "Rule": "token.literal",
+    "Value": "12",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.Onboarding",
+    "File": "src/Slop.Onboarding.ps1",
+    "Line": 84,
+    "Rule": "token.literal",
+    "Value": "18",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.Onboarding",
+    "File": "src/Slop.Onboarding.ps1",
+    "Line": 84,
+    "Rule": "token.literal",
+    "Value": "#F21E293B",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.Onboarding",
+    "File": "src/Slop.Onboarding.ps1",
+    "Line": 85,
+    "Rule": "token.literal",
+    "Value": "#663B82F6",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.Onboarding",
+    "File": "src/Slop.Onboarding.ps1",
+    "Line": 92,
+    "Rule": "token.literal",
+    "Value": "15",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.Onboarding",
+    "File": "src/Slop.Onboarding.ps1",
+    "Line": 93,
+    "Rule": "token.literal",
+    "Value": "2,0,0,10",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.Onboarding",
+    "File": "src/Slop.Onboarding.ps1",
+    "Line": 93,
+    "Rule": "copy.literal",
+    "Value": "1 of 4 · What should I call you?",
+    "Severity": "baselined",
+    "Reason": "static copy not mapped to canonical key"
+  },
+  {
+    "Surface": "Slop.Onboarding",
+    "File": "src/Slop.Onboarding.ps1",
+    "Line": 96,
+    "Rule": "token.literal",
+    "Value": "11",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.Onboarding",
+    "File": "src/Slop.Onboarding.ps1",
+    "Line": 96,
+    "Rule": "token.literal",
+    "Value": "0,0,0,8",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.Onboarding",
+    "File": "src/Slop.Onboarding.ps1",
+    "Line": 97,
+    "Rule": "copy.literal",
+    "Value": "Pick a name for your companion. You can change it later.",
+    "Severity": "baselined",
+    "Reason": "static copy not mapped to canonical key"
+  },
+  {
+    "Surface": "Slop.Onboarding",
+    "File": "src/Slop.Onboarding.ps1",
+    "Line": 98,
+    "Rule": "token.literal",
+    "Value": "13",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.Onboarding",
+    "File": "src/Slop.Onboarding.ps1",
+    "Line": 99,
+    "Rule": "token.literal",
+    "Value": "#44FFFFFF",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.Onboarding",
+    "File": "src/Slop.Onboarding.ps1",
+    "Line": 101,
+    "Rule": "token.literal",
+    "Value": "11",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.Onboarding",
+    "File": "src/Slop.Onboarding.ps1",
+    "Line": 101,
+    "Rule": "token.literal",
+    "Value": "0,14,0,8",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.Onboarding",
+    "File": "src/Slop.Onboarding.ps1",
+    "Line": 102,
+    "Rule": "copy.literal",
+    "Value": "What should I call you? (optional)",
+    "Severity": "baselined",
+    "Reason": "static copy not mapped to canonical key"
+  },
+  {
+    "Surface": "Slop.Onboarding",
+    "File": "src/Slop.Onboarding.ps1",
+    "Line": 103,
+    "Rule": "token.literal",
+    "Value": "13",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.Onboarding",
+    "File": "src/Slop.Onboarding.ps1",
+    "Line": 104,
+    "Rule": "token.literal",
+    "Value": "#44FFFFFF",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.Onboarding",
+    "File": "src/Slop.Onboarding.ps1",
+    "Line": 109,
+    "Rule": "token.literal",
+    "Value": "11",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.Onboarding",
+    "File": "src/Slop.Onboarding.ps1",
+    "Line": 109,
+    "Rule": "token.literal",
+    "Value": "0,0,0,12",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.Onboarding",
+    "File": "src/Slop.Onboarding.ps1",
+    "Line": 110,
+    "Rule": "copy.literal",
+    "Value": "Choose your colour.",
+    "Severity": "baselined",
+    "Reason": "static copy not mapped to canonical key"
+  },
+  {
+    "Surface": "Slop.Onboarding",
+    "File": "src/Slop.Onboarding.ps1",
+    "Line": 116,
+    "Rule": "token.literal",
+    "Value": "11",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.Onboarding",
+    "File": "src/Slop.Onboarding.ps1",
+    "Line": 116,
+    "Rule": "token.literal",
+    "Value": "0,0,0,6",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.Onboarding",
+    "File": "src/Slop.Onboarding.ps1",
+    "Line": 117,
+    "Rule": "copy.literal",
+    "Value": "Pick a voice, then add any instructions you want kept.",
+    "Severity": "baselined",
+    "Reason": "static copy not mapped to canonical key"
+  },
+  {
+    "Surface": "Slop.Onboarding",
+    "File": "src/Slop.Onboarding.ps1",
+    "Line": 119,
+    "Rule": "token.literal",
+    "Value": "#D6D6E0",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.Onboarding",
+    "File": "src/Slop.Onboarding.ps1",
+    "Line": 119,
+    "Rule": "token.literal",
+    "Value": "11",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.Onboarding",
+    "File": "src/Slop.Onboarding.ps1",
+    "Line": 120,
+    "Rule": "token.literal",
+    "Value": "10,6,0,8",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.Onboarding",
+    "File": "src/Slop.Onboarding.ps1",
+    "Line": 121,
+    "Rule": "token.literal",
+    "Value": "11",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.Onboarding",
+    "File": "src/Slop.Onboarding.ps1",
+    "Line": 123,
+    "Rule": "token.literal",
+    "Value": "#44FFFFFF",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.Onboarding",
+    "File": "src/Slop.Onboarding.ps1",
+    "Line": 124,
+    "Rule": "copy.literal",
+    "Value": "Anything else I should remember?",
+    "Severity": "baselined",
+    "Reason": "static copy not mapped to canonical key"
+  },
+  {
+    "Surface": "Slop.Onboarding",
+    "File": "src/Slop.Onboarding.ps1",
+    "Line": 127,
+    "Rule": "token.literal",
+    "Value": "0,0,8,0",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.Onboarding",
+    "File": "src/Slop.Onboarding.ps1",
+    "Line": 128,
+    "Rule": "token.literal",
+    "Value": "11",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.Onboarding",
+    "File": "src/Slop.Onboarding.ps1",
+    "Line": 128,
+    "Rule": "token.literal",
+    "Value": "0,0,0,8",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.Onboarding",
+    "File": "src/Slop.Onboarding.ps1",
+    "Line": 129,
+    "Rule": "copy.literal",
+    "Value": "Choose where answers come from. Built-in works offline; OpenCode uses the service you set up. For a custom endpoint, open Advanced setup. Nothing leaves this PC until you opt in.",
+    "Severity": "baselined",
+    "Reason": "static copy not mapped to canonical key"
+  },
+  {
+    "Surface": "Slop.Onboarding",
+    "File": "src/Slop.Onboarding.ps1",
+    "Line": 131,
+    "Rule": "token.literal",
+    "Value": "11",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.Onboarding",
+    "File": "src/Slop.Onboarding.ps1",
+    "Line": 131,
+    "Rule": "token.literal",
+    "Value": "0,2",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.Onboarding",
+    "File": "src/Slop.Onboarding.ps1",
+    "Line": 132,
+    "Rule": "copy.literal",
+    "Value": "Built-in — works offline (recommended)",
+    "Severity": "baselined",
+    "Reason": "static copy not mapped to canonical key"
+  },
+  {
+    "Surface": "Slop.Onboarding",
+    "File": "src/Slop.Onboarding.ps1",
+    "Line": 134,
+    "Rule": "token.literal",
+    "Value": "11",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.Onboarding",
+    "File": "src/Slop.Onboarding.ps1",
+    "Line": 134,
+    "Rule": "token.literal",
+    "Value": "0,2",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.Onboarding",
+    "File": "src/Slop.Onboarding.ps1",
+    "Line": 135,
+    "Rule": "copy.literal",
+    "Value": "Custom — local OpenAI-compatible endpoint",
+    "Severity": "baselined",
+    "Reason": "static copy not mapped to canonical key"
+  },
+  {
+    "Surface": "Slop.Onboarding",
+    "File": "src/Slop.Onboarding.ps1",
+    "Line": 137,
+    "Rule": "token.literal",
+    "Value": "11",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.Onboarding",
+    "File": "src/Slop.Onboarding.ps1",
+    "Line": 137,
+    "Rule": "token.literal",
+    "Value": "0,2",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.Onboarding",
+    "File": "src/Slop.Onboarding.ps1",
+    "Line": 140,
+    "Rule": "token.literal",
+    "Value": "11",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.Onboarding",
+    "File": "src/Slop.Onboarding.ps1",
+    "Line": 140,
+    "Rule": "token.literal",
+    "Value": "0,2",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.Onboarding",
+    "File": "src/Slop.Onboarding.ps1",
+    "Line": 142,
+    "Rule": "token.literal",
+    "Value": "11",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.Onboarding",
+    "File": "src/Slop.Onboarding.ps1",
+    "Line": 142,
+    "Rule": "token.literal",
+    "Value": "0,8,0,4",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.Onboarding",
+    "File": "src/Slop.Onboarding.ps1",
+    "Line": 142,
+    "Rule": "copy.literal",
+    "Value": "Advanced setup",
+    "Severity": "baselined",
+    "Reason": "static copy not mapped to canonical key"
+  },
+  {
+    "Surface": "Slop.Onboarding",
+    "File": "src/Slop.Onboarding.ps1",
+    "Line": 143,
+    "Rule": "token.literal",
+    "Value": "12,4,0,4",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.Onboarding",
+    "File": "src/Slop.Onboarding.ps1",
+    "Line": 144,
+    "Rule": "token.literal",
+    "Value": "11",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.Onboarding",
+    "File": "src/Slop.Onboarding.ps1",
+    "Line": 145,
+    "Rule": "token.literal",
+    "Value": "0,0,0,6",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.Onboarding",
+    "File": "src/Slop.Onboarding.ps1",
+    "Line": 146,
+    "Rule": "token.literal",
+    "Value": "0,0,0,8",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.Onboarding",
+    "File": "src/Slop.Onboarding.ps1",
+    "Line": 147,
+    "Rule": "token.literal",
+    "Value": "11",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.Onboarding",
+    "File": "src/Slop.Onboarding.ps1",
+    "Line": 148,
+    "Rule": "token.literal",
+    "Value": "#44FFFFFF",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.Onboarding",
+    "File": "src/Slop.Onboarding.ps1",
+    "Line": 150,
+    "Rule": "copy.literal",
+    "Value": "Local http URL, for example http://127.0.0.1:11434",
+    "Severity": "baselined",
+    "Reason": "static copy not mapped to canonical key"
+  },
+  {
+    "Surface": "Slop.Onboarding",
+    "File": "src/Slop.Onboarding.ps1",
+    "Line": 151,
+    "Rule": "token.literal",
+    "Value": "11",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.Onboarding",
+    "File": "src/Slop.Onboarding.ps1",
+    "Line": 151,
+    "Rule": "token.literal",
+    "Value": "0,6,0,0",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.Onboarding",
+    "File": "src/Slop.Onboarding.ps1",
+    "Line": 152,
+    "Rule": "token.literal",
+    "Value": "#44FFFFFF",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.Onboarding",
+    "File": "src/Slop.Onboarding.ps1",
+    "Line": 153,
+    "Rule": "copy.literal",
+    "Value": "Model name",
+    "Severity": "baselined",
+    "Reason": "static copy not mapped to canonical key"
+  },
+  {
+    "Surface": "Slop.Onboarding",
+    "File": "src/Slop.Onboarding.ps1",
+    "Line": 155,
+    "Rule": "token.literal",
+    "Value": "0,0,0,8",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.Onboarding",
+    "File": "src/Slop.Onboarding.ps1",
+    "Line": 156,
+    "Rule": "token.literal",
+    "Value": "11",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.Onboarding",
+    "File": "src/Slop.Onboarding.ps1",
+    "Line": 157,
+    "Rule": "token.literal",
+    "Value": "#44FFFFFF",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.Onboarding",
+    "File": "src/Slop.Onboarding.ps1",
+    "Line": 159,
+    "Rule": "token.literal",
+    "Value": "11",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.Onboarding",
+    "File": "src/Slop.Onboarding.ps1",
+    "Line": 159,
+    "Rule": "token.literal",
+    "Value": "0,5,0,0",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.Onboarding",
+    "File": "src/Slop.Onboarding.ps1",
+    "Line": 160,
+    "Rule": "token.literal",
+    "Value": "#44FFFFFF",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.Onboarding",
+    "File": "src/Slop.Onboarding.ps1",
+    "Line": 161,
+    "Rule": "copy.literal",
+    "Value": "Model",
+    "Severity": "baselined",
+    "Reason": "static copy not mapped to canonical key"
+  },
+  {
+    "Surface": "Slop.Onboarding",
+    "File": "src/Slop.Onboarding.ps1",
+    "Line": 162,
+    "Rule": "token.literal",
+    "Value": "11",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.Onboarding",
+    "File": "src/Slop.Onboarding.ps1",
+    "Line": 162,
+    "Rule": "token.literal",
+    "Value": "0,5,0,0",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.Onboarding",
+    "File": "src/Slop.Onboarding.ps1",
+    "Line": 163,
+    "Rule": "token.literal",
+    "Value": "#44FFFFFF",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.Onboarding",
+    "File": "src/Slop.Onboarding.ps1",
+    "Line": 164,
+    "Rule": "copy.literal",
+    "Value": "OpenCode agent id",
+    "Severity": "baselined",
+    "Reason": "static copy not mapped to canonical key"
+  },
+  {
+    "Surface": "Slop.Onboarding",
+    "File": "src/Slop.Onboarding.ps1",
+    "Line": 165,
+    "Rule": "token.literal",
+    "Value": "11",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.Onboarding",
+    "File": "src/Slop.Onboarding.ps1",
+    "Line": 165,
+    "Rule": "token.literal",
+    "Value": "0,5,0,0",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.Onboarding",
+    "File": "src/Slop.Onboarding.ps1",
+    "Line": 166,
+    "Rule": "copy.literal",
+    "Value": "Capability profile",
+    "Severity": "baselined",
+    "Reason": "static copy not mapped to canonical key"
+  },
+  {
+    "Surface": "Slop.Onboarding",
+    "File": "src/Slop.Onboarding.ps1",
+    "Line": 167,
+    "Rule": "token.literal",
+    "Value": "11",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.Onboarding",
+    "File": "src/Slop.Onboarding.ps1",
+    "Line": 168,
+    "Rule": "token.literal",
+    "Value": "0,5,0,0",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.Onboarding",
+    "File": "src/Slop.Onboarding.ps1",
+    "Line": 170,
+    "Rule": "token.literal",
+    "Value": "#22FFFFFF",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.Onboarding",
+    "File": "src/Slop.Onboarding.ps1",
+    "Line": 171,
+    "Rule": "token.literal",
+    "Value": "11",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.Onboarding",
+    "File": "src/Slop.Onboarding.ps1",
+    "Line": 172,
+    "Rule": "token.literal",
+    "Value": "0,8,0,0",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.Onboarding",
+    "File": "src/Slop.Onboarding.ps1",
+    "Line": 176,
+    "Rule": "token.literal",
+    "Value": "11",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.Onboarding",
+    "File": "src/Slop.Onboarding.ps1",
+    "Line": 176,
+    "Rule": "token.literal",
+    "Value": "0,8,0,4",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.Onboarding",
+    "File": "src/Slop.Onboarding.ps1",
+    "Line": 176,
+    "Rule": "copy.literal",
+    "Value": "Voice input",
+    "Severity": "baselined",
+    "Reason": "static copy not mapped to canonical key"
+  },
+  {
+    "Surface": "Slop.Onboarding",
+    "File": "src/Slop.Onboarding.ps1",
+    "Line": 177,
+    "Rule": "token.literal",
+    "Value": "11",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.Onboarding",
+    "File": "src/Slop.Onboarding.ps1",
+    "Line": 177,
+    "Rule": "token.literal",
+    "Value": "0,2,0,4",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.Onboarding",
+    "File": "src/Slop.Onboarding.ps1",
+    "Line": 178,
+    "Rule": "copy.literal",
+    "Value": "Enable voice input (local transcription, off by default)",
+    "Severity": "baselined",
+    "Reason": "static copy not mapped to canonical key"
+  },
+  {
+    "Surface": "Slop.Onboarding",
+    "File": "src/Slop.Onboarding.ps1",
+    "Line": 179,
+    "Rule": "token.literal",
+    "Value": "11",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.Onboarding",
+    "File": "src/Slop.Onboarding.ps1",
+    "Line": 180,
+    "Rule": "copy.literal",
+    "Value": "Whisper language",
+    "Severity": "baselined",
+    "Reason": "static copy not mapped to canonical key"
+  },
+  {
+    "Surface": "Slop.Onboarding",
+    "File": "src/Slop.Onboarding.ps1",
+    "Line": 181,
+    "Rule": "token.literal",
+    "Value": "11",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.Onboarding",
+    "File": "src/Slop.Onboarding.ps1",
+    "Line": 182,
+    "Rule": "token.literal",
+    "Value": "0,5,0,0",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.Onboarding",
+    "File": "src/Slop.Onboarding.ps1",
+    "Line": 182,
+    "Rule": "copy.literal",
+    "Value": "Whisper readiness: checking",
+    "Severity": "baselined",
+    "Reason": "static copy not mapped to canonical key"
+  },
+  {
+    "Surface": "Slop.Onboarding",
+    "File": "src/Slop.Onboarding.ps1",
+    "Line": 186,
+    "Rule": "token.literal",
+    "Value": "0,12,0,0",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.Onboarding",
+    "File": "src/Slop.Onboarding.ps1",
+    "Line": 187,
+    "Rule": "type.floor",
+    "Value": "10",
+    "Severity": "baselined",
+    "Reason": "font size below type.floor token"
+  },
+  {
+    "Surface": "Slop.Onboarding",
+    "File": "src/Slop.Onboarding.ps1",
+    "Line": 190,
+    "Rule": "copy.literal",
+    "Value": "Cancel",
+    "Severity": "baselined",
+    "Reason": "static copy not mapped to canonical key"
+  },
+  {
+    "Surface": "Slop.Onboarding",
+    "File": "src/Slop.Onboarding.ps1",
+    "Line": 191,
+    "Rule": "token.literal",
+    "Value": "#22FFFFFF",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.Onboarding",
+    "File": "src/Slop.Onboarding.ps1",
+    "Line": 191,
+    "Rule": "token.literal",
+    "Value": "11",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.Onboarding",
+    "File": "src/Slop.Onboarding.ps1",
+    "Line": 192,
+    "Rule": "token.literal",
+    "Value": "0,0,6,0",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.Onboarding",
+    "File": "src/Slop.Onboarding.ps1",
+    "Line": 193,
+    "Rule": "copy.literal",
+    "Value": "Back",
+    "Severity": "baselined",
+    "Reason": "static copy not mapped to canonical key"
+  },
+  {
+    "Surface": "Slop.Onboarding",
+    "File": "src/Slop.Onboarding.ps1",
+    "Line": 194,
+    "Rule": "token.literal",
+    "Value": "#22FFFFFF",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.Onboarding",
+    "File": "src/Slop.Onboarding.ps1",
+    "Line": 194,
+    "Rule": "token.literal",
+    "Value": "11",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.Onboarding",
+    "File": "src/Slop.Onboarding.ps1",
+    "Line": 195,
+    "Rule": "token.literal",
+    "Value": "0,0,6,0",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.Onboarding",
+    "File": "src/Slop.Onboarding.ps1",
+    "Line": 196,
+    "Rule": "copy.literal",
+    "Value": "Next",
+    "Severity": "baselined",
+    "Reason": "static copy not mapped to canonical key"
+  },
+  {
+    "Surface": "Slop.Onboarding",
+    "File": "src/Slop.Onboarding.ps1",
+    "Line": 197,
+    "Rule": "token.literal",
+    "Value": "#3B82F6",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.Onboarding",
+    "File": "src/Slop.Onboarding.ps1",
+    "Line": 197,
+    "Rule": "token.literal",
+    "Value": "White",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop.Onboarding",
+    "File": "src/Slop.Onboarding.ps1",
+    "Line": 197,
+    "Rule": "token.literal",
+    "Value": "11",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 105,
+    "Rule": "token.literal",
+    "Value": "162,0,0,0",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 106,
+    "Rule": "type.floor",
+    "Value": "9",
+    "Severity": "baselined",
+    "Reason": "font size below type.floor token"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 107,
+    "Rule": "copy.literal",
+    "Value": "Local · bundled · Qwen3.5-2B Q4_K_M",
+    "Severity": "baselined",
+    "Reason": "static copy not mapped to canonical key"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 111,
+    "Rule": "token.literal",
+    "Value": "0,0,14,0",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 112,
+    "Rule": "token.literal",
+    "Value": "#221E293B",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 112,
+    "Rule": "token.literal",
+    "Value": "#44FFFFFF",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 113,
+    "Rule": "token.literal",
+    "Value": "10",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 115,
+    "Rule": "token.literal",
+    "Value": "0,0,4,0",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 116,
+    "Rule": "token.literal",
+    "Value": "#33BFDBFE",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 117,
+    "Rule": "token.literal",
+    "Value": "#55FFFFFF",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 117,
+    "Rule": "type.floor",
+    "Value": "9",
+    "Severity": "baselined",
+    "Reason": "font size below type.floor token"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 118,
+    "Rule": "copy.literal",
+    "Value": "Open control deck",
+    "Severity": "baselined",
+    "Reason": "static copy not mapped to canonical key"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 119,
+    "Rule": "token.literal",
+    "Value": "0,0,4,0",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 120,
+    "Rule": "token.literal",
+    "Value": "#33BFDBFE",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 121,
+    "Rule": "token.literal",
+    "Value": "#55FFFFFF",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 121,
+    "Rule": "type.floor",
+    "Value": "9",
+    "Severity": "baselined",
+    "Reason": "font size below type.floor token"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 122,
+    "Rule": "copy.literal",
+    "Value": "Open chat window",
+    "Severity": "baselined",
+    "Reason": "static copy not mapped to canonical key"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 123,
+    "Rule": "token.literal",
+    "Value": "0,0,4,0",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 124,
+    "Rule": "token.literal",
+    "Value": "#33BFDBFE",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 125,
+    "Rule": "token.literal",
+    "Value": "#55FFFFFF",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 125,
+    "Rule": "type.floor",
+    "Value": "9",
+    "Severity": "baselined",
+    "Reason": "font size below type.floor token"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 126,
+    "Rule": "copy.literal",
+    "Value": "Minimize to blob",
+    "Severity": "baselined",
+    "Reason": "static copy not mapped to canonical key"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 128,
+    "Rule": "token.literal",
+    "Value": "#33BFDBFE",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 129,
+    "Rule": "token.literal",
+    "Value": "#55FFFFFF",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 129,
+    "Rule": "type.floor",
+    "Value": "9",
+    "Severity": "baselined",
+    "Reason": "font size below type.floor token"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 130,
+    "Rule": "copy.literal",
+    "Value": "X",
+    "Severity": "baselined",
+    "Reason": "static copy not mapped to canonical key"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 130,
+    "Rule": "copy.literal",
+    "Value": "Minimize to tray",
+    "Severity": "baselined",
+    "Reason": "static copy not mapped to canonical key"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 133,
+    "Rule": "token.literal",
+    "Value": "24,12,24,8",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 133,
+    "Rule": "token.literal",
+    "Value": "14",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 133,
+    "Rule": "token.literal",
+    "Value": "#1AFFFFFF",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 133,
+    "Rule": "token.literal",
+    "Value": "#33FFFFFF",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 139,
+    "Rule": "token.literal",
+    "Value": "8,6,8,2",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 142,
+    "Rule": "token.literal",
+    "Value": "12",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 146,
+    "Rule": "token.literal",
+    "Value": "12",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 146,
+    "Rule": "token.literal",
+    "Value": "#1AFFFFFF",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 148,
+    "Rule": "token.literal",
+    "Value": "0,0,4,0",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 149,
+    "Rule": "token.literal",
+    "Value": "14",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 149,
+    "Rule": "token.literal",
+    "Value": "6,6,6,10",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 149,
+    "Rule": "copy.literal",
+    "Value": "Settings",
+    "Severity": "baselined",
+    "Reason": "static copy not mapped to canonical key"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 151,
+    "Rule": "token.literal",
+    "Value": "11",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 151,
+    "Rule": "token.literal",
+    "Value": "6,0,6,4",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 151,
+    "Rule": "copy.literal",
+    "Value": "Companion",
+    "Severity": "baselined",
+    "Reason": "static copy not mapped to canonical key"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 152,
+    "Rule": "token.literal",
+    "Value": "11",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 152,
+    "Rule": "copy.literal",
+    "Value": "Name, colour and personality are set in Customize.",
+    "Severity": "baselined",
+    "Reason": "static copy not mapped to canonical key"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 153,
+    "Rule": "token.literal",
+    "Value": "6,0,6,8",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 155,
+    "Rule": "token.literal",
+    "Value": "11",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 155,
+    "Rule": "token.literal",
+    "Value": "6,4,6,4",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 155,
+    "Rule": "copy.literal",
+    "Value": "Brain",
+    "Severity": "baselined",
+    "Reason": "static copy not mapped to canonical key"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 156,
+    "Rule": "token.literal",
+    "Value": "11",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 156,
+    "Rule": "token.literal",
+    "Value": "6,0,6,2",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 156,
+    "Rule": "copy.literal",
+    "Value": "Effective route",
+    "Severity": "baselined",
+    "Reason": "static copy not mapped to canonical key"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 157,
+    "Rule": "token.literal",
+    "Value": "#DADAE2",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 157,
+    "Rule": "token.literal",
+    "Value": "11",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 158,
+    "Rule": "token.literal",
+    "Value": "6,0,6,8",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 159,
+    "Rule": "token.literal",
+    "Value": "11",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 159,
+    "Rule": "token.literal",
+    "Value": "6,0,6,8",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 160,
+    "Rule": "token.literal",
+    "Value": "8,4,0,4",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 161,
+    "Rule": "token.literal",
+    "Value": "11",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 162,
+    "Rule": "token.literal",
+    "Value": "0,0,0,6",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 163,
+    "Rule": "token.literal",
+    "Value": "11",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 163,
+    "Rule": "token.literal",
+    "Value": "0,0,0,2",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 163,
+    "Rule": "copy.literal",
+    "Value": "Model (synced to model/modelName)",
+    "Severity": "baselined",
+    "Reason": "static copy not mapped to canonical key"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 164,
+    "Rule": "token.literal",
+    "Value": "11",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 165,
+    "Rule": "token.literal",
+    "Value": "0,0,0,8",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 166,
+    "Rule": "token.literal",
+    "Value": "11",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 166,
+    "Rule": "token.literal",
+    "Value": "0,0,0,2",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 166,
+    "Rule": "copy.literal",
+    "Value": "OpenCode base URL",
+    "Severity": "baselined",
+    "Reason": "static copy not mapped to canonical key"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 167,
+    "Rule": "token.literal",
+    "Value": "11",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 168,
+    "Rule": "token.literal",
+    "Value": "0,0,0,8",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 169,
+    "Rule": "token.literal",
+    "Value": "11",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 169,
+    "Rule": "token.literal",
+    "Value": "0,0,0,2",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 169,
+    "Rule": "copy.literal",
+    "Value": "OpenCode agent id",
+    "Severity": "baselined",
+    "Reason": "static copy not mapped to canonical key"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 170,
+    "Rule": "token.literal",
+    "Value": "11",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 171,
+    "Rule": "token.literal",
+    "Value": "0,0,0,8",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 175,
+    "Rule": "token.literal",
+    "Value": "11",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 175,
+    "Rule": "token.literal",
+    "Value": "6,4,6,4",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 175,
+    "Rule": "copy.literal",
+    "Value": "Voice",
+    "Severity": "baselined",
+    "Reason": "static copy not mapped to canonical key"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 177,
+    "Rule": "token.literal",
+    "Value": "11",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 177,
+    "Rule": "token.literal",
+    "Value": "6,0,6,6",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 178,
+    "Rule": "token.literal",
+    "Value": "11",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 178,
+    "Rule": "token.literal",
+    "Value": "6,0,6,2",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 178,
+    "Rule": "copy.literal",
+    "Value": "Language",
+    "Severity": "baselined",
+    "Reason": "static copy not mapped to canonical key"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 179,
+    "Rule": "token.literal",
+    "Value": "11",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 179,
+    "Rule": "token.literal",
+    "Value": "6,0,6,6",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 181,
+    "Rule": "token.literal",
+    "Value": "11",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 181,
+    "Rule": "token.literal",
+    "Value": "6,0,6,2",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 181,
+    "Rule": "copy.literal",
+    "Value": "Max seconds",
+    "Severity": "baselined",
+    "Reason": "static copy not mapped to canonical key"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 182,
+    "Rule": "token.literal",
+    "Value": "11",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 182,
+    "Rule": "token.literal",
+    "Value": "6,0,6,6",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 184,
+    "Rule": "copy.literal",
+    "Value": "Repair voice",
+    "Severity": "baselined",
+    "Reason": "static copy not mapped to canonical key"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 185,
+    "Rule": "token.literal",
+    "Value": "11",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 185,
+    "Rule": "token.literal",
+    "Value": "6,0,6,6",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 186,
+    "Rule": "token.literal",
+    "Value": "#22FFFFFF",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 187,
+    "Rule": "copy.literal",
+    "Value": "Whisper readiness: unknown",
+    "Severity": "baselined",
+    "Reason": "static copy not mapped to canonical key"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 188,
+    "Rule": "token.literal",
+    "Value": "11",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 188,
+    "Rule": "token.literal",
+    "Value": "6,0,6,10",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 190,
+    "Rule": "copy.literal",
+    "Value": "Save",
+    "Severity": "baselined",
+    "Reason": "static copy not mapped to canonical key"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 191,
+    "Rule": "token.literal",
+    "Value": "11",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 191,
+    "Rule": "token.literal",
+    "Value": "6,0,6,6",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 192,
+    "Rule": "token.literal",
+    "Value": "White",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 193,
+    "Rule": "token.literal",
+    "Value": "11",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 194,
+    "Rule": "token.literal",
+    "Value": "6,0,6,10",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 196,
+    "Rule": "token.literal",
+    "Value": "11",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 196,
+    "Rule": "token.literal",
+    "Value": "6,0,6,2",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 196,
+    "Rule": "copy.literal",
+    "Value": "Startup behaviour",
+    "Severity": "baselined",
+    "Reason": "static copy not mapped to canonical key"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 197,
+    "Rule": "copy.literal",
+    "Value": "Autostart: Off",
+    "Severity": "baselined",
+    "Reason": "static copy not mapped to canonical key"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 198,
+    "Rule": "token.literal",
+    "Value": "11",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 198,
+    "Rule": "token.literal",
+    "Value": "6,0,6,8",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 199,
+    "Rule": "token.literal",
+    "Value": "11",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 199,
+    "Rule": "copy.literal",
+    "Value": "Data location: {app}\\data (inside the folder you chose during setup)",
+    "Severity": "baselined",
+    "Reason": "static copy not mapped to canonical key"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 200,
+    "Rule": "token.literal",
+    "Value": "6,0,6,10",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 201,
+    "Rule": "copy.literal",
+    "Value": "About and version - Sloppy companion v1",
+    "Severity": "baselined",
+    "Reason": "static copy not mapped to canonical key"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 202,
+    "Rule": "token.literal",
+    "Value": "11",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 202,
+    "Rule": "token.literal",
+    "Value": "6,0,6,8",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 203,
+    "Rule": "token.literal",
+    "Value": "11",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 203,
+    "Rule": "token.literal",
+    "Value": "6,0,6,8",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 203,
+    "Rule": "copy.literal",
+    "Value": "Advanced / developer",
+    "Severity": "baselined",
+    "Reason": "static copy not mapped to canonical key"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 204,
+    "Rule": "token.literal",
+    "Value": "6,4,6,8",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 206,
+    "Rule": "copy.literal",
+    "Value": "Back to chat",
+    "Severity": "baselined",
+    "Reason": "static copy not mapped to canonical key"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 207,
+    "Rule": "token.literal",
+    "Value": "11",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 207,
+    "Rule": "token.literal",
+    "Value": "6,2,6,6",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 212,
+    "Rule": "token.literal",
+    "Value": "12",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 212,
+    "Rule": "token.literal",
+    "Value": "#1AFFFFFF",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 214,
+    "Rule": "token.literal",
+    "Value": "0,0,4,0",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 215,
+    "Rule": "token.literal",
+    "Value": "14",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 215,
+    "Rule": "token.literal",
+    "Value": "6,6,6,10",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 215,
+    "Rule": "copy.literal",
+    "Value": "Customize",
+    "Severity": "baselined",
+    "Reason": "static copy not mapped to canonical key"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 216,
+    "Rule": "copy.literal",
+    "Value": "This is the only place your name, colour, personality and persona text are edited.",
+    "Severity": "baselined",
+    "Reason": "static copy not mapped to canonical key"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 217,
+    "Rule": "token.literal",
+    "Value": "11",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 217,
+    "Rule": "token.literal",
+    "Value": "6,0,6,8",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 218,
+    "Rule": "token.literal",
+    "Value": "11",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 218,
+    "Rule": "token.literal",
+    "Value": "6,0,6,2",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 218,
+    "Rule": "copy.literal",
+    "Value": "Name",
+    "Severity": "baselined",
+    "Reason": "static copy not mapped to canonical key"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 219,
+    "Rule": "token.literal",
+    "Value": "11",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 219,
+    "Rule": "token.literal",
+    "Value": "6,0,6,8",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 220,
+    "Rule": "type.floor",
+    "Value": "10",
+    "Severity": "baselined",
+    "Reason": "font size below type.floor token"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 220,
+    "Rule": "token.literal",
+    "Value": "6,0,6,2",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 220,
+    "Rule": "copy.literal",
+    "Value": "Colour",
+    "Severity": "baselined",
+    "Reason": "static copy not mapped to canonical key"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 221,
+    "Rule": "token.literal",
+    "Value": "11",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 222,
+    "Rule": "token.literal",
+    "Value": "6,0,6,8",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 223,
+    "Rule": "type.floor",
+    "Value": "10",
+    "Severity": "baselined",
+    "Reason": "font size below type.floor token"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 223,
+    "Rule": "token.literal",
+    "Value": "6,0,6,2",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 223,
+    "Rule": "copy.literal",
+    "Value": "Personality",
+    "Severity": "baselined",
+    "Reason": "static copy not mapped to canonical key"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 224,
+    "Rule": "token.literal",
+    "Value": "11",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 225,
+    "Rule": "token.literal",
+    "Value": "6,0,6,8",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 226,
+    "Rule": "token.literal",
+    "Value": "11",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 226,
+    "Rule": "token.literal",
+    "Value": "6,4,6,2",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 226,
+    "Rule": "copy.literal",
+    "Value": "Persona text",
+    "Severity": "baselined",
+    "Reason": "static copy not mapped to canonical key"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 227,
+    "Rule": "type.floor",
+    "Value": "10",
+    "Severity": "baselined",
+    "Reason": "font size below type.floor token"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 228,
+    "Rule": "token.literal",
+    "Value": "6,0,6,8",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 229,
+    "Rule": "copy.literal",
+    "Value": "Save",
+    "Severity": "baselined",
+    "Reason": "static copy not mapped to canonical key"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 230,
+    "Rule": "token.literal",
+    "Value": "11",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 230,
+    "Rule": "token.literal",
+    "Value": "6,0,6,6",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 231,
+    "Rule": "token.literal",
+    "Value": "White",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 232,
+    "Rule": "type.floor",
+    "Value": "10",
+    "Severity": "baselined",
+    "Reason": "font size below type.floor token"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 233,
+    "Rule": "token.literal",
+    "Value": "6,0,6,10",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 234,
+    "Rule": "copy.literal",
+    "Value": "Back to chat",
+    "Severity": "baselined",
+    "Reason": "static copy not mapped to canonical key"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 235,
+    "Rule": "type.floor",
+    "Value": "10",
+    "Severity": "baselined",
+    "Reason": "font size below type.floor token"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 235,
+    "Rule": "token.literal",
+    "Value": "6,2,6,6",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 240,
+    "Rule": "token.literal",
+    "Value": "12",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 240,
+    "Rule": "token.literal",
+    "Value": "#1AFFFFFF",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 242,
+    "Rule": "token.literal",
+    "Value": "0,0,4,0",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 243,
+    "Rule": "token.literal",
+    "Value": "14",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 243,
+    "Rule": "token.literal",
+    "Value": "6,6,6,10",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 243,
+    "Rule": "copy.literal",
+    "Value": "Brain",
+    "Severity": "baselined",
+    "Reason": "static copy not mapped to canonical key"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 244,
+    "Rule": "token.literal",
+    "Value": "11",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 244,
+    "Rule": "copy.literal",
+    "Value": "Where answers come from",
+    "Severity": "baselined",
+    "Reason": "static copy not mapped to canonical key"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 245,
+    "Rule": "token.literal",
+    "Value": "6,0,6,4",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 246,
+    "Rule": "token.literal",
+    "Value": "#DADAE2",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 246,
+    "Rule": "token.literal",
+    "Value": "11",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 246,
+    "Rule": "token.literal",
+    "Value": "6,0,6,6",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 247,
+    "Rule": "token.literal",
+    "Value": "11",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 247,
+    "Rule": "token.literal",
+    "Value": "6,0,6,6",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 248,
+    "Rule": "token.literal",
+    "Value": "11",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 248,
+    "Rule": "token.literal",
+    "Value": "6,4,6,2",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 248,
+    "Rule": "copy.literal",
+    "Value": "Brain tier",
+    "Severity": "baselined",
+    "Reason": "static copy not mapped to canonical key"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 249,
+    "Rule": "token.literal",
+    "Value": "11",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 249,
+    "Rule": "token.literal",
+    "Value": "6,0,6,6",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 250,
+    "Rule": "token.literal",
+    "Value": "11",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 250,
+    "Rule": "token.literal",
+    "Value": "6,0,6,8",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 251,
+    "Rule": "token.literal",
+    "Value": "8,4,0,4",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 252,
+    "Rule": "token.literal",
+    "Value": "11",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 253,
+    "Rule": "token.literal",
+    "Value": "0,0,0,6",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 254,
+    "Rule": "token.literal",
+    "Value": "11",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 254,
+    "Rule": "token.literal",
+    "Value": "0,0,0,2",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 255,
+    "Rule": "token.literal",
+    "Value": "11",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 255,
+    "Rule": "token.literal",
+    "Value": "0,0,0,8",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 256,
+    "Rule": "token.literal",
+    "Value": "11",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 256,
+    "Rule": "token.literal",
+    "Value": "0,0,0,2",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 256,
+    "Rule": "copy.literal",
+    "Value": "Endpoint URL (custom, loopback only)",
+    "Severity": "baselined",
+    "Reason": "static copy not mapped to canonical key"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 257,
+    "Rule": "token.literal",
+    "Value": "11",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 257,
+    "Rule": "token.literal",
+    "Value": "0,0,0,8",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 258,
+    "Rule": "token.literal",
+    "Value": "11",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 258,
+    "Rule": "token.literal",
+    "Value": "0,0,0,2",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 258,
+    "Rule": "copy.literal",
+    "Value": "Model",
+    "Severity": "baselined",
+    "Reason": "static copy not mapped to canonical key"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 259,
+    "Rule": "token.literal",
+    "Value": "11",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 259,
+    "Rule": "token.literal",
+    "Value": "0,0,0,8",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 260,
+    "Rule": "token.literal",
+    "Value": "11",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 260,
+    "Rule": "token.literal",
+    "Value": "0,0,0,2",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 260,
+    "Rule": "copy.literal",
+    "Value": "Agent id",
+    "Severity": "baselined",
+    "Reason": "static copy not mapped to canonical key"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 261,
+    "Rule": "token.literal",
+    "Value": "11",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 261,
+    "Rule": "token.literal",
+    "Value": "0,0,0,8",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 262,
+    "Rule": "token.literal",
+    "Value": "11",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 262,
+    "Rule": "token.literal",
+    "Value": "0,0,0,2",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 262,
+    "Rule": "copy.literal",
+    "Value": "Capability profile",
+    "Severity": "baselined",
+    "Reason": "static copy not mapped to canonical key"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 263,
+    "Rule": "token.literal",
+    "Value": "11",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 263,
+    "Rule": "token.literal",
+    "Value": "0,0,0,8",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 266,
+    "Rule": "copy.literal",
+    "Value": "Save",
+    "Severity": "baselined",
+    "Reason": "static copy not mapped to canonical key"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 267,
+    "Rule": "token.literal",
+    "Value": "11",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 267,
+    "Rule": "token.literal",
+    "Value": "6,0,6,6",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 268,
+    "Rule": "token.literal",
+    "Value": "White",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 269,
+    "Rule": "type.floor",
+    "Value": "10",
+    "Severity": "baselined",
+    "Reason": "font size below type.floor token"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 270,
+    "Rule": "token.literal",
+    "Value": "6,0,6,10",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 271,
+    "Rule": "copy.literal",
+    "Value": "Back to chat",
+    "Severity": "baselined",
+    "Reason": "static copy not mapped to canonical key"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 272,
+    "Rule": "type.floor",
+    "Value": "10",
+    "Severity": "baselined",
+    "Reason": "font size below type.floor token"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 272,
+    "Rule": "token.literal",
+    "Value": "6,2,6,6",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 277,
+    "Rule": "token.literal",
+    "Value": "12",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 277,
+    "Rule": "token.literal",
+    "Value": "#1AFFFFFF",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 279,
+    "Rule": "token.literal",
+    "Value": "0,0,4,0",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 280,
+    "Rule": "token.literal",
+    "Value": "14",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 280,
+    "Rule": "token.literal",
+    "Value": "6,6,6,10",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 281,
+    "Rule": "token.literal",
+    "Value": "11",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 281,
+    "Rule": "token.literal",
+    "Value": "6,0,6,2",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 281,
+    "Rule": "copy.literal",
+    "Value": "Active data route",
+    "Severity": "baselined",
+    "Reason": "static copy not mapped to canonical key"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 282,
+    "Rule": "token.literal",
+    "Value": "#DADAE2",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 282,
+    "Rule": "token.literal",
+    "Value": "11",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 283,
+    "Rule": "token.literal",
+    "Value": "6,0,6,8",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 284,
+    "Rule": "token.literal",
+    "Value": "11",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 285,
+    "Rule": "token.literal",
+    "Value": "6,0,6,8",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 286,
+    "Rule": "token.literal",
+    "Value": "11",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 286,
+    "Rule": "token.literal",
+    "Value": "6,4,6,2",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 286,
+    "Rule": "copy.literal",
+    "Value": "Deletion scopes",
+    "Severity": "baselined",
+    "Reason": "static copy not mapped to canonical key"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 287,
+    "Rule": "token.literal",
+    "Value": "11",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 287,
+    "Rule": "token.literal",
+    "Value": "6,0,6,4",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 288,
+    "Rule": "token.literal",
+    "Value": "11",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 288,
+    "Rule": "token.literal",
+    "Value": "6,0,6,4",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 289,
+    "Rule": "token.literal",
+    "Value": "11",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 289,
+    "Rule": "token.literal",
+    "Value": "6,0,6,8",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 290,
+    "Rule": "token.literal",
+    "Value": "11",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 290,
+    "Rule": "token.literal",
+    "Value": "6,4,6,2",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 290,
+    "Rule": "copy.literal",
+    "Value": "Deletion actions",
+    "Severity": "baselined",
+    "Reason": "static copy not mapped to canonical key"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 291,
+    "Rule": "token.literal",
+    "Value": "11",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 291,
+    "Rule": "copy.literal",
+    "Value": "These actions cannot be undone.",
+    "Severity": "baselined",
+    "Reason": "static copy not mapped to canonical key"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 292,
+    "Rule": "token.literal",
+    "Value": "6,0,6,6",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 293,
+    "Rule": "copy.literal",
+    "Value": "Clear conversation",
+    "Severity": "baselined",
+    "Reason": "static copy not mapped to canonical key"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 294,
+    "Rule": "token.literal",
+    "Value": "11",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 294,
+    "Rule": "token.literal",
+    "Value": "6,0,6,6",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 295,
+    "Rule": "copy.literal",
+    "Value": "Delete OpenCode session",
+    "Severity": "baselined",
+    "Reason": "static copy not mapped to canonical key"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 296,
+    "Rule": "token.literal",
+    "Value": "11",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 296,
+    "Rule": "token.literal",
+    "Value": "6,0,6,6",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 297,
+    "Rule": "copy.literal",
+    "Value": "Clear Sloppy local data",
+    "Severity": "baselined",
+    "Reason": "static copy not mapped to canonical key"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 298,
+    "Rule": "token.literal",
+    "Value": "11",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 298,
+    "Rule": "token.literal",
+    "Value": "6,0,6,8",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 299,
+    "Rule": "token.literal",
+    "Value": "11",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 300,
+    "Rule": "token.literal",
+    "Value": "6,0,6,10",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 301,
+    "Rule": "copy.literal",
+    "Value": "Back to chat",
+    "Severity": "baselined",
+    "Reason": "static copy not mapped to canonical key"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 302,
+    "Rule": "token.literal",
+    "Value": "11",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 302,
+    "Rule": "token.literal",
+    "Value": "6,2,6,6",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 309,
+    "Rule": "token.literal",
+    "Value": "#1EFFFFFF",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 310,
+    "Rule": "token.literal",
+    "Value": "#33FFFFFF",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 311,
+    "Rule": "token.literal",
+    "Value": "24,8,24,20",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 311,
+    "Rule": "token.literal",
+    "Value": "14",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 320,
+    "Rule": "token.literal",
+    "Value": "12",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 321,
+    "Rule": "token.literal",
+    "Value": "#33FFFFFF",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 324,
+    "Rule": "copy.literal",
+    "Value": "Type a message, then press Enter to send",
+    "Severity": "baselined",
+    "Reason": "static copy not mapped to canonical key"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 325,
+    "Rule": "token.literal",
+    "Value": "12",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 325,
+    "Rule": "copy.literal",
+    "Value": "Ask something…",
+    "Severity": "baselined",
+    "Reason": "static copy not mapped to canonical key"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 326,
+    "Rule": "token.literal",
+    "Value": "#77EAEAEA",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 326,
+    "Rule": "token.literal",
+    "Value": "7,0,0,0",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 330,
+    "Rule": "token.literal",
+    "Value": "6,0,0,0",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 330,
+    "Rule": "token.literal",
+    "Value": "#AAA",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 331,
+    "Rule": "token.literal",
+    "Value": "13",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 331,
+    "Rule": "copy.literal",
+    "Value": "Record a short voice note (click to start/stop)",
+    "Severity": "baselined",
+    "Reason": "static copy not mapped to canonical key"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 333,
+    "Rule": "token.literal",
+    "Value": "6,0,0,0",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 333,
+    "Rule": "token.literal",
+    "Value": "White",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 334,
+    "Rule": "token.literal",
+    "Value": "11",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 335,
+    "Rule": "copy.literal",
+    "Value": "Send",
+    "Severity": "baselined",
+    "Reason": "static copy not mapped to canonical key"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 336,
+    "Rule": "token.literal",
+    "Value": "6,0,0,0",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 336,
+    "Rule": "token.literal",
+    "Value": "#3B82F6",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 336,
+    "Rule": "token.literal",
+    "Value": "White",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 337,
+    "Rule": "token.literal",
+    "Value": "12",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 344,
+    "Rule": "token.literal",
+    "Value": "#CC3B82F6",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 350,
+    "Rule": "copy.literal",
+    "Value": "Resize",
+    "Severity": "baselined",
+    "Reason": "static copy not mapped to canonical key"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 355,
+    "Rule": "token.literal",
+    "Value": "#3B82F6",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 359,
+    "Rule": "token.literal",
+    "Value": "#3B82F6",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 363,
+    "Rule": "token.literal",
+    "Value": "#3B82F6",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 367,
+    "Rule": "token.literal",
+    "Value": "#3B82F6",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 371,
+    "Rule": "token.literal",
+    "Value": "#BFDBFE",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 372,
+    "Rule": "token.literal",
+    "Value": "#1E3A8A",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  },
+  {
+    "Surface": "Slop",
+    "File": "src/Slop.ps1",
+    "Line": 375,
+    "Rule": "token.literal",
+    "Value": "#000",
+    "Severity": "baselined",
+    "Reason": "legacy literal; reduce surface by surface"
+  }
+]
