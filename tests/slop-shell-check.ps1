@@ -186,6 +186,8 @@ Assert-True ($src -match "ChatMode -eq 'Full'") 'full chat mode is tracked separ
 Assert-True ($src -match '\[System\.Windows\.SystemParameters\]::WorkArea') 'chat window sizes to the work area'
 Assert-True ($src -notmatch "WindowState\s*=\s*'Maximized'") 'shell no longer toggles true maximize'
 Assert-True ($src -match 'Get-SlopChatWindowRect') 'chat geometry is computed by the pure contract'
+Assert-True ($src -match '\$window\.Add_LocationChanged') 'pet window location changes are clamped'
+Assert-True ($src -match 'Test-SlopPaneClampNeeded') 'location clamp tolerates tiny corrections'
 Assert-True ($src -match '\$pattern = switch -Exact \(\$sig\.Kind\)') 'face tick chooses a pattern from effective signal before drawing'
 Assert-True ($src -match '\$sig = Get-SlopSignal -State \$script:Motion') 'face tick resolves the effective signal explicitly'
 Assert-True ($src -match '\$sig\.Kind -in @\(''approval'',''stalled'',''warning'',''thinking'',''error'',''critical''\)') 'attention/error kinds drive the frozen face state'

@@ -7,6 +7,8 @@ Describe 'Slop transparent chat window contract' {
         # Pester isolates file scope from It blocks: define the pure functions
         # inside BeforeAll, where the container can see them.
         . (Join-Path $PSScriptRoot '../src/Slop.ChatWindow.ps1')
+        $paneModule = Join-Path $PSScriptRoot '../src/Slop.PaneMovement.ps1'
+        if (Test-Path -LiteralPath $paneModule) { . $paneModule }
         $script:ChatSrc = Get-Content -Raw -LiteralPath (Join-Path $PSScriptRoot '../src/Slop.ChatWindow.ps1')
         $script:AppSrc = Get-Content -Raw -LiteralPath (Join-Path $PSScriptRoot '../src/Slop.ps1')
     }
@@ -49,13 +51,24 @@ Describe 'Slop transparent chat window contract' {
         $r.Left | Should -BeGreaterThan 584
     }
 
-    It 'uses the whole work area in Full mode' {
+    It 'uses a large inset preset for Full mode and hides the pet' {
         $wa = @{ X = 0; Y = 0; Width = 1920; Height = 1040 }
         $r = Get-SlopChatWindowRect -PetLeft 100 -PetTop 100 -PetWidth 484 -PetHeight 330 -WorkArea $wa -Mode Full
-        $r.Left | Should -Be 0
-        $r.Top | Should -Be 0
-        $r.Width | Should -Be 1920
-        $r.Height | Should -Be 1040
+        $r.Left | Should -Be 112
+        $r.Top | Should -Be 72
+        $r.Width | Should -Be 1696
+        $r.Height | Should -Be 896
+        ($r.Left + $r.Width) | Should -BeLessThan ($wa.X + $wa.Width)
+        ($r.Top + $r.Height) | Should -BeLessThan ($wa.Y + $wa.Height)
+        $pet = Get-SlopPanePetState -ChatMode Full -ChatOpen $true
+        $pet.Visible | Should -BeFalse
+        $pet.Interactive | Should -BeFalse
+    }
+
+    It 'wires a drag grip and tolerant clamp into the chat window module' {
+        $script:ChatSrc | Should -Match 'Get-SlopChatDragGripRect'
+        $script:ChatSrc | Should -Match 'Test-SlopPaneClampNeeded'
+        $script:ChatSrc | Should -Match 'x:Name="ChatDragGrip"'
     }
 
     It 'requires explicit pet dimensions so chat placement cannot use a stale pea size' {
