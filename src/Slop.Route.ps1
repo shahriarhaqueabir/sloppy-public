@@ -112,8 +112,10 @@ function Get-SlopRoutePlan {
                 [Globalization.DateTimeStyles]::AssumeUniversal, [ref]$observedAt)
         $age = [DateTimeOffset]::UtcNow - $observedAt
         $liveVerified = $evidenceMatchesService -and $age.TotalSeconds -ge 0 -and $age.TotalSeconds -le 30
+        $profileArgs = @{}
+        if ($Config.ContainsKey('capabilityToggles')) { $profileArgs.CapabilityToggles = $Config.capabilityToggles }
         $generatedConfig = New-SlopControlledConfig -Profile ([string]$Config.capabilityProfile) `
-            -AgentId ([string]$Config.agentId) -Model $model
+            -AgentId ([string]$Config.agentId) -Model $model @profileArgs
         $evidence = $OpenCodePermissionEvidence
         $profileResult = Test-SlopEffectivePermissions -GeneratedConfig $generatedConfig `
             -LiveRules $(if ($liveVerified) { @($evidence.LiveRules) } else { @() }) `

@@ -9,6 +9,7 @@ Add-Type -AssemblyName PresentationFramework, PresentationCore, WindowsBase, Sys
 . (Join-Path $PSScriptRoot 'Slop.Frame.ps1')
 . (Join-Path $PSScriptRoot 'Slop.Face.ps1')
 . (Join-Path $PSScriptRoot 'Slop.ChatWindow.ps1')
+. (Join-Path $PSScriptRoot 'Slop.ControlDeck.ps1')
 . (Join-Path $PSScriptRoot 'Slop.PaneMovement.ps1')
 . (Join-Path $PSScriptRoot 'Slop.Lifecycle.ps1')
 . (Join-Path $PSScriptRoot 'Slop.OpenCode.ps1')
@@ -107,6 +108,10 @@ $xaml = @'
               Background="#221E293B" BorderBrush="#44FFFFFF" BorderThickness="1"
               CornerRadius="10" Opacity="0.6" SnapsToDevicePixels="True">
         <StackPanel Orientation="Horizontal">
+          <Button x:Name="ControlDeckButton" Width="18" Height="18" Margin="0,0,4,0"
+                  Style="{StaticResource SlopButton}" Background="#33BFDBFE"
+                  BorderThickness="1" BorderBrush="#55FFFFFF" Cursor="Hand" FontSize="9" FontWeight="Bold"
+                  Content="☰" ToolTip="Open control deck" AutomationProperties.Name="Open control deck"/>
           <Button x:Name="SettingsDot" Width="18" Height="18" Margin="0,0,4,0"
                   Style="{StaticResource SlopButton}" Background="#33BFDBFE"
                   BorderThickness="1" BorderBrush="#55FFFFFF" Cursor="Hand" FontSize="9" FontWeight="Bold"
@@ -380,6 +385,7 @@ $DragHandle = $window.FindName('DragHandle')
 $BodyPath = $window.FindName('BodyPath')
 $OutlinePath = $window.FindName('OutlinePath')
 $HeadHighlight = $window.FindName('HeadHighlight')
+$ControlDeckButton = $window.FindName('ControlDeckButton')
 $SettingsDot = $window.FindName('SettingsDot')
 $PinDot = $window.FindName('PinDot')
 $CloseDot = $window.FindName('CloseDot')
@@ -571,6 +577,8 @@ $script:ChatWindow = $null
 $script:ChatMode = 'Extended'
 $script:ChatStoredPetRect = $null
 $script:ChatDragLast = $null
+$script:ChatDeckOpen = $false
+$script:ChatDeckSection = 'Overview'
 $script:PetControls = @{}
 
 function Get-SlopCurrentPetRect {
@@ -632,6 +640,11 @@ function Use-SlopChatControls {
     $script:MicBtn = $Target.FindName('MicBtn')
     $script:SendBtn = $Target.FindName('SendBtn')
     $script:StopBtn = $Target.FindName('StopBtn')
+    $script:ChatDeckPanel = $Target.FindName('ChatDeckPanel')
+    $script:DeckStatusText = $Target.FindName('DeckStatusText')
+    $script:DeckOverviewText = $Target.FindName('DeckOverviewText')
+    $script:DeckConversationLengthText = $Target.FindName('DeckConversationLengthText')
+    $script:DeckUnderHoodText = $Target.FindName('DeckUnderHoodText')
     Move-SlopChatBubbles -From $script:PetControls.ChatStack -To $script:ChatStack
 }
 
@@ -645,10 +658,156 @@ function Restore-SlopMainChatControls {
     $script:MicBtn = $script:PetControls.MicBtn
     $script:SendBtn = $script:PetControls.SendBtn
     $script:StopBtn = $script:PetControls.StopBtn
+    $script:ChatDeckPanel = $null
+    $script:DeckStatusText = $null
+    $script:DeckOverviewText = $null
+    $script:DeckConversationLengthText = $null
+    $script:DeckUnderHoodText = $null
     Move-SlopChatBubbles -From $previousStack -To $script:ChatStack
 }
 
+function Update-SlopControlDeckState {
+    if (-not $script:ChatDeckPanel -or -not $script:ChatWindow) { return }
+    $cfg = $script:SlopConfigResult.Config
+    $route = Resolve-SlopRouteKind -Config $cfg
+    $brain = [string]$cfg.model
+    if ([string]::IsNullOrWhiteSpace($brain)) { $brain = [string]$cfg.modelName }
+    if ([string]::IsNullOrWhiteSpace($brain)) { $brain = 'unset' }
+    $session = if ($script:OpenCodeSessionId) { [string]$script:OpenCodeSessionId } else { 'none' }
+    $messages = if ($script:ChatStack) { $script:ChatStack.Children.Count } else { 0 }
+    if ($script:DeckOverviewText) {
+        $script:DeckOverviewText.Text = "Route: $route`nBrain/model: $brain`nSession: $session`nSignal: $($script:Motion.Signal.Status)"
+    }
+    if ($script:DeckConversationLengthText) {
+        $script:DeckConversationLengthText.Text = "Conversation length: $messages messages"
+    }
+    if ($script:DeckUnderHoodText) {
+        $baseUrl = Get-SlopEffectiveOpenCodeBaseUrl -Config $cfg
+        $agent = [string]$cfg.agentId
+        if ([string]::IsNullOrWhiteSpace($agent)) { $agent = 'sloppy' }
+        $script:DeckUnderHoodText.Text =
+            "Route: $route`nEndpoint: $baseUrl`nAgent: $agent`nMotion: $($script:Motion.Signal.State)`nStreaming: $($script:IsStreaming)"
+    }
+}
+
+function Set-SlopControlDeckSection {
+    param([Parameter(Mandatory)][string]$Name)
+    if (-not $script:ChatWindow) { return }
+    $script:ChatDeckSection = $Name
+    $map = @{
+        Overview     = 'DeckOverviewSection'
+        Settings     = 'DeckSettingsSection'
+        Data         = 'DeckDataSection'
+        Tools        = 'DeckToolsSection'
+        UnderTheHood = 'DeckUnderHoodSection'
+        Exit         = 'DeckExitSection'
+    }
+    if (-not $map.ContainsKey($Name)) { return }
+    foreach ($entry in $map.GetEnumerator()) {
+        $panel = $script:ChatWindow.FindName($entry.Value)
+        if ($null -ne $panel) { $panel.Visibility = if ($entry.Key -eq $Name) { 'Visible' } else { 'Collapsed' } }
+    }
+    Update-SlopControlDeckState
+}
+
+function Update-SlopControlDeckVisibility {
+    if (-not $script:ChatDeckPanel) { return }
+    $script:ChatDeckPanel.Visibility = if ($script:ChatDeckOpen) { 'Visible' } else { 'Collapsed' }
+    if ($script:ChatScroll) {
+        $script:ChatScroll.Visibility = if ($script:ChatDeckOpen) { 'Collapsed' } else { 'Visible' }
+    }
+    if ($script:ChatDeckOpen) { Set-SlopControlDeckSection -Name $script:ChatDeckSection }
+}
+
+function Initialize-SlopControlDeckToggles {
+    if (-not $script:ChatWindow -or -not $script:SlopConfigResult.Config.ContainsKey('capabilityToggles')) { return }
+    $toggles = $script:SlopConfigResult.Config.capabilityToggles
+    foreach ($entry in (Get-SlopCapabilityToggleMap).GetEnumerator()) {
+        $controlName = switch ($entry.Key) {
+            'workspaceFiles'  { 'WorkspaceFilesToggle' }
+            'webAccess'       { 'WebAccessToggle' }
+            'shellCommands'   { 'ShellCommandsToggle' }
+            'skillsPlugins'   { 'SkillsPluginsToggle' }
+            'subagentsTasks'  { 'SubagentsTasksToggle' }
+            'externalFolders' { 'ExternalFoldersToggle' }
+        }
+        $control = $script:ChatWindow.FindName($controlName)
+        if ($null -ne $control) { $control.IsChecked = [bool]$toggles[$entry.Key] }
+    }
+    $disclosures = Get-SlopCapabilityDisclosure
+    $web = $script:ChatWindow.FindName('WebAccessDisclosureText')
+    if ($null -ne $web) { $web.Text = $disclosures.webAccess }
+    $shell = $script:ChatWindow.FindName('ShellCommandsDisclosureText')
+    if ($null -ne $shell) { $shell.Text = $disclosures.shellCommands }
+}
+
+function Save-SlopControlDeckToggles {
+    if (-not $script:ChatWindow -or -not $script:SlopConfigResult.Config.ContainsKey('capabilityToggles')) {
+        return $false
+    }
+    $toggles = @{}
+    foreach ($entry in (Get-SlopCapabilityToggleMap).GetEnumerator()) {
+        $controlName = switch ($entry.Key) {
+            'workspaceFiles'  { 'WorkspaceFilesToggle' }
+            'webAccess'       { 'WebAccessToggle' }
+            'shellCommands'   { 'ShellCommandsToggle' }
+            'skillsPlugins'   { 'SkillsPluginsToggle' }
+            'subagentsTasks'  { 'SubagentsTasksToggle' }
+            'externalFolders' { 'ExternalFoldersToggle' }
+        }
+        $control = $script:ChatWindow.FindName($controlName)
+        $toggles[$entry.Key] = if ($null -ne $control) { [bool]$control.IsChecked } else { $false }
+    }
+    $check = Test-SlopCapabilityToggles -Toggles $toggles
+    if (-not $check.Ok) {
+        if ($script:DeckStatusText) {
+            $script:DeckStatusText.Text = 'Capability settings invalid: ' + ($check.Errors -join '; ')
+        }
+        return $false
+    }
+    # Verify the generated deny-first contract before writing: a bad profile
+    # must never replace a working configuration.
+    $profile = Get-SlopCapabilityProfile -Toggles $toggles
+    $agentId = [string]$script:SlopConfigResult.Config.agentId
+    if ([string]::IsNullOrWhiteSpace($agentId)) { $agentId = 'sloppy' }
+    $model = [string]$script:SlopConfigResult.Config.model
+    if ([string]::IsNullOrWhiteSpace($model)) { $model = 'unset' }
+    $generated = New-SlopControlledConfig -Profile $profile -AgentId $agentId -Model $model -CapabilityToggles $toggles
+    $permissions = @($generated.permissions)
+    $denyFirst = $permissions.Count -gt 0 -and $permissions[0].action -eq '*' -and $permissions[0].effect -eq 'deny'
+    $hardDeny = @($permissions | Where-Object { $_.effect -eq 'deny' -and $_.resource -ne '*' }).Count -gt 0
+    if (-not $denyFirst -or -not $hardDeny) {
+        if ($script:DeckStatusText) {
+            $script:DeckStatusText.Text = 'Capability verification failed; previous settings kept.'
+        }
+        return $false
+    }
+
+    $previous = $script:SlopConfigResult.Config.capabilityToggles
+    $previousProfile = $script:SlopConfigResult.Config.capabilityProfile
+    $script:SlopConfigResult.Config.capabilityToggles = $toggles
+    $script:SlopConfigResult.Config.capabilityProfile = $profile
+    if (-not (Save-SlopSettings)) {
+        $script:SlopConfigResult.Config.capabilityToggles = $previous
+        $script:SlopConfigResult.Config.capabilityProfile = $previousProfile
+        if ($script:DeckStatusText) {
+            $script:DeckStatusText.Text = 'Capability changes were not saved; previous settings kept.'
+        }
+        return $false
+    }
+    if ($script:DeckStatusText) { $script:DeckStatusText.Text = 'Capability settings saved.' }
+    Update-SlopControlDeckState
+    return $true
+}
+
 $SettingsDot.Add_Click({ Open-SlopChatWindow })
+$ControlDeckButton.Add_Click({
+    if (-not $script:ChatWindow -or -not $script:ChatWindow.IsLoaded) {
+        Open-SlopChatWindow
+    }
+    $script:ChatDeckOpen = $true
+    Update-SlopControlDeckVisibility
+})
 $PinDot.Add_Click({ Collapse-Chat })
 $CloseDot.Add_Click({ Minimize-ToTray })
 $ControlDots.Add_MouseEnter({ $ControlDots.Opacity = 0.95 })
@@ -883,7 +1042,11 @@ function Set-SlopChatWindowRect {
     $script:ChatWindow.Width = $r.Width
     $script:ChatWindow.Height = $r.Height
     $script:ChatMode = $Mode
+    # The deck is the default view in Full; Extended keeps the conversation
+    # foreground until the header button asks for the deck.
+    $script:ChatDeckOpen = ($Mode -eq 'Full')
     $script:ChatWindow.FindName('ChatModeButton').Content = if ($Mode -eq 'Full') { '_' } else { '□' }
+    Update-SlopControlDeckVisibility
     Set-SlopPetChatInteraction -ChatOpen $true
 }
 
@@ -908,6 +1071,7 @@ function Open-SlopChatWindow {
     $script:ChatWindow = $chat
     $script:ChatMode = 'Extended'
     Use-SlopChatControls -Target $chat
+    Initialize-SlopControlDeckToggles
     Initialize-SlopChatControlHandlers -Target $chat
     $chatRoot = $chat.FindName('ChatRoot')
     $chatScroll = $chat.FindName('ChatScroll')
@@ -923,6 +1087,39 @@ function Open-SlopChatWindow {
         $newMode = if ($script:ChatMode -eq 'Full') { 'Extended' } else { 'Full' }
         Set-SlopChatWindowRect -Mode $newMode
     })
+    $chat.FindName('ChatDeckButton').Add_Click({
+        $script:ChatDeckOpen = -not $script:ChatDeckOpen
+        Update-SlopControlDeckVisibility
+    })
+    foreach ($name in @('DeckOverviewButton','DeckSettingsButton','DeckDataButton','DeckToolsButton','DeckUnderHoodButton','DeckExitButton')) {
+        $button = $chat.FindName($name)
+        if ($null -eq $button) { continue }
+        $button.Add_Click({
+            param($s, $e)
+            Set-SlopControlDeckSection -Name ([string]$s.Tag)
+        })
+    }
+    foreach ($name in @('WorkspaceFilesToggle','WebAccessToggle','ShellCommandsToggle','SkillsPluginsToggle','SubagentsTasksToggle','ExternalFoldersToggle')) {
+        $toggle = $chat.FindName($name)
+        if ($null -ne $toggle) { $toggle.Add_Click({ Save-SlopControlDeckToggles | Out-Null }) }
+    }
+    $deckDelete = @{
+        DeckDeleteConversationButton = 'conversation'
+        DeckDeleteSessionButton      = 'session'
+        DeckDeleteLocalDataButton    = 'local-data'
+    }
+    foreach ($entry in $deckDelete.GetEnumerator()) {
+        $button = $chat.FindName($entry.Key)
+        if ($null -ne $button) {
+            $button.Add_Click({
+                param($s, $e)
+                Invoke-SlopDeletion -Action $s.Tag
+                Update-SlopControlDeckState
+            })
+            $button.Tag = $entry.Value
+        }
+    }
+    # DeckShutdownButton is wired to the shared shutdown resolver in Task 5.
     # The grip is a transparent top strip over the chrome. Drag moves only the
     # chat pane through the pure clamped helper; the pet is never moved/resized.
     $chatGrip = $chat.FindName('ChatDragGrip')
@@ -963,6 +1160,8 @@ function Open-SlopChatWindow {
     $script:ChatWindow.Add_Closed({
         $script:ChatWindow = $null
         $script:ChatDragLast = $null
+        $script:ChatDeckOpen = $false
+        $script:ChatDeckSection = 'Overview'
         Restore-SlopMainChatControls
         if ($script:ChatStoredPetRect) {
             # Closing from Full restores the pet at its exact stored rect.

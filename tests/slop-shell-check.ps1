@@ -277,7 +277,7 @@ Assert-True ($src -match '\$OutlinePath\.Data = \$BodyPath\.Data') 'outline trac
 
 Assert-True ($src -match 'x:Name="ControlDeckButton"') 'control deck button is wired in the shell'
 Assert-True ($src -match '\$script:ChatDeckOpen') 'control deck open state is owned by the shell'
-Assert-True ($src -match 'x:Name="DeckStatusText"') 'control deck status is wired in the shell'
+Assert-True ($src -match '\$script:DeckStatusText') 'control deck status is wired in the shell'
 
 Describe 'Slop shell / XAML static checks' {
     foreach ($check in $script:SlopChecks) {

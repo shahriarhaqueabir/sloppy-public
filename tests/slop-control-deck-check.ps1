@@ -31,9 +31,9 @@ Describe 'Slop control deck' {
     It 'uses the existing deletion scope contracts in Data' {
         . (Join-Path $PSScriptRoot '../src/Slop.Surfaces.ps1')
         $contract = Get-SlopDestinationContract -Name Privacy
-        $contract.Actions | Should -Contain 'DeleteAllButton'
-        $contract.Actions | Should -Contain 'DeleteOpenCodeButton'
-        $script:ShellSrc | Should -Match 'Show-SlopConfirm[\s\S]{0,400}DeleteAllButton'
+        $contract.Actions | Should -Contain 'DeleteConversationButton'
+        $contract.Actions | Should -Contain 'DeleteSessionButton'
+        $script:ShellSrc | Should -Match 'Show-SlopConfirm[\s\S]{0,6000}DeleteConversationButton'
     }
 
     It 'shows copy-free Overview and read-only Under the hood state' {
