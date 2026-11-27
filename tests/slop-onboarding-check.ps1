@@ -105,6 +105,16 @@ Describe 'Slop.Onboarding' {
         $src | Should -Not -Match '\$swatch\.Style = \$window\.Resources'
     }
 
+    It 'never reads a function-local XAML variable from an event handler' {
+        $src = Get-Content (Join-Path $PSScriptRoot '../src/Slop.Onboarding.ps1') -Raw
+        $src | Should -Match '\$script:PreviewPea = \$dlg\.FindName\(''PreviewPea''\)'
+        $src | Should -Match '\$script:SampleLine = \$dlg\.FindName\(''SampleLine''\)'
+        $src | Should -Match '\$script:PreviewPea\.Fill ='
+        $src | Should -Match '\$script:SampleLine\.Text ='
+        $src | Should -Not -Match '(?m)^\s+\$PreviewPea\.Fill ='
+        $src | Should -Not -Match '(?m)^\s+\$SampleLine\.Text ='
+    }
+
     It 'binds every named wizard control that code uses before touching it' {
         $src = Get-Content (Join-Path $PSScriptRoot '../src/Slop.Onboarding.ps1') -Raw
         $names = @([regex]::Matches($src, 'x:Name="([A-Za-z][A-Za-z0-9]*)"') | ForEach-Object { $_.Groups[1].Value } | Sort-Object -Unique)

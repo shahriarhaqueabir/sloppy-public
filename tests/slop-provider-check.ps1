@@ -25,9 +25,18 @@ Describe 'Slop.Provider' {
         $contract = Get-SlopAdapterContract
         $contract.Version | Should -Be 1
         $contract.EntryPoint | Should -Be 'Invoke-SlopAdapter'
-        foreach ($marker in @('__DONE__', '__CONNECTED__', '__WARN__', '__ERR__', '__TOK__', '__OC')) {
+        foreach ($marker in @('__DONE__', '__CONNECTED__', '__WARN__', '__ERR__', '__TOK__', '__OC', '__THINK__')) {
             $contract.MarkerContract | Should -Contain $marker
         }
+    }
+
+    It 'asks the bundled model to disable thinking only on the local route' {
+        $body = New-SlopChatRequestBody -SystemPrompt '' -UserText 'hi' -DisableThinking | ConvertFrom-Json
+        $body.chat_template_kwargs.enable_thinking | Should -BeFalse
+        $plain = New-SlopChatRequestBody -SystemPrompt '' -UserText 'hi' | ConvertFrom-Json
+        $plain.PSObject.Properties.Name | Should -Not -Contain 'chat_template_kwargs'
+        $routeSrc = Get-Content (Join-Path $PSScriptRoot '../src/Slop.Route.ps1') -Raw
+        $routeSrc | Should -Match 'DisableThinking \$true'
     }
 
     It 'builds a streaming request body with and without a persona' {

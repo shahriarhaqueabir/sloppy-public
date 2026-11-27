@@ -204,6 +204,44 @@ Assert-True ($stallSw.Elapsed.TotalSeconds -lt 2) `
 $stallReader.Release()
 $stallReader.Cts.Dispose()
 
+# 17. hidden reasoning becomes an explicit fallback only when no visible answer exists
+$hasThinkingFallback = (Get-Command Format-SlopThinkingFallback -ErrorAction SilentlyContinue) -ne $null
+Assert-True $hasThinkingFallback 'thinking fallback formatter exists'
+if ($hasThinkingFallback) {
+    $fb = Format-SlopThinkingFallback -Thinking '  hidden answer  ' -VisibleText ''
+    Assert-True ($fb -eq '[thinking] hidden answer') 'reasoning becomes labelled fallback text'
+    Assert-True ($null -eq (Format-SlopThinkingFallback -Thinking 'x' -VisibleText 'visible')) `
+        'visible text is never replaced by thinking'
+}
+
+$thinkQueue = [System.Collections.Concurrent.ConcurrentQueue[string]]::new()
+$thinkSse = @(
+    'data: {"choices":[{"delta":{"content":""}}]}',
+    'data: {"choices":[{"delta":{"reasoning_content":"hel"}}]}',
+    'data: {"choices":[{"delta":{"reasoning_content":"lo"}}]}',
+    'data: [DONE]'
+) -join "`n"
+$thinkStats = Read-SlopSseStream -Reader ([System.IO.StringReader]::new($thinkSse)) -Queue $thinkQueue
+$thinkTokens = @(); $thinkTok = $null
+while ($thinkQueue.TryDequeue([ref]$thinkTok)) { $thinkTokens += $thinkTok }
+Assert-True ($thinkStats.Tokens -eq 0 -and $thinkStats.Thinking -eq 'hello') `
+    'SSE reader accumulates reasoning_content separately from visible tokens'
+Assert-True ($thinkTokens.Count -eq 1 -and $thinkTokens[0] -eq '__THINK__hello') `
+    'a reasoning-only stream emits exactly one __THINK__ control token'
+
+$bothQueue = [System.Collections.Concurrent.ConcurrentQueue[string]]::new()
+$bothSse = @(
+    'data: {"choices":[{"delta":{"content":"shown","reasoning_content":"hidden"}}]}',
+    'data: [DONE]'
+) -join "`n"
+$bothStats = Read-SlopSseStream -Reader ([System.IO.StringReader]::new($bothSse)) -Queue $bothQueue
+$bothTokens = @(); $bothTok = $null
+while ($bothQueue.TryDequeue([ref]$bothTok)) { $bothTokens += $bothTok }
+Assert-True (($bothTokens -join '') -eq 'shown') `
+    'a stream with visible content never emits __THINK__'
+Assert-True ((Resolve-SlopStreamToken -Token '__THINK__hello').Kind -eq 'thinking') `
+    '__THINK__ is classified as a distinct lifecycle kind'
+
 Describe 'Slop request lifecycle' {
     foreach ($check in $script:SlopChecks) {
         $name = $check.Name

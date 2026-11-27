@@ -122,4 +122,9 @@ Describe 'Slop shell chat-window wiring' {
         $script:AppSrc | Should -Match 'Set-SlopPetChatInteraction -ChatOpen \$false'
         $script:AppSrc | Should -Match '\$script:ChatWindow\.Add_Closed'
     }
+
+    It 'routes mouse wheel input through the chat window root' {
+        $script:AppSrc | Should -Match 'ChatRoot\.Add_PreviewMouseWheel|ChatWindow\.Add_PreviewMouseWheel'
+        $script:AppSrc | Should -Match 'ScrollToVerticalOffset\(\$chatScroll\.VerticalOffset'
+    }
 }

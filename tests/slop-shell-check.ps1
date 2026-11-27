@@ -267,6 +267,11 @@ Assert-True ($readme -match 'Qwen3\.5-2B Q4_K_M') 'README names the Qwen Tier 1 
 Assert-True ($architecture -match 'Qwen3\.5-2B Q4_K_M') 'architecture names the Qwen Tier 1 brain'
 Assert-True ($gitattributes -match 'runtime/\*\*/\*\.gguf filter=lfs') 'GGUF artifacts are tracked with Git LFS'
 
+Assert-True ($src -match 'Canvas\.Left="10" Canvas\.Top="10"') 'frame sits 10px from the window edge'
+Assert-True ($src -match 'clipInset = 8\.0') 'content clip inset follows the tighter margin'
+Assert-True ($src -match 'x:Name="OutlinePath"[^>]*Fill="Transparent"') 'outline is a transparent top layer'
+Assert-True ($src -match '\$OutlinePath\.Data = \$BodyPath\.Data') 'outline tracks the membrane path each tick'
+
 Describe 'Slop shell / XAML static checks' {
     foreach ($check in $script:SlopChecks) {
         $name = $check.Name
