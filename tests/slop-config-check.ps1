@@ -428,4 +428,68 @@ Describe 'Slop.Config' {
         $bad2.capabilityToggles.webAccess = 'yes'
         (Test-SlopConfig -Config $bad2).Ok | Should -BeFalse
     }
+
+    It 'exposes exactly two UI tiers with verified defaults' {
+        $tiers = @(Get-SlopTierCatalog)
+        $tiers.Count | Should -Be 2
+        $tiers[0].Id | Should -Be 'tier-1'
+        $tiers[0].Label | Should -Match 'Local LLM'
+        $tiers[0].Brain | Should -Be 'builtin'
+        $tiers[0].DefaultModel | Should -Be 'Qwen3.5-2B Q4_K_M'
+        $tiers[1].Id | Should -Be 'tier-2'
+        $tiers[1].Label | Should -Match 'OpenCode'
+        $tiers[1].Brain | Should -Be 'opencode'
+        $tiers[1].DefaultModel | Should -Be 'big-pickle'
+    }
+
+    It 'resolves a config to a UI tier and keeps the numeric wrapper' {
+        Resolve-SlopTierFromConfig @{ brain = 'builtin' } | Should -Be 'tier-1'
+        Resolve-SlopTierFromConfig @{ brain = 'opencode' } | Should -Be 'tier-2'
+        Resolve-SlopTierFromConfig @{ brain = 'custom' } | Should -Be ''
+        Resolve-SlopTierFromConfig @{ brain = 'unknown' } | Should -Be ''
+        Resolve-SlopTierFromConfig $null | Should -Be ''
+        Get-SlopTierDefaultModel -TierId 'tier-1' | Should -Be 'Qwen3.5-2B Q4_K_M'
+        Get-SlopTierDefaultModel -TierId 'tier-2' | Should -Be 'big-pickle'
+        Resolve-SlopTier -Brain 'builtin' | Should -Be 1
+        Resolve-SlopTier -Brain 'opencode' | Should -Be 2
+        Resolve-SlopTier -Brain 'custom' | Should -Be 0
+    }
+
+    It 'writes tier 1 through brain validation while preserving the bundled local file' {
+        $cfg = New-SlopDefaultConfig
+        $cfg.localModelFile = ''
+        $result = Set-SlopTierConfig -Config $cfg -TierId 'tier-1' -Model 'ignored'
+        $result.Ok | Should -BeTrue
+        $result.Config.brain | Should -Be 'builtin'
+        $result.Config.localModelName | Should -Be 'Qwen3.5-2B Q4_K_M'
+        $result.Config.localModelFile | Should -Be 'runtime\models\Qwen3.5-2B-Q4_K_M.gguf'
+        $result.Config.endpointUrl | Should -Be ''
+        $result.Config.provider | Should -Be ''
+    }
+
+    It 'writes tier 2 through brain validation with a loopback base URL' {
+        $result = Set-SlopTierConfig -Config (New-SlopDefaultConfig) -TierId 'tier-2' -Model 'big-pickle'
+        $result.Ok | Should -BeTrue
+        $result.Config.brain | Should -Be 'opencode'
+        $result.Config.provider | Should -Be 'opencode'
+        $result.Config.agentId | Should -Be 'sloppy'
+        $result.Config.model | Should -Be 'big-pickle'
+        $result.Config.openCodeBaseUrl | Should -Be 'http://127.0.0.1:28894'
+        $result.Config.endpointUrl | Should -Be ''
+    }
+
+    It 'rejects invalid tier 2 input without mutating the source config' {
+        $cfg = New-SlopDefaultConfig
+        $badUrl = Set-SlopTierConfig -Config $cfg -TierId 'tier-2' -Model 'big-pickle' -BaseUrl 'http://example.test'
+        $badUrl.Ok | Should -BeFalse
+        $cfg.brain | Should -Be 'builtin'
+        $badModel = Set-SlopTierConfig -Config $cfg -TierId 'tier-2' -Model ''
+        $badModel.Ok | Should -BeFalse
+        $cfg.model | Should -Be 'big-pickle'
+    }
+
+    It 'keeps the config source free of hardcoded user paths' {
+        $src = Get-Content (Join-Path $PSScriptRoot '../src/Slop.Config.ps1') -Raw
+        $src | Should -Not -Match 'C:\\[A-Za-z0-9._-]+\\[A-Za-z0-9._-]+'
+    }
 }
