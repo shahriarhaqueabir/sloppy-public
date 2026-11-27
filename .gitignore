@@ -32,6 +32,9 @@ docs/superpowers/
 # Local companion data
 /data/
 
+# Local icon drafts
+/assets/icons/
+
 # Bundled runtime/model caches (large binaries/models are tracked via LFS)
 runtime/models/.cache/
 runtime/models/**/.cache/
