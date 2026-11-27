@@ -22,6 +22,13 @@ Describe 'Slop.Onboarding' {
         $md | Should -Not -Match '\sKeep it short\.  '
     }
 
+    It 'describes tools through permissions instead of claiming none' {
+        $md = New-SlopPersonaMarkdown -Preset 'calm' -Name 'Sloppy'
+        $md | Should -Not -Match 'no tools'
+        $md | Should -Match 'OpenCode tools may be available'
+        $md | Should -Match 'permissions shown to you'
+    }
+
     It 'omits the owner sentence and custom header when neither was supplied' {
         $md = New-SlopPersonaMarkdown -Preset 'calm' -Name 'Sloppy' -CustomText ''
         $md | Should -Not -Match 'goes by'
