@@ -827,8 +827,8 @@ function Apply-SlopMotion {
 function Set-SlopChatWindowRect {
     param([ValidateSet('Extended','Full')][string]$Mode)
     if (-not $script:ChatWindow) { return }
-    $r = Get-SlopChatWindowRect -PetLeft $window.Left -PetTop $window.Top `
-        -WorkArea ([System.Windows.SystemParameters]::WorkArea) -Mode $Mode
+    $r = Get-SlopChatWindowRect -PetLeft $window.Left -PetTop $window.Top -PetWidth $window.Width `
+        -PetHeight $window.Height -WorkArea ([System.Windows.SystemParameters]::WorkArea) -Mode $Mode
     $script:ChatWindow.Left = $r.Left
     $script:ChatWindow.Top = $r.Top
     $script:ChatWindow.Width = $r.Width

@@ -26,8 +26,8 @@ function Get-SlopChatWindowRect {
     param(
         [Parameter(Mandatory)][double]$PetLeft,
         [Parameter(Mandatory)][double]$PetTop,
-        [double]$PetWidth = 26.0,
-        [double]$PetHeight = 26.0,
+        [Parameter(Mandatory)][double]$PetWidth,
+        [Parameter(Mandatory)][double]$PetHeight,
         [Parameter(Mandatory)]$WorkArea,
         [ValidateSet('Extended','Full')][string]$Mode = 'Extended',
         [double]$ExtendedWidth = 760.0,
