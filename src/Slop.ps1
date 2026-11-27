@@ -15,7 +15,9 @@ Add-Type -AssemblyName PresentationFramework, PresentationCore, WindowsBase, Sys
 . (Join-Path $PSScriptRoot 'Slop.OpenCode.ps1')
 # Sloppy companion modules. Order matters: Provider/Onboarding/Route depend on
 # Config; Route also needs OpenCodeProfile, LocalModel and the OpenCode bridge.
+# Config owns paths and identity; AgentPack resolves the tracked persona pack.
 . (Join-Path $PSScriptRoot 'Slop.Config.ps1')
+. (Join-Path $PSScriptRoot 'Slop.AgentPack.ps1')
 . (Join-Path $PSScriptRoot 'Slop.Audio.ps1')
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'tools/slop-preflight.ps1')
 . (Join-Path $PSScriptRoot 'Slop.LocalModel.ps1')
@@ -1486,6 +1488,11 @@ function Save-SlopCustomize {
     }
 
     $personaText = [string]$CustomizePersonaBox.Text
+    $overlay = Test-SlopAgentOverlay -Text $personaText
+    if (-not $overlay.Ok) {
+        Set-SlopDestinationStatus -Name Customize -Text ("Customize invalid: " + ($overlay.Errors -join '; ')) -Tone 'error'
+        return $false
+    }
     try {
         Write-SlopPersona -Text $personaText
         Write-SlopConfig -Config $result.Config
@@ -2043,8 +2050,15 @@ function Start-Stream {
         Add-Bubble -Text "[error: openCodeBaseUrl must be a loopback http URL]" -IsUser $false
         return
     }
+    $agentPack = Get-SlopResolvedAgentPack -AppRoot (Split-Path $PSScriptRoot -Parent) `
+        -Identity $config -PersonaText (Read-SlopPersona)
+    if (-not $agentPack.Ok) {
+        Clear-SlopSignalEvent -State $script:Motion -Id 'request:preflight' | Out-Null
+        Add-Bubble -Text "[error: Sloppy identity could not be resolved: $(($agentPack.Errors -join '; '))]" -IsUser $false
+        return
+    }
     $streamPlan = Get-SlopStreamPlan `
-        -Config $config -UserText $UserText -PersonaText (Read-SlopPersona) `
+        -Config $config -UserText $UserText -PersonaText $agentPack.Text `
         -Attachments $Attachments `
         -LocalModelProcess $script:LocalModelProcess `
         -ScriptRootPath $PSScriptRoot -RepoRootPath (Split-Path $PSScriptRoot -Parent)
