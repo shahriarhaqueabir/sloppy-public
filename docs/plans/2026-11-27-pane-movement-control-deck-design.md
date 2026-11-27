@@ -5,8 +5,8 @@ Status: Approved in brainstorming; implementation not started.
 
 Note on location: `docs/superpowers/` is gitignored in this public repo, so the
 canonical tracked copy of this spec lives in `docs/plans/`, matching the existing
-design-doc convention. The interactive mockup used for approval is at
-`C:\Users\shahr\AppData\Local\Temp\opencode\sloppy-mockup.html` (local-only artifact).
+design-doc convention. The interactive mockup used for approval was a local-only
+artifact and is not tracked.
 
 ## Context
 
