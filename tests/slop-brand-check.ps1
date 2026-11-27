@@ -148,3 +148,36 @@ $fixture = @'
         @($result.Errors).Count | Should -BeGreaterThan 0
     }
 }
+
+Describe 'Sloppy design style roles' {
+    BeforeAll {
+        $script:root = Split-Path -Parent $PSScriptRoot
+        . (Join-Path $script:root 'src/Slop.BrandAudit.ps1')
+        $script:requiredRoles = @(
+            'slop.button.primary', 'slop.button.secondary', 'slop.button.danger',
+            'slop.input', 'slop.checkbox', 'slop.combo', 'slop.card', 'slop.header',
+            'slop.status.idle', 'slop.status.thinking', 'slop.status.working',
+            'slop.status.success', 'slop.status.error'
+        )
+    }
+
+    It 'exposes every required component style role' {
+        foreach ($name in $script:requiredRoles) {
+            { Get-SlopStyleRole -Name $name } | Should -Not -Throw -Because "$name must exist"
+        }
+    }
+
+    It 'throws on an unknown style role' {
+        { Get-SlopStyleRole -Name 'slop.role.unknown' } | Should -Throw
+    }
+
+    It 'resolves role tokens to existing design tokens' {
+        foreach ($name in $script:requiredRoles) {
+            $role = Get-SlopStyleRole -Name $name
+            $role.Token | Should -Not -BeNullOrEmpty
+            $role.TextToken | Should -Not -BeNullOrEmpty
+            { Get-SlopDesignToken -Name $role.Token } | Should -Not -Throw
+            { Get-SlopDesignToken -Name $role.TextToken } | Should -Not -Throw
+        }
+    }
+}
