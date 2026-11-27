@@ -84,6 +84,15 @@ if ($m.Success) {
     Assert-True ($verifier -match 'function Grab \{[\s\S]{0,900}\$script:LastGrabRect = \$r') 'capture stores one window rect per grab'
     Assert-True ($verifier -match 'function Pixel\(\$b,\$lx,\$ly\) \{[\s\S]{0,300}\$script:LastGrabRect') 'pixel lookup uses the same rect as its bitmap'
     Assert-True ($verifier -match 'function Grab \{[\s\S]{0,300}Get-Win \$proc\.Id') 'capture re-queries the top-level window before reading its rect'
+    Assert-True ($verifier -match 'function Get-AppWindows') 'live verifier enumerates every top-level window in the app process'
+    Assert-True ($verifier -match 'function Get-ChatWin') 'live verifier resolves the separate chat window by title'
+    Assert-True ($verifier -match 'function Find-UiaIn') 'live verifier can scope an automation search to one window'
+    Assert-True ($verifier -match 'Invoke-UiaIn \(Get-ChatWin\) ''ChatModeButton''') 'live verifier toggles chat size in the chat window'
+    Assert-True ($verifier -match 'CHAT Extended size=') 'live verifier checks the Extended chat geometry'
+    Assert-True ($verifier -match 'CHAT Full size=') 'live verifier checks the Full work-area chat geometry'
+    Assert-True ($verifier -match 'CHAT closed pet=') 'live verifier proves the pet keeps its size after chat closes'
+    Assert-True ($verifier -notmatch 'Invoke-Uia ''SettingsDot''') 'live verifier no longer pseudo-maximizes the pet window'
+    Assert-True ($verifier -notmatch 'expanded size is not 760x540') 'live verifier no longer expects the pet to expand into chat'
     $controls = $w.FindName('ControlDots')
     Assert-True ($controls -is [System.Windows.Controls.Border]) 'control actions are grouped in a separate glass tile'
     if ($controls -is [System.Windows.Controls.Border]) {
@@ -92,7 +101,7 @@ if ($m.Success) {
         Assert-True ($controls.BorderThickness.Left -gt 0) 'control tile has a visible rim'
     }
     foreach ($action in @(
-        @{ Id = 'SettingsDot'; Name = 'Maximize Slop to work area' },
+        @{ Id = 'SettingsDot'; Name = 'Open chat window' },
         @{ Id = 'PinDot'; Name = 'Collapse Slop to pea' },
         @{ Id = 'CloseDot'; Name = 'Minimize Slop to tray' }
     )) {
@@ -132,10 +141,10 @@ Assert-True ($src -match '\$HeadHighlight\.Data\s*=') 'rim highlight follows the
 Assert-True ($src -match '\$Frame\.Clip\s*=') 'content clip is rebuilt on resize'
 Assert-True ($src -match 'Add_SizeChanged(?s:.*?)Update-SlopFrameClip') 'clip/layout rebuild lives in the SizeChanged handler'
 Assert-True ($src -notmatch 'MaxHeight="235"') 'chat scroll is not height-capped'
-Assert-True ($src -match '\$script:ExpandedSize') 'expanded size is remembered'
-Assert-True ($src -match '\$script:RestoreCompact') 'compact size restores after collapse'
-Assert-True ($src -match '\$script:Membrane\.Expand') 'clicking the pea expands the membrane'
-Assert-True ($src -match '\$script:Membrane\.Collapse') 'collapsing drives the membrane back to the pea'
+Assert-True ($src -match 'function Open-SlopChatWindow') 'chat opens in its own window'
+Assert-True ($src -match 'Set-SlopPetChatInteraction -ChatOpen \$false') 'pet interaction is restored after chat closes'
+Assert-True ($src -match '\$script:ChatWindow\.Activate\(\)') 'an existing chat window is brought to front'
+Assert-True ($src -match '\$script:ChatWindow\.Add_Closed') 'chat close restores the pet surface'
 Assert-True ($src -match 'SetMotionScale') 'reduced motion is forwarded to the membrane'
 Assert-True ($src -notmatch 'EdgeMode="Aliased"') 'smooth vector curves are not aliased'
 Assert-True ($src -match 'StrokeLineJoin="Round"') 'body outline uses round joins'
@@ -157,7 +166,7 @@ Assert-True ($src -match '\$this\.IsEnabled = \$false') 'approval buttons ignore
 Assert-True ($src -notmatch 'llama\.cpp Pal') 'stale llama.cpp product description is gone'
 
 Assert-True ($src -notmatch "Did you know: honey never spoils") 'canned trivia is removed'
-Assert-True ($src -match 'if \(\$expanded\) \{ 10 \} else \{ 8 \}') 'bubble font is 8 compact / 10 expanded'
+Assert-True ($src -match '\$fontSize = 8') 'bubbles use the compact 8px font on the pet surface'
 Assert-True ($src -match "TextWrapping = 'Wrap'") 'bubble text wraps instead of clipping'
 
 Assert-True ($src -match 'Slop\.Sense\.ps1') 'System Sense module is dot-sourced'
@@ -173,10 +182,10 @@ Assert-True ($src -match '\$script:ShadowScaleTransform\.ScaleX\s*=') 'shadow sc
 Assert-True ($src -match '\$bodyClosed = \$script:Membrane\.IsClosed') 'collapsed state is sampled once per tick'
 Assert-True ($src -match 'if \(-not \$bodyClosed\) \{\s*\$script:Membrane\.Update') 'membrane physics is skipped while collapsed'
 Assert-True ($src -match 'if \(-not \$bodyClosed\) \{\s*\$BodyPath\.Data') 'outline geometry is not rebuilt while collapsed'
-Assert-True ($src -match '\$script:PseudoMaximized') 'work-area large state is tracked'
-Assert-True ($src -match '\[System\.Windows\.SystemParameters\]::WorkArea') 'large mode sizes to the work area'
+Assert-True ($src -match "ChatMode -eq 'Full'") 'full chat mode is tracked separately from the pet'
+Assert-True ($src -match '\[System\.Windows\.SystemParameters\]::WorkArea') 'chat window sizes to the work area'
 Assert-True ($src -notmatch "WindowState\s*=\s*'Maximized'") 'shell no longer toggles true maximize'
-Assert-True (([regex]::Matches($src, [regex]::Escape('-and -not $script:PseudoMaximized'))).Count -eq 2) 'expand and collapse both respect the large state'
+Assert-True ($src -match 'Get-SlopChatWindowRect') 'chat geometry is computed by the pure contract'
 Assert-True ($src -match '\$pattern = switch -Exact \(\$sig\.Kind\)') 'face tick chooses a pattern from effective signal before drawing'
 Assert-True ($src -match '\$sig = Get-SlopSignal -State \$script:Motion') 'face tick resolves the effective signal explicitly'
 Assert-True ($src -match '\$sig\.Kind -in @\(''approval'',''stalled'',''warning'',''thinking'',''error'',''critical''\)') 'attention/error kinds drive the frozen face state'
@@ -186,7 +195,7 @@ Assert-True ($src -notmatch 'ThoughtAccumulator') 'old random thought timer is g
 Assert-True ($src -match 'function Update-SlopFaceRegion') 'face region has a dedicated layout function'
 Assert-True ($src -match '\$Stage\.Children\.Insert\(\$idx, \$layer\)') 'face layer is inserted before the Frame in z-order'
 Assert-True ($src -match 'System\.Windows\.Rect\]::new\(0\.0, 0\.0, \$w, \$h\), 12\.0, 12\.0') 'compact face region uses a rounded clip'
-Assert-True ($src -match '\$layer\.Clip = \$BodyPath\.Data') 'expanded face region clips to the membrane path'
+Assert-True ($src -notmatch '\$layer\.Clip = \$BodyPath\.Data') 'pet face never clips to an expanded membrane path'
 Assert-True ($src -match '\$script:FaceRegion\.Width') 'motion tick uses the computed face region size'
 Assert-True ($src -match '-Inset 3\.0') 'motion tick passes the configured inset'
 
