@@ -98,7 +98,7 @@ Describe 'Slop transparent chat window contract' {
         try {
             $plate = $win.FindName('ChatBackplate')
             if ($null -eq $plate) { throw 'ChatBackplate is missing from the chat XAML' }
-            [System.Windows.Grid]::GetRowSpan($plate) | Should -Be 3
+            [System.Windows.Controls.Grid]::GetRowSpan($plate) | Should -Be 3
             $plate.Background | Should -BeOfType [System.Windows.Media.SolidColorBrush]
             $plate.Background.Color.A | Should -BeGreaterOrEqual 0xD0
             $plate.IsHitTestVisible | Should -BeFalse

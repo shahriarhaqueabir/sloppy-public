@@ -78,7 +78,11 @@ function Get-SlopChatWindowXaml {
       <RowDefinition Height="*"/>
       <RowDefinition Height="Auto"/>
     </Grid.RowDefinitions>
-    <Border x:Name="ChatChrome" Grid.Row="0" Background="#221E293B"
+    <!-- Readability comes from a dark backplate inside the transparent window,
+         never from a system material that would replace the WPF surface. -->
+    <Border x:Name="ChatBackplate" Grid.RowSpan="3" Margin="4" CornerRadius="12"
+            Background="#E612141C" IsHitTestVisible="False"/>
+    <Border x:Name="ChatChrome" Grid.Row="0" Background="#F21E293B"
             BorderBrush="#44FFFFFF" BorderThickness="1" CornerRadius="12,12,0,0">
       <Grid>
         <TextBlock Text="S.L.O.P. chat" Foreground="#EAEAEA" FontWeight="SemiBold"
@@ -102,8 +106,8 @@ function Get-SlopChatWindowXaml {
         <StackPanel x:Name="ChatStack"/>
       </ScrollViewer>
     </Grid>
-    <Border Grid.Row="2" Margin="12,0,12,12" Padding="8" CornerRadius="10"
-            Background="#221E293B" BorderBrush="#44FFFFFF" BorderThickness="1">
+    <Border x:Name="ChatInputChrome" Grid.Row="2" Margin="12,0,12,12" Padding="8" CornerRadius="10"
+            Background="#F21E293B" BorderBrush="#44FFFFFF" BorderThickness="1">
       <StackPanel>
         <WrapPanel x:Name="ShortcutsStrip" Margin="0,0,0,6"/>
         <Grid>
