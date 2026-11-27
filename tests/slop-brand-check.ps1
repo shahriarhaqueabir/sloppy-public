@@ -69,7 +69,10 @@ $fixture = @'
 
     It 'discovers the code-created disclosure dialog' {
         $code = @(Get-SlopBrandSurfaces -Root $script:root | Where-Object { $_.Kind -eq 'Code' })
-        @($code | Where-Object { $_.File -eq 'src/Slop.ps1' -and $_.Line -eq 1972 }).Count |
+        $sourcePath = Join-Path $script:root 'src/Slop.ps1'
+        $expectedLine = (Select-String -LiteralPath $sourcePath `
+            -Pattern '[System.Windows.Window]::new()' -SimpleMatch | Select-Object -First 1).LineNumber
+        @($code | Where-Object { $_.File -eq 'src/Slop.ps1' -and $_.Line -eq $expectedLine }).Count |
             Should -Be 1
     }
 

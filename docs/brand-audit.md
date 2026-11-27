@@ -7,187 +7,254 @@ ratchet baseline, not approval of the listed copy or literals.
 
 | surface | file | line | rule | value | severity | exception reason |
 | --- | --- | --- | --- | --- | --- | --- |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 108 | token.literal | 4 | baselined | legacy literal; reduce surface by surface |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 108 | token.literal | 12 | baselined | legacy literal; reduce surface by surface |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 109 | token.literal | #F212141C | baselined | legacy literal; reduce surface by surface |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 109 | token.literal | #8893A4BD | baselined | legacy literal; reduce surface by surface |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 111 | token.literal | 0,0,124,0 | baselined | legacy literal; reduce surface by surface |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 112 | copy.literal | Drag chat pane | baselined | static copy not mapped to canonical key |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 114 | token.literal | #F21E293B | baselined | legacy literal; reduce surface by surface |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 115 | token.literal | #44FFFFFF | baselined | legacy literal; reduce surface by surface |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 115 | token.literal | 12,12,0,0 | baselined | legacy literal; reduce surface by surface |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 117 | copy.literal | S.L.O.P. chat | baselined | static copy not mapped to canonical key |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 118 | token.literal | 12 | baselined | legacy literal; reduce surface by surface |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 118 | token.literal | 12,0,0,0 | baselined | legacy literal; reduce surface by surface |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 120 | token.literal | 0,0,8,0 | baselined | legacy literal; reduce surface by surface |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 122 | token.literal | #F24F46E5 | baselined | legacy literal; reduce surface by surface |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 122 | token.literal | #FFFFFF | baselined | legacy literal; reduce surface by surface |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 122 | copy.literal | Toggle control deck | baselined | static copy not mapped to canonical key |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 123 | token.literal | #55FFFFFF | baselined | legacy literal; reduce surface by surface |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 123 | token.literal | 11 | baselined | legacy literal; reduce surface by surface |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 126 | token.literal | #F24F46E5 | baselined | legacy literal; reduce surface by surface |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 126 | token.literal | #FFFFFF | baselined | legacy literal; reduce surface by surface |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 126 | copy.literal | Toggle chat size | baselined | static copy not mapped to canonical key |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 127 | token.literal | #55FFFFFF | baselined | legacy literal; reduce surface by surface |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 127 | token.literal | 11 | baselined | legacy literal; reduce surface by surface |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 129 | copy.literal | X | baselined | static copy not mapped to canonical key |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 130 | token.literal | #F24F46E5 | baselined | legacy literal; reduce surface by surface |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 130 | token.literal | #FFFFFF | baselined | legacy literal; reduce surface by surface |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 130 | copy.literal | Close chat | baselined | static copy not mapped to canonical key |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 131 | token.literal | #55FFFFFF | baselined | legacy literal; reduce surface by surface |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 131 | token.literal | 11 | baselined | legacy literal; reduce surface by surface |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 136 | token.literal | 12,6,12,6 | baselined | legacy literal; reduce surface by surface |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 141 | token.literal | 10 | baselined | legacy literal; reduce surface by surface |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 142 | token.literal | #F212141C | baselined | legacy literal; reduce surface by surface |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 142 | token.literal | #8893A4BD | baselined | legacy literal; reduce surface by surface |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 150 | token.literal | 0,0,0,8 | baselined | legacy literal; reduce surface by surface |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 151 | copy.literal | Overview | baselined | static copy not mapped to canonical key |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 152 | token.literal | 0,0,4,4 | baselined | legacy literal; reduce surface by surface |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 152 | type.floor | 10 | baselined | font size below type.floor token |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 152 | token.literal | #F24F46E5 | baselined | legacy literal; reduce surface by surface |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 152 | token.literal | #FFFFFF | baselined | legacy literal; reduce surface by surface |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 153 | token.literal | #55FFFFFF | baselined | legacy literal; reduce surface by surface |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 155 | copy.literal | Settings | baselined | static copy not mapped to canonical key |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 156 | token.literal | 0,0,4,4 | baselined | legacy literal; reduce surface by surface |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 156 | type.floor | 10 | baselined | font size below type.floor token |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 156 | token.literal | #F2263348 | baselined | legacy literal; reduce surface by surface |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 157 | token.literal | #55FFFFFF | baselined | legacy literal; reduce surface by surface |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 159 | copy.literal | Data | baselined | static copy not mapped to canonical key |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 160 | token.literal | 0,0,4,4 | baselined | legacy literal; reduce surface by surface |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 160 | type.floor | 10 | baselined | font size below type.floor token |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 160 | token.literal | #F2263348 | baselined | legacy literal; reduce surface by surface |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 161 | token.literal | #55FFFFFF | baselined | legacy literal; reduce surface by surface |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 163 | copy.literal | Tools &amp; Skills | baselined | static copy not mapped to canonical key |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 164 | token.literal | 0,0,4,4 | baselined | legacy literal; reduce surface by surface |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 164 | type.floor | 10 | baselined | font size below type.floor token |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 164 | token.literal | #F2263348 | baselined | legacy literal; reduce surface by surface |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 165 | token.literal | #55FFFFFF | baselined | legacy literal; reduce surface by surface |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 167 | copy.literal | Under the hood | baselined | static copy not mapped to canonical key |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 168 | token.literal | 0,0,4,4 | baselined | legacy literal; reduce surface by surface |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 168 | type.floor | 10 | baselined | font size below type.floor token |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 168 | token.literal | #F2263348 | baselined | legacy literal; reduce surface by surface |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 169 | token.literal | #55FFFFFF | baselined | legacy literal; reduce surface by surface |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 171 | copy.literal | Exit | baselined | static copy not mapped to canonical key |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 172 | token.literal | 0,0,4,4 | baselined | legacy literal; reduce surface by surface |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 172 | type.floor | 10 | baselined | font size below type.floor token |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 109 | token.literal | 4 | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 109 | token.literal | 12 | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 110 | token.literal | #F212141C | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 110 | token.literal | #8893A4BD | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 112 | token.literal | 0,0,124,0 | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 113 | copy.literal | Drag chat pane | baselined | static copy not mapped to canonical key |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 115 | token.literal | #F21E293B | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 116 | token.literal | #44FFFFFF | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 116 | token.literal | 12,12,0,0 | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 118 | copy.literal | S.L.O.P. chat | baselined | static copy not mapped to canonical key |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 119 | token.literal | 12 | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 119 | token.literal | 12,0,0,0 | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 121 | token.literal | 0,0,8,0 | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 123 | token.literal | #F24F46E5 | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 123 | token.literal | #FFFFFF | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 123 | copy.literal | Toggle control deck | baselined | static copy not mapped to canonical key |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 124 | token.literal | #55FFFFFF | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 124 | token.literal | 11 | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 127 | token.literal | #F24F46E5 | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 127 | token.literal | #FFFFFF | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 127 | copy.literal | Toggle chat size | baselined | static copy not mapped to canonical key |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 128 | token.literal | #55FFFFFF | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 128 | token.literal | 11 | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 130 | copy.literal | X | baselined | static copy not mapped to canonical key |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 131 | token.literal | #F24F46E5 | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 131 | token.literal | #FFFFFF | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 131 | copy.literal | Close chat | baselined | static copy not mapped to canonical key |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 132 | token.literal | #55FFFFFF | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 132 | token.literal | 11 | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 137 | token.literal | 12,4,12,0 | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 137 | token.literal | 10 | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 138 | token.literal | #F212141C | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 138 | token.literal | #8893A4BD | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 145 | token.literal | 0,0,0,4 | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 146 | copy.literal | Overview | baselined | static copy not mapped to canonical key |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 147 | token.literal | 0,0,4,0 | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 147 | type.floor | 10 | baselined | font size below type.floor token |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 147 | token.literal | #F24F46E5 | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 147 | token.literal | #FFFFFF | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 148 | token.literal | #55FFFFFF | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 150 | copy.literal | Settings | baselined | static copy not mapped to canonical key |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 151 | token.literal | 0,0,4,0 | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 151 | type.floor | 10 | baselined | font size below type.floor token |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 151 | token.literal | #F2263348 | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 152 | token.literal | #55FFFFFF | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 154 | copy.literal | Data | baselined | static copy not mapped to canonical key |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 155 | token.literal | 0,0,4,0 | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 155 | type.floor | 10 | baselined | font size below type.floor token |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 155 | token.literal | #F2263348 | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 156 | token.literal | #55FFFFFF | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 158 | copy.literal | Tools &amp; Skills | baselined | static copy not mapped to canonical key |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 159 | token.literal | 0,0,4,0 | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 159 | type.floor | 10 | baselined | font size below type.floor token |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 159 | token.literal | #F2263348 | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 160 | token.literal | #55FFFFFF | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 162 | copy.literal | Under the hood | baselined | static copy not mapped to canonical key |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 163 | token.literal | 0,0,4,0 | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 163 | type.floor | 10 | baselined | font size below type.floor token |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 163 | token.literal | #F2263348 | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 164 | token.literal | #55FFFFFF | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 166 | copy.literal | Exit | baselined | static copy not mapped to canonical key |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 167 | token.literal | 0,0,4,0 | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 167 | type.floor | 10 | baselined | font size below type.floor token |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 167 | token.literal | #F2263348 | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 168 | token.literal | #55FFFFFF | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 171 | copy.literal | Collapse or expand the deck body | baselined | static copy not mapped to canonical key |
 | Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 172 | token.literal | #F2263348 | baselined | legacy literal; reduce surface by surface |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 173 | token.literal | #55FFFFFF | baselined | legacy literal; reduce surface by surface |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 179 | token.literal | 13 | baselined | legacy literal; reduce surface by surface |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 179 | token.literal | 0,0,0,6 | baselined | legacy literal; reduce surface by surface |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 179 | copy.literal | Overview | baselined | static copy not mapped to canonical key |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 180 | copy.literal | Route, brain, session and signal state appear here. | baselined | static copy not mapped to canonical key |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 181 | token.literal | #DADAE2 | baselined | legacy literal; reduce surface by surface |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 181 | token.literal | 11 | baselined | legacy literal; reduce surface by surface |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 181 | token.literal | 0,0,0,8 | baselined | legacy literal; reduce surface by surface |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 183 | copy.literal | Conversation length: 0 messages | baselined | static copy not mapped to canonical key |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 184 | token.literal | 11 | baselined | legacy literal; reduce surface by surface |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 184 | token.literal | 0,0,0,8 | baselined | legacy literal; reduce surface by surface |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 187 | token.literal | 13 | baselined | legacy literal; reduce surface by surface |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 187 | token.literal | 0,0,0,6 | baselined | legacy literal; reduce surface by surface |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 187 | copy.literal | Settings | baselined | static copy not mapped to canonical key |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 188 | copy.literal | Voice and model settings live in the main Settings panel. | baselined | static copy not mapped to canonical key |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 189 | token.literal | 11 | baselined | legacy literal; reduce surface by surface |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 189 | token.literal | 0,0,0,8 | baselined | legacy literal; reduce surface by surface |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 193 | token.literal | 13 | baselined | legacy literal; reduce surface by surface |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 193 | token.literal | 0,0,0,6 | baselined | legacy literal; reduce surface by surface |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 193 | copy.literal | Data | baselined | static copy not mapped to canonical key |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 194 | copy.literal | Deletion scopes are confirmed before anything is removed. | baselined | static copy not mapped to canonical key |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 195 | token.literal | 11 | baselined | legacy literal; reduce surface by surface |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 195 | token.literal | 0,0,0,8 | baselined | legacy literal; reduce surface by surface |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 197 | copy.literal | Delete conversation | baselined | static copy not mapped to canonical key |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 198 | token.literal | 0,0,0,6 | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 172 | token.literal | #55FFFFFF | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 173 | token.literal | 11 | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 176 | token.literal | 8 | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 177 | token.literal | #F212141C | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 177 | token.literal | #44FFFFFF | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 186 | token.literal | 13 | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 186 | token.literal | 0,0,0,6 | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 186 | copy.literal | Overview | baselined | static copy not mapped to canonical key |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 187 | copy.literal | Route, brain, session and signal state appear here. | baselined | static copy not mapped to canonical key |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 188 | token.literal | #DADAE2 | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 188 | token.literal | 11 | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 188 | token.literal | 0,0,0,8 | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 190 | copy.literal | Conversation length: 0 messages | baselined | static copy not mapped to canonical key |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 191 | token.literal | 11 | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 191 | token.literal | 0,0,0,8 | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 194 | token.literal | 13 | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 194 | token.literal | 0,0,0,6 | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 194 | copy.literal | Settings | baselined | static copy not mapped to canonical key |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 195 | token.literal | 6 | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 195 | token.literal | #F2263348 | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 195 | token.literal | #44FFFFFF | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 196 | token.literal | 0,0,0,8 | baselined | legacy literal; reduce surface by surface |
 | Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 198 | token.literal | 11 | baselined | legacy literal; reduce surface by surface |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 198 | token.literal | #F24F46E5 | baselined | legacy literal; reduce surface by surface |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 198 | token.literal | #FFFFFF | baselined | legacy literal; reduce surface by surface |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 199 | token.literal | #55FFFFFF | baselined | legacy literal; reduce surface by surface |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 201 | copy.literal | Delete OpenCode session | baselined | static copy not mapped to canonical key |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 202 | token.literal | 0,0,0,6 | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 198 | token.literal | 0,0,0,4 | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 198 | copy.literal | Voice | baselined | static copy not mapped to canonical key |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 199 | copy.literal | Voice input (local transcription) | baselined | static copy not mapped to canonical key |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 200 | token.literal | #DADAE2 | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 200 | token.literal | 11 | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 200 | token.literal | 0,0,0,4 | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 201 | type.floor | 10 | baselined | font size below type.floor token |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 201 | token.literal | 0,0,0,2 | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 201 | copy.literal | Language | baselined | static copy not mapped to canonical key |
 | Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 202 | token.literal | 11 | baselined | legacy literal; reduce surface by surface |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 202 | token.literal | #F2263348 | baselined | legacy literal; reduce surface by surface |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 203 | token.literal | #55FFFFFF | baselined | legacy literal; reduce surface by surface |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 205 | copy.literal | Delete local data | baselined | static copy not mapped to canonical key |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 206 | token.literal | 0,0,0,8 | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 203 | token.literal | 0,0,0,4 | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 205 | type.floor | 10 | baselined | font size below type.floor token |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 205 | token.literal | 0,0,0,2 | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 205 | copy.literal | Max seconds | baselined | static copy not mapped to canonical key |
 | Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 206 | token.literal | 11 | baselined | legacy literal; reduce surface by surface |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 206 | token.literal | #F2263348 | baselined | legacy literal; reduce surface by surface |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 207 | token.literal | #55FFFFFF | baselined | legacy literal; reduce surface by surface |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 211 | token.literal | 13 | baselined | legacy literal; reduce surface by surface |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 211 | token.literal | 0,0,0,6 | baselined | legacy literal; reduce surface by surface |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 211 | copy.literal | Tools &amp; Skills | baselined | static copy not mapped to canonical key |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 212 | token.literal | #DADAE2 | baselined | legacy literal; reduce surface by surface |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 212 | token.literal | 11 | baselined | legacy literal; reduce surface by surface |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 212 | token.literal | 0,0,0,4 | baselined | legacy literal; reduce surface by surface |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 212 | copy.literal | Workspace files | baselined | static copy not mapped to canonical key |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 213 | token.literal | #DADAE2 | baselined | legacy literal; reduce surface by surface |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 213 | token.literal | 11 | baselined | legacy literal; reduce surface by surface |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 213 | token.literal | 0,0,0,2 | baselined | legacy literal; reduce surface by surface |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 213 | copy.literal | Web access | baselined | static copy not mapped to canonical key |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 215 | copy.literal | Can fetch web content; requests can reach beyond this PC. | baselined | static copy not mapped to canonical key |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 216 | type.floor | 10 | baselined | font size below type.floor token |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 216 | token.literal | 18,0,0,6 | baselined | legacy literal; reduce surface by surface |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 218 | token.literal | #DADAE2 | baselined | legacy literal; reduce surface by surface |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 218 | token.literal | 11 | baselined | legacy literal; reduce surface by surface |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 218 | token.literal | 0,0,0,2 | baselined | legacy literal; reduce surface by surface |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 218 | copy.literal | Shell commands | baselined | static copy not mapped to canonical key |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 220 | copy.literal | Can run shell commands that may change files on this PC. | baselined | static copy not mapped to canonical key |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 221 | type.floor | 10 | baselined | font size below type.floor token |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 221 | token.literal | 18,0,0,6 | baselined | legacy literal; reduce surface by surface |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 223 | token.literal | #DADAE2 | baselined | legacy literal; reduce surface by surface |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 223 | token.literal | 11 | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 208 | token.literal | 0,0,0,4 | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 209 | copy.literal | Whisper readiness: unknown | baselined | static copy not mapped to canonical key |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 210 | type.floor | 10 | baselined | font size below type.floor token |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 210 | token.literal | 0,0,0,4 | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 212 | copy.literal | Save voice | baselined | static copy not mapped to canonical key |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 213 | type.floor | 10 | baselined | font size below type.floor token |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 213 | token.literal | #F24F46E5 | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 213 | token.literal | #FFFFFF | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 214 | token.literal | #55FFFFFF | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 218 | token.literal | 6 | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 218 | token.literal | #F2263348 | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 218 | token.literal | #44FFFFFF | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 219 | token.literal | 0,0,0,8 | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 221 | token.literal | 11 | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 221 | token.literal | 0,0,0,4 | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 221 | copy.literal | Model | baselined | static copy not mapped to canonical key |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 222 | token.literal | #DADAE2 | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 222 | copy.literal | Route: unset | baselined | static copy not mapped to canonical key |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 223 | type.floor | 10 | baselined | font size below type.floor token |
 | Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 223 | token.literal | 0,0,0,4 | baselined | legacy literal; reduce surface by surface |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 223 | copy.literal | Skills and plugins | baselined | static copy not mapped to canonical key |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 224 | token.literal | #DADAE2 | baselined | legacy literal; reduce surface by surface |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 224 | token.literal | 11 | baselined | legacy literal; reduce surface by surface |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 224 | token.literal | 0,0,0,4 | baselined | legacy literal; reduce surface by surface |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 224 | copy.literal | Subagents and tasks | baselined | static copy not mapped to canonical key |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 225 | token.literal | #DADAE2 | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 224 | type.floor | 10 | baselined | font size below type.floor token |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 224 | token.literal | 0,0,0,2 | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 224 | copy.literal | Brain tier and model | baselined | static copy not mapped to canonical key |
 | Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 225 | token.literal | 11 | baselined | legacy literal; reduce surface by surface |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 225 | token.literal | 0,0,0,8 | baselined | legacy literal; reduce surface by surface |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 225 | copy.literal | External folders | baselined | static copy not mapped to canonical key |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 228 | token.literal | 13 | baselined | legacy literal; reduce surface by surface |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 228 | token.literal | 0,0,0,6 | baselined | legacy literal; reduce surface by surface |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 228 | copy.literal | Under the hood | baselined | static copy not mapped to canonical key |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 230 | type.floor | 10 | baselined | font size below type.floor token |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 231 | token.literal | #F2263348 | baselined | legacy literal; reduce surface by surface |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 231 | token.literal | #44FFFFFF | baselined | legacy literal; reduce surface by surface |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 232 | copy.literal | Effective route and state appear here. | baselined | static copy not mapped to canonical key |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 235 | token.literal | 13 | baselined | legacy literal; reduce surface by surface |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 235 | token.literal | 0,0,0,6 | baselined | legacy literal; reduce surface by surface |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 235 | copy.literal | Exit | baselined | static copy not mapped to canonical key |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 236 | copy.literal | Say or type 'Sloppy, shutdown' to confirm before leaving. | baselined | static copy not mapped to canonical key |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 237 | token.literal | 11 | baselined | legacy literal; reduce surface by surface |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 237 | token.literal | 0,0,0,8 | baselined | legacy literal; reduce surface by surface |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 239 | copy.literal | Sloppy, shutdown | baselined | static copy not mapped to canonical key |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 240 | token.literal | 0,0,0,6 | baselined | legacy literal; reduce surface by surface |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 240 | token.literal | 11 | baselined | legacy literal; reduce surface by surface |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 240 | token.literal | #F24F46E5 | baselined | legacy literal; reduce surface by surface |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 240 | token.literal | #FFFFFF | baselined | legacy literal; reduce surface by surface |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 241 | token.literal | #55FFFFFF | baselined | legacy literal; reduce surface by surface |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 246 | type.floor | 10 | baselined | font size below type.floor token |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 247 | token.literal | 0,6,0,0 | baselined | legacy literal; reduce surface by surface |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 251 | token.literal | 12,0,12,12 | baselined | legacy literal; reduce surface by surface |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 251 | token.literal | 10 | baselined | legacy literal; reduce surface by surface |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 252 | token.literal | #F21E293B | baselined | legacy literal; reduce surface by surface |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 252 | token.literal | #44FFFFFF | baselined | legacy literal; reduce surface by surface |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 254 | token.literal | 0,0,0,6 | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 226 | token.literal | 0,0,0,4 | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 227 | copy.literal | Save model | baselined | static copy not mapped to canonical key |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 228 | type.floor | 10 | baselined | font size below type.floor token |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 228 | token.literal | #F24F46E5 | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 228 | token.literal | #FFFFFF | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 229 | token.literal | #55FFFFFF | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 233 | token.literal | 6 | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 233 | token.literal | #F2263348 | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 233 | token.literal | #44FFFFFF | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 234 | token.literal | 0,0,0,8 | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 236 | token.literal | 11 | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 236 | token.literal | 0,0,0,4 | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 236 | copy.literal | Data | baselined | static copy not mapped to canonical key |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 237 | type.floor | 10 | baselined | font size below type.floor token |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 237 | token.literal | 0,0,0,2 | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 237 | copy.literal | Config location (read-only) | baselined | static copy not mapped to canonical key |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 238 | copy.literal | unavailable | baselined | static copy not mapped to canonical key |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 239 | type.floor | 10 | baselined | font size below type.floor token |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 244 | token.literal | 13 | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 244 | token.literal | 0,0,0,6 | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 244 | copy.literal | Data | baselined | static copy not mapped to canonical key |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 245 | copy.literal | Deletion scopes are confirmed before anything is removed. | baselined | static copy not mapped to canonical key |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 246 | token.literal | 11 | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 246 | token.literal | 0,0,0,8 | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 248 | copy.literal | Delete conversation | baselined | static copy not mapped to canonical key |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 249 | token.literal | 0,0,0,6 | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 249 | token.literal | 11 | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 249 | token.literal | #F24F46E5 | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 249 | token.literal | #FFFFFF | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 250 | token.literal | #55FFFFFF | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 252 | copy.literal | Delete OpenCode session | baselined | static copy not mapped to canonical key |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 253 | token.literal | 0,0,0,6 | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 253 | token.literal | 11 | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 253 | token.literal | #F2263348 | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 254 | token.literal | #55FFFFFF | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 256 | copy.literal | Delete local data | baselined | static copy not mapped to canonical key |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 257 | token.literal | 0,0,0,8 | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 257 | token.literal | 11 | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 257 | token.literal | #F2263348 | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 258 | token.literal | #55FFFFFF | baselined | legacy literal; reduce surface by surface |
 | Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 262 | token.literal | 13 | baselined | legacy literal; reduce surface by surface |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 263 | token.literal | #F2263348 | baselined | legacy literal; reduce surface by surface |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 263 | token.literal | #8893A4BD | baselined | legacy literal; reduce surface by surface |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 266 | token.literal | 13 | baselined | legacy literal; reduce surface by surface |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 266 | token.literal | 11,0,0,0 | baselined | legacy literal; reduce surface by surface |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 269 | token.literal | 6,0,0,0 | baselined | legacy literal; reduce surface by surface |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 269 | token.literal | #F24F46E5 | baselined | legacy literal; reduce surface by surface |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 269 | token.literal | #FFFFFF | baselined | legacy literal; reduce surface by surface |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 270 | token.literal | #55FFFFFF | baselined | legacy literal; reduce surface by surface |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 272 | copy.literal | Send | baselined | static copy not mapped to canonical key |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 273 | token.literal | 6,0,0,0 | baselined | legacy literal; reduce surface by surface |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 273 | token.literal | #F24F46E5 | baselined | legacy literal; reduce surface by surface |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 273 | token.literal | #FFFFFF | baselined | legacy literal; reduce surface by surface |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 274 | token.literal | #55FFFFFF | baselined | legacy literal; reduce surface by surface |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 276 | copy.literal | Stop | baselined | static copy not mapped to canonical key |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 277 | token.literal | 6,0,0,0 | baselined | legacy literal; reduce surface by surface |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 277 | token.literal | #F24F46E5 | baselined | legacy literal; reduce surface by surface |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 278 | token.literal | #FFFFFF | baselined | legacy literal; reduce surface by surface |
-| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 278 | token.literal | #55FFFFFF | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 262 | token.literal | 0,0,0,6 | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 262 | copy.literal | Tools &amp; Skills | baselined | static copy not mapped to canonical key |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 263 | token.literal | #DADAE2 | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 263 | token.literal | 11 | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 263 | token.literal | 0,0,0,4 | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 263 | copy.literal | Workspace files | baselined | static copy not mapped to canonical key |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 264 | token.literal | #DADAE2 | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 264 | token.literal | 11 | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 264 | token.literal | 0,0,0,2 | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 264 | copy.literal | Web access | baselined | static copy not mapped to canonical key |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 266 | copy.literal | Can fetch web content; requests can reach beyond this PC. | baselined | static copy not mapped to canonical key |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 267 | type.floor | 10 | baselined | font size below type.floor token |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 267 | token.literal | 18,0,0,6 | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 269 | token.literal | #DADAE2 | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 269 | token.literal | 11 | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 269 | token.literal | 0,0,0,2 | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 269 | copy.literal | Shell commands | baselined | static copy not mapped to canonical key |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 271 | copy.literal | Can run shell commands that may change files on this PC. | baselined | static copy not mapped to canonical key |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 272 | type.floor | 10 | baselined | font size below type.floor token |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 272 | token.literal | 18,0,0,6 | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 274 | token.literal | #DADAE2 | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 274 | token.literal | 11 | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 274 | token.literal | 0,0,0,4 | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 274 | copy.literal | Skills and plugins | baselined | static copy not mapped to canonical key |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 275 | token.literal | #DADAE2 | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 275 | token.literal | 11 | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 275 | token.literal | 0,0,0,4 | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 275 | copy.literal | Subagents and tasks | baselined | static copy not mapped to canonical key |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 276 | token.literal | #DADAE2 | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 276 | token.literal | 11 | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 276 | token.literal | 0,0,0,8 | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 276 | copy.literal | External folders | baselined | static copy not mapped to canonical key |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 279 | token.literal | 13 | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 279 | token.literal | 0,0,0,6 | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 279 | copy.literal | Under the hood | baselined | static copy not mapped to canonical key |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 281 | type.floor | 10 | baselined | font size below type.floor token |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 282 | token.literal | #F2263348 | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 282 | token.literal | #44FFFFFF | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 283 | copy.literal | Effective route and state appear here. | baselined | static copy not mapped to canonical key |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 286 | token.literal | 13 | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 286 | token.literal | 0,0,0,6 | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 286 | copy.literal | Exit | baselined | static copy not mapped to canonical key |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 287 | copy.literal | Say or type 'Sloppy, shutdown' to confirm before leaving. | baselined | static copy not mapped to canonical key |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 288 | token.literal | 11 | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 288 | token.literal | 0,0,0,8 | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 290 | copy.literal | Sloppy, shutdown | baselined | static copy not mapped to canonical key |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 291 | token.literal | 0,0,0,6 | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 291 | token.literal | 11 | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 291 | token.literal | #F24F46E5 | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 291 | token.literal | #FFFFFF | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 292 | token.literal | #55FFFFFF | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 297 | type.floor | 10 | baselined | font size below type.floor token |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 298 | token.literal | 0,6,0,0 | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 303 | token.literal | 12,6,12,6 | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 309 | token.literal | 12,0,12,12 | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 309 | token.literal | 10 | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 310 | token.literal | #F21E293B | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 310 | token.literal | #44FFFFFF | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 312 | token.literal | 0,0,0,6 | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 320 | token.literal | 13 | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 321 | token.literal | #F2263348 | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 321 | token.literal | #8893A4BD | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 324 | token.literal | 13 | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 324 | token.literal | 11,0,0,0 | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 327 | token.literal | 6,0,0,0 | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 327 | token.literal | #F24F46E5 | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 327 | token.literal | #FFFFFF | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 328 | token.literal | #55FFFFFF | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 330 | copy.literal | Send | baselined | static copy not mapped to canonical key |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 331 | token.literal | 6,0,0,0 | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 331 | token.literal | #F24F46E5 | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 331 | token.literal | #FFFFFF | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 332 | token.literal | #55FFFFFF | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 334 | copy.literal | Stop | baselined | static copy not mapped to canonical key |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 335 | token.literal | 6,0,0,0 | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 335 | token.literal | #F24F46E5 | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 336 | token.literal | #FFFFFF | baselined | legacy literal; reduce surface by surface |
+| Slop.ChatWindow | src/Slop.ChatWindow.ps1 | 336 | token.literal | #55FFFFFF | baselined | legacy literal; reduce surface by surface |
 | Slop.Onboarding | src/Slop.Onboarding.ps1 | 74 | token.literal | 15 | baselined | legacy literal; reduce surface by surface |
 | Slop.Onboarding | src/Slop.Onboarding.ps1 | 84 | token.literal | 12 | baselined | legacy literal; reduce surface by surface |
 | Slop.Onboarding | src/Slop.Onboarding.ps1 | 84 | token.literal | 18 | baselined | legacy literal; reduce surface by surface |
@@ -583,10 +650,10 @@ ratchet baseline, not approval of the listed copy or literals.
 
 ## Summary
 
-- Total findings: 573
-- By surface: Slop=290, Slop.ChatWindow=181, Slop.Onboarding=102
-- By rule: copy.literal=116, token.literal=434, type.floor=23
-- Accepted baseline: 573 entries (see `tests/slop-brand-baseline.json`).
+- Total findings: 640
+- By surface: Slop=290, Slop.ChatWindow=248, Slop.Onboarding=102
+- By rule: copy.literal=129, token.literal=479, type.floor=32
+- Accepted baseline: 640 entries (see `tests/slop-brand-baseline.json`).
 - Hard failures: 0
 
 ## Rule exceptions
@@ -642,4 +709,3 @@ Channel Notes
 - In-app: compact, status-adjacent copy.
 - Onboarding: plain, honest, never salesy.
 - Dialogs: name the consequence before asking for confirmation.
-

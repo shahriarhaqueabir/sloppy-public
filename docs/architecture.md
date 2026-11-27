@@ -314,6 +314,14 @@ transparent top grip; `src/Slop.PaneMovement.ps1` clamps only the pane and store
 and restores the pet rect, so entering Full hides the pea and leaving restores
 it exactly.
 
+The chat pane has four rows: chrome, control deck, transcript, composer. The
+deck is a collapsible top strip: the strip and its six section buttons stay
+visible, while the body collapses independently. `Full` opens the body;
+`Extended` starts collapsed. Deck state never changes transcript visibility.
+The deck Settings section exposes Voice and Model cards that save through
+`Slop.Config.ps1`, plus a read-only Data path from `Get-SlopConfigPath`;
+directory relocation is a separate spec.
+
 The control deck (`src/Slop.ControlDeck.ps1`) has six sections — Overview,
 Settings, Data, Tools & Skills, Under the hood, Exit. Its six capability toggles
 map onto the existing deny-first OpenCode profile in `src/Slop.CapabilityToggles.ps1`
