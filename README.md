@@ -1,4 +1,6 @@
 <p align="center">
+  <img src="assets/sloppy.png" alt="Sloppy desktop companion" width="400">
+  <br>
   <img src="assets/Sloppy.gif" alt="Sloppy demo — animated desktop companion reacting to agent state" width="400">
 </p>
 
