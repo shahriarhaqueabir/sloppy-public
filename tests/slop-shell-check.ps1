@@ -292,6 +292,9 @@ Assert-True ($readme -match 'All six capability toggles') 'README documents defa
 Assert-True ($architecture -match 'selectable only') 'architecture documents selectable-only conversation text'
 Assert-True ($readme -match 'Sloppy, shutdown') 'README documents the shutdown phrase'
 Assert-True ($architecture -match 'inset from the work area') 'architecture describes Full as an inset preset'
+Assert-True ($readme -match '<img src="assets/sloppy\.png"[^>]*width="400"') 'README hero includes the still PNG'
+Assert-True ($readme -match '<img src="assets/Sloppy\.gif"[^>]*width="400"') 'README hero keeps the animated GIF'
+Assert-True ($readme -match 'sloppy\.png[\s\S]{0,200}Sloppy\.gif') 'README hero stacks the PNG above the GIF'
 
 # Full mode hides the pet window. A modal ShowDialog main loop returns as soon
 # as that window is hidden, ending the script and killing the whole app.
