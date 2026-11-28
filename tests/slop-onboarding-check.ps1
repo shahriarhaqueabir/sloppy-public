@@ -99,9 +99,40 @@ Describe 'Slop.Onboarding' {
         $src | Should -Not -Match 'opencode-paid'
     }
 
-    It 'pre-fills the OpenCode model from the shared tier catalog' {
-        $opts = @(Get-SlopBrainModelOptions -Brain 'opencode')
-        $opts | Should -Be @('big-pickle','beam-free')
+    It 'pre-fills the OpenCode model from the Tier 2 default' {
+        $src = Get-Content (Join-Path $PSScriptRoot '../src/Slop.Onboarding.ps1') -Raw
+        $src | Should -Match "Get-SlopTierDefaultModel -TierId 'tier-2'"
+        $src | Should -Not -Match "Get-SlopBrainModelOptions -Brain 'opencode'\[0\]"
+        Get-SlopTierDefaultModel -TierId 'tier-2' | Should -Be 'big-pickle'
+    }
+
+    It 'documents exactly two UI tiers with honest route and full-deck behavior' {
+        $docs = Get-Content (Join-Path $PSScriptRoot '../docs/architecture.md') -Raw
+        $docs | Should -Match 'exactly two UI tiers'
+        $docs | Should -Not -Match 'Tier 3'
+        $docs | Should -Match 'Tier 1'
+        $docs | Should -Match 'app-root'
+        $docs | Should -Match 'Qwen3\.5-2B-Q4_K_M\.gguf'
+        $docs | Should -Match 'local llama\.cpp loopback'
+        $docs | Should -Match 'Tier 2'
+        $docs | Should -Match 'loopback OpenCode service'
+        $docs | Should -Match 'sloppy agent'
+        $docs | Should -Match 'defaults to `big-pickle`'
+        $docs | Should -Match 'expanded deck hides chat'
+        $docs | Should -Match 'without an inner scrollbar'
+    }
+
+    It 'keeps onboarding and docs free of provider pricing and sensitive transport details' {
+        $onboarding = Get-Content (Join-Path $PSScriptRoot '../src/Slop.Onboarding.ps1') -Raw
+        $onboarding | Should -Not -Match 'PaidProvider'
+        $onboarding | Should -Not -Match 'providerTier'
+        $onboarding | Should -Not -Match 'opencode-paid'
+        $onboarding | Should -Not -Match 'priceTier'
+        $docs = Get-Content (Join-Path $PSScriptRoot '../docs/architecture.md') -Raw
+        $docs | Should -Not -Match 'providerID'
+        $docs | Should -Not -Match 'x-opencode-org-id|orgId'
+        $docs | Should -Not -Match 'OPENCODE_PASSWORD'
+        $docs | Should -Not -Match 'C:\\Users\\'
     }
 
     It 'rounds colour swatches with a Button template instead of an unsupported CornerRadius property' {
