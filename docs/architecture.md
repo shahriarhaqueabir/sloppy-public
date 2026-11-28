@@ -122,6 +122,8 @@ opencode serve --port 28894 (Basic auth; password from ~/.config/opencode/servic
 
 Tier 1 runs locally through `runtime/llama-b12676-bin-win-cuda-13.5-x64/llama-server.exe` and the LFS-tracked `runtime/models/Qwen3.5-2B-Q4_K_M.gguf` (1.3 GB, Apache-2.0); `--jinja` uses the GGUF's embedded chat template. An mmproj is optional and unused by default. HF download cache under `runtime/models/.cache/` is ignored. Text requests use the existing llama.cpp adapter. Opt-in voice input records a short WAV with WinMM; the Whisper CLI and DLLs are bundled under `runtime/whisper/`. `ggml-small.bin` is downloaded and checksum-verified during setup, so the bundled Whisper small setup is complete. `src/Slop.Audio.ps1` transcribes locally and sends the transcript through the same text path. No audio leaves the machine, and there is no TTS or VAD. `mmproj` and `localVisionReady` stay unused readiness hooks; Tier 1 makes no image claim.
 
+The model picker exposes exactly two UI tiers. Tier 1 is the bundled app-root GGUF in `runtime/models/`, served by local llama.cpp loopback with no OpenCode call. Tier 2 is the loopback OpenCode service and its sloppy agent; it defaults to `big-pickle` and fills the model list from active, enabled, zero-cost chat models returned by that local service. `custom` remains valid in config and runtime but has no picker entry.
+
 The bridge creates **one OpenCode session per Slop conversation** and sends only new
 user text on each turn. Slop must stop resending its 12-message history — OpenCode
 already owns that context.
@@ -316,8 +318,10 @@ it exactly.
 
 The chat pane has four rows: chrome, control deck, transcript, composer. The
 deck is a collapsible top strip: the strip and its six section buttons stay
-visible, while the body collapses independently. `Full` opens the body;
-`Extended` starts collapsed. Deck state never changes transcript visibility.
+visible, while the body collapses independently. The expanded deck hides chat
+so a whole section fits without an inner scrollbar, then restores the exact
+pane height and mode on collapse. `Full` opens the body; `Extended` starts
+collapsed. Section switching never changes chat visibility or window size.
 The deck Settings section exposes Voice and Model cards that save through
 `Slop.Config.ps1`, plus a read-only Data path from `Get-SlopConfigPath`;
 directory relocation is a separate spec.

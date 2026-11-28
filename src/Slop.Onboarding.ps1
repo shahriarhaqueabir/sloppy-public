@@ -251,7 +251,7 @@ function Show-SlopOnboarding {
     $EndpointBox.Text = if ($Config.endpointUrl) { [string]$Config.endpointUrl } else { [string]$defaults.endpointUrl }
     $ModelBox.Text = if ($Config.modelName) { [string]$Config.modelName } elseif ($Config.model) { [string]$Config.model } else { [string]$defaults.modelName }
     $ProviderBox.Text = if ($Config.provider) { [string]$Config.provider } else { [string]$defaults.provider }
-    $RouteModelBox.Text = if ($Config.model) { [string]$Config.model } else { @(Get-SlopBrainModelOptions -Brain 'opencode')[0] }
+    $RouteModelBox.Text = if ($Config.model) { [string]$Config.model } else { Get-SlopTierDefaultModel -TierId 'tier-2' }
     $AgentBox.Text = if ($Config.agentId) { [string]$Config.agentId } else { 'sloppy' }
     foreach ($preset in Get-SlopPersonalities) { $ProfileCombo.Items.Add($preset) | Out-Null }
     foreach ($profile in Get-SlopCapabilityProfiles) { $ProfileCombo.Items.Add($profile) | Out-Null }
