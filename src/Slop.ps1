@@ -956,7 +956,7 @@ function Set-SlopControlDeckSection {
 
 function Update-SlopControlDeckVisibility {
     if (-not $script:ChatDeckPanel) { return }
-    # The strip stays discoverable; only the body collapses.
+    # The strip stays discoverable; the body takes the chat rows when open.
     $script:ChatDeckPanel.Visibility = 'Visible'
     $heightSource = if ($script:ChatWindow -and $script:ChatWindow.ActualHeight -gt 0) {
         [double]$script:ChatWindow.ActualHeight
@@ -968,6 +968,12 @@ function Update-SlopControlDeckVisibility {
         $script:DeckBody.Height = $bodyHeight
         $script:DeckBody.Visibility = if ($bodyHeight -gt 0) { 'Visible' } else { 'Collapsed' }
     }
+    if ($script:ChatWindow) {
+        $ChatScroll = $script:ChatWindow.FindName('ChatScroll')
+        $ChatInputChrome = $script:ChatWindow.FindName('ChatInputChrome')
+        if ($ChatScroll) { $ChatScroll.Visibility = if ($bodyHeight -gt 0) { 'Collapsed' } else { 'Visible' } }
+        if ($ChatInputChrome) { $ChatInputChrome.Visibility = if ($bodyHeight -gt 0) { 'Collapsed' } else { 'Visible' } }
+    }
     if ($script:DeckCollapseButton) {
         $script:DeckCollapseButton.Content = if ($script:ChatDeckOpen) { '⌃' } else { '⌄' }
     }
@@ -975,6 +981,39 @@ function Update-SlopControlDeckVisibility {
         Set-SlopControlDeckSection -Name $script:ChatDeckSection
         Update-SlopDeckSettingsUi
     }
+}
+
+function Set-SlopDeckExpandedState {
+    param([Parameter(Mandatory)][bool]$Open)
+    if (-not $script:ChatWindow) { return }
+    if ($Open) {
+        if ($script:ChatDeckOpen) {
+            Update-SlopControlDeckVisibility
+            return
+        }
+        $script:DeckExpandedHeight = $script:ChatWindow.Height
+        $script:DeckExpandedMode = $script:ChatMode
+        $workAreaHeight = [double][System.Windows.SystemParameters]::WorkArea.Height
+        $expandedHeight = Get-SlopDeckExpandedWindowHeight -WorkAreaHeight $workAreaHeight `
+            -CurrentHeight ([double]$script:ChatWindow.Height)
+        $script:ChatWindow.Height = $expandedHeight
+        $script:ChatDeckOpen = $true
+    } else {
+        if (-not $script:ChatDeckOpen) {
+            Update-SlopControlDeckVisibility
+            return
+        }
+        $restoreHeight = $script:DeckExpandedHeight
+        $restoreMode = $script:DeckExpandedMode
+        if (-not [string]::IsNullOrWhiteSpace($restoreMode) -and $restoreMode -cne $script:ChatMode) {
+            Set-SlopChatWindowRect -Mode $restoreMode
+        }
+        if ($null -ne $restoreHeight) { $script:ChatWindow.Height = $restoreHeight }
+        $script:ChatDeckOpen = $false
+        $script:DeckExpandedHeight = $null
+        $script:DeckExpandedMode = $null
+    }
+    Update-SlopControlDeckVisibility
 }
 
 function Initialize-SlopControlDeckToggles {
@@ -1063,8 +1102,7 @@ $ControlDeckButton.Add_Click({
     if (-not $script:ChatWindow -or -not $script:ChatWindow.IsLoaded) {
         Open-SlopChatWindow
     }
-    $script:ChatDeckOpen = $true
-    Update-SlopControlDeckVisibility
+    Set-SlopDeckExpandedState -Open $true
 })
 $PinDot.Add_Click({ Collapse-Chat })
 $CloseDot.Add_Click({ Minimize-ToTray })
@@ -1300,6 +1338,9 @@ function Set-SlopChatWindowRect {
     $script:ChatWindow.Width = $r.Width
     $script:ChatWindow.Height = $r.Height
     $script:ChatMode = $Mode
+    # An explicit mode change becomes the new owner of window geometry.
+    $script:DeckExpandedHeight = $null
+    $script:DeckExpandedMode = $null
     # The deck is the default view in Full; Extended keeps the conversation
     # foreground until the header button asks for the deck.
     $script:ChatDeckOpen = ($Mode -eq 'Full')
@@ -1346,12 +1387,10 @@ function Open-SlopChatWindow {
         Set-SlopChatWindowRect -Mode $newMode
     })
     $chat.FindName('ChatDeckButton').Add_Click({
-        $script:ChatDeckOpen = -not $script:ChatDeckOpen
-        Update-SlopControlDeckVisibility
+        Set-SlopDeckExpandedState -Open (-not $script:ChatDeckOpen)
     })
     $chat.FindName('DeckCollapseButton').Add_Click({
-        $script:ChatDeckOpen = -not $script:ChatDeckOpen
-        Update-SlopControlDeckVisibility
+        Set-SlopDeckExpandedState -Open $false
     })
     foreach ($name in @('DeckOverviewButton','DeckSettingsButton','DeckDataButton','DeckToolsButton','DeckUnderHoodButton','DeckExitButton')) {
         $button = $chat.FindName($name)
