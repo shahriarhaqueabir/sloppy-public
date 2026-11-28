@@ -296,4 +296,41 @@ Describe 'Slop control deck' {
         $section | Should -Not -Match 'ChatScroll\.Visibility'
         $section | Should -Not -Match 'ChatInputChrome\.Visibility'
     }
+
+    It 'does not recurse when the tier combo raises selection changes during a programmatic update' {
+        $modelUi = [regex]::Match($script:ShellSrc,
+            'function Update-SlopDeckModelUi[\s\S]{0,3000}(?=\r?\nfunction )').Value
+        . ([scriptblock]::Create($modelUi))
+
+        function Get-SlopTierCatalog { @(@{ Id = 'tier-1'; Label = 'Tier 1 local' }) }
+        function Resolve-SlopTierFromConfig { param($Config) 'tier-1' }
+        function Get-SlopTierDefaultModel { param($TierId) 'bundled-model' }
+        function Set-SlopDeckStatus { param([AllowEmptyString()][string]$Text) }
+
+        $script:SlopConfigResult = @{ Config = @{ model = 'bundled-model' } }
+        $script:DeckModelCatalog = @()
+        $script:DeckTierCombo = [pscustomobject]@{ Tag = 'tier-combo'; IsEnabled = $true }
+        $script:DeckModelCombo = [pscustomobject]@{ Tag = 'model-combo'; IsEnabled = $false }
+        $script:DeckModelRefreshButton = [pscustomobject]@{ Tag = 'refresh'; IsEnabled = $false }
+
+        $script:DeckModelUpdateCalls = 0
+        function Set-SlopComboItems {
+            param($Combo, [object[]]$Items, [string]$Selected)
+            $script:DeckModelUpdateCalls++
+            if ($script:DeckModelUpdateCalls -lt 30 -and -not $script:DeckModelUiUpdating) {
+                Update-SlopDeckModelUi
+            }
+        }
+
+        Update-SlopDeckModelUi
+        $script:DeckModelUpdateCalls | Should -BeLessThan 5
+    }
+
+    It 'ignores programmatic tier selection events in the shared handler' {
+        $handlers = [regex]::Match($script:ShellSrc,
+            'function Initialize-SlopChatControlHandlers[\s\S]{0,3000}(?=\r?\nfunction )').Value
+        $tierHandler = [regex]::Match($handlers,
+            '\$tierCombo\.Add_SelectionChanged\(\{[\s\S]{0,800}\}\)').Value
+        $tierHandler | Should -Match 'if \(\$script:DeckModelUiUpdating\) \{ return \}'
+    }
 }
