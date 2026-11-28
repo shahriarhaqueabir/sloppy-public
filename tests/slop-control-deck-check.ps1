@@ -149,10 +149,13 @@ Describe 'Slop control deck' {
         (Get-SlopDeckModelEditArguments -Config $null -Model 'new-model').Ok | Should -BeFalse
     }
 
-    It 'keeps the deck strip and transcript visible when the body changes' {
+    It 'keeps the strip visible while the transcript yields to the expanded body' {
         $visibility = [regex]::Match($script:ShellSrc,
-            'function Update-SlopControlDeckVisibility[\s\S]{0,1400}(?=\r?\nfunction )').Value
-        $visibility | Should -Not -Match 'ChatScroll\.Visibility'
+            'function Update-SlopControlDeckVisibility[\s\S]{0,1800}(?=\r?\nfunction )').Value
+        $visibility | Should -Match 'ChatScroll\.Visibility[\s\S]{0,120}Collapsed'
+        $visibility | Should -Match 'ChatInputChrome\.Visibility[\s\S]{0,120}Collapsed'
+        $visibility | Should -Match 'ChatScroll\.Visibility[\s\S]{0,120}Visible'
+        $visibility | Should -Match 'ChatInputChrome\.Visibility[\s\S]{0,120}Visible'
         $visibility | Should -Match 'ChatDeckPanel\.Visibility\s*=\s*''Visible'''
         $visibility | Should -Not -Match 'ChatDeckPanel\.Visibility[^\r\n]*Collapsed'
         $visibility | Should -Match 'DeckBody\.Visibility\s*='
@@ -249,5 +252,48 @@ Describe 'Slop control deck' {
             '\$BrainTypeCombo\.Add_SelectionChanged\(\{[\s\S]{0,1600}\}\)').Value
         $brainHandler | Should -Match 'Get-SlopBrainModelOptions'
         $brainHandler | Should -Not -Match 'Invoke-SlopModelCatalogRefresh'
+    }
+
+    It 'expands and collapses through one shared height-and-mode owner' {
+        $script:ShellSrc | Should -Match 'function Set-SlopDeckExpandedState'
+        $state = [regex]::Match($script:ShellSrc,
+            'function Set-SlopDeckExpandedState[\s\S]{0,3000}(?=\r?\nfunction )').Value
+        $state | Should -Match '\$script:DeckExpandedHeight\s*=\s*\$script:ChatWindow\.Height'
+        $state | Should -Match '\$script:DeckExpandedMode\s*=\s*\$script:ChatMode'
+        $state | Should -Match 'Get-SlopDeckExpandedWindowHeight'
+        $state | Should -Match 'SystemParameters.*WorkArea'
+        $state | Should -Match '\$script:ChatWindow\.Height\s*='
+        $state | Should -Match 'Set-SlopChatWindowRect'
+        $state | Should -Match 'ChatDeckOpen\s*=\s*\$true'
+        $state | Should -Match 'ChatDeckOpen\s*=\s*\$false'
+        $state | Should -Match 'DeckExpandedHeight\s*=\s*\$null'
+        $state | Should -Match 'DeckExpandedMode\s*=\s*\$null'
+        $state | Should -Match 'Update-SlopControlDeckVisibility'
+    }
+
+    It 'routes both header and strip toggles through the shared expand state' {
+        $header = [regex]::Match($script:ShellSrc,
+            '\$ControlDeckButton\.Add_Click\(\{[\s\S]{0,1200}\}\)').Value
+        $header | Should -Match 'Set-SlopDeckExpandedState\s+-Open\s+\$true'
+        $strip = [regex]::Match($script:ShellSrc,
+            "chat\.FindName\('ChatDeckButton'\)\.Add_Click\(\{[\s\S]{0,1200}\}\)").Value
+        $strip | Should -Match 'Set-SlopDeckExpandedState'
+        $collapse = [regex]::Match($script:ShellSrc,
+            "chat\.FindName\('DeckCollapseButton'\)\.Add_Click\(\{[\s\S]{0,1200}\}\)").Value
+        $collapse | Should -Match 'Set-SlopDeckExpandedState'
+    }
+
+    It 'clears expand restore state on an explicit pane mode change' {
+        $rect = [regex]::Match($script:ShellSrc,
+            'function Set-SlopChatWindowRect[\s\S]{0,3000}(?=\r?\nfunction )').Value
+        $rect | Should -Match 'DeckExpandedHeight\s*=\s*\$null'
+        $rect | Should -Match 'DeckExpandedMode\s*=\s*\$null'
+    }
+
+    It 'never changes transcript visibility from a section switch' {
+        $section = [regex]::Match($script:ShellSrc,
+            'function Set-SlopControlDeckSection[\s\S]{0,2400}(?=\r?\nfunction )').Value
+        $section | Should -Not -Match 'ChatScroll\.Visibility'
+        $section | Should -Not -Match 'ChatInputChrome\.Visibility'
     }
 }
