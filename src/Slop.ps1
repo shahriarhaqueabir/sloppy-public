@@ -587,6 +587,7 @@ $script:ChatDeckSection = 'Overview'
 # Only {Id, Name} pairs are cached here. Raw catalog payloads and auth headers
 # never leave the model catalog module.
 $script:DeckModelCatalog = @()
+$script:DeckModelUiUpdating = $false
 $script:DeckExpandedHeight = $null
 $script:DeckExpandedMode = $null
 $script:PetControls = @{}
@@ -754,51 +755,58 @@ function Get-SlopDeckTierIdFromUi {
 }
 
 function Update-SlopDeckModelUi {
-    $cfg = $script:SlopConfigResult.Config
-    $tiers = @(Get-SlopTierCatalog)
-    $labels = @($tiers | ForEach-Object { [string]$_.Label })
-    $tierId = Resolve-SlopTierFromConfig -Config $cfg
-    $selectedTier = ''
-    foreach ($tier in $tiers) {
-        if ([string]$tier.Id -ceq $tierId) { $selectedTier = [string]$tier.Label }
-    }
-    if ($script:DeckTierCombo) {
-        Set-SlopComboItems -Combo $script:DeckTierCombo -Items $labels -Selected $selectedTier
-    }
-    if ($null -eq $cfg) {
+    if ($script:DeckModelUiUpdating) { return }
+    $script:DeckModelUiUpdating = $true
+    try {
+        $cfg = $script:SlopConfigResult.Config
+        $tiers = @(Get-SlopTierCatalog)
+        $labels = @($tiers | ForEach-Object { [string]$_.Label })
+        $tierId = Resolve-SlopTierFromConfig -Config $cfg
+        $selectedTier = ''
+        foreach ($tier in $tiers) {
+            if ([string]$tier.Id -ceq $tierId) { $selectedTier = [string]$tier.Label }
+        }
+        if ($script:DeckTierCombo) {
+            Set-SlopComboItems -Combo $script:DeckTierCombo -Items $labels -Selected $selectedTier
+        }
+        if ($null -eq $cfg) {
+            if ($script:DeckModelCombo) {
+                Set-SlopComboItems -Combo $script:DeckModelCombo -Items @() -Selected ''
+                $script:DeckModelCombo.IsEnabled = $false
+            }
+            if ($script:DeckModelRefreshButton) { $script:DeckModelRefreshButton.IsEnabled = $false }
+            return
+        }
+        $saved = [string]$cfg.model
+        if ([string]::IsNullOrWhiteSpace($saved)) { $saved = [string]$cfg.modelName }
+        $items = @()
+        $selected = $saved
+        $enabled = $false
+        if ($tierId -ceq 'tier-1') {
+            $items = @(Get-SlopTierDefaultModel -TierId 'tier-1')
+            $selected = [string]$items[0]
+        } elseif ($tierId -ceq 'tier-2') {
+            foreach ($entry in @($script:DeckModelCatalog)) {
+                $name = [string]$entry.Name
+                if (-not [string]::IsNullOrWhiteSpace($name) -and $items -notcontains $name) { $items += $name }
+            }
+            if (-not [string]::IsNullOrWhiteSpace($selected) -and $items -notcontains $selected) {
+                $items = @($selected) + $items
+            }
+            if ([string]::IsNullOrWhiteSpace($selected) -and $items.Count -gt 0) { $selected = [string]$items[0] }
+            $enabled = $true
+        }
         if ($script:DeckModelCombo) {
-            Set-SlopComboItems -Combo $script:DeckModelCombo -Items @() -Selected ''
-            $script:DeckModelCombo.IsEnabled = $false
+            Set-SlopComboItems -Combo $script:DeckModelCombo -Items $items -Selected $selected
+            $script:DeckModelCombo.IsEnabled = $enabled
         }
-        if ($script:DeckModelRefreshButton) { $script:DeckModelRefreshButton.IsEnabled = $false }
-        return
-    }
-    $saved = [string]$cfg.model
-    if ([string]::IsNullOrWhiteSpace($saved)) { $saved = [string]$cfg.modelName }
-    $items = @()
-    $selected = $saved
-    $enabled = $false
-    if ($tierId -ceq 'tier-1') {
-        $items = @(Get-SlopTierDefaultModel -TierId 'tier-1')
-        $selected = [string]$items[0]
-    } elseif ($tierId -ceq 'tier-2') {
-        foreach ($entry in @($script:DeckModelCatalog)) {
-            $name = [string]$entry.Name
-            if (-not [string]::IsNullOrWhiteSpace($name) -and $items -notcontains $name) { $items += $name }
+        if ($script:DeckModelRefreshButton) { $script:DeckModelRefreshButton.IsEnabled = ($tierId -ceq 'tier-2') }
+        if ([string]::IsNullOrWhiteSpace($tierId)) {
+            Set-SlopDeckStatus -Text 'Custom brain: change it in Brain settings.'
         }
-        if (-not [string]::IsNullOrWhiteSpace($selected) -and $items -notcontains $selected) {
-            $items = @($selected) + $items
-        }
-        if ([string]::IsNullOrWhiteSpace($selected) -and $items.Count -gt 0) { $selected = [string]$items[0] }
-        $enabled = $true
     }
-    if ($script:DeckModelCombo) {
-        Set-SlopComboItems -Combo $script:DeckModelCombo -Items $items -Selected $selected
-        $script:DeckModelCombo.IsEnabled = $enabled
-    }
-    if ($script:DeckModelRefreshButton) { $script:DeckModelRefreshButton.IsEnabled = ($tierId -ceq 'tier-2') }
-    if ([string]::IsNullOrWhiteSpace($tierId)) {
-        Set-SlopDeckStatus -Text 'Custom brain: change it in Brain settings.'
+    finally {
+        $script:DeckModelUiUpdating = $false
     }
 }
 
@@ -2649,6 +2657,7 @@ function Initialize-SlopChatControlHandlers {
     if ($tierCombo) {
         $tierCombo.Add_SelectionChanged({
             param($s, $e)
+            if ($script:DeckModelUiUpdating) { return }
             Update-SlopDeckModelUi
             Invoke-SlopModelCatalogRefresh
         })
