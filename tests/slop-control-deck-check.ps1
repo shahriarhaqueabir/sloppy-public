@@ -62,11 +62,14 @@ Describe 'Slop control deck' {
         }
     }
 
-    It 'sizes the deck body without squeezing transcript or composer' {
-        Get-SlopDeckBodyHeight -WindowHeight 760 -DeckOpen $true | Should -Be 220
-        Get-SlopDeckBodyHeight -WindowHeight 410 -DeckOpen $true | Should -Be 92
-        Get-SlopDeckBodyHeight -WindowHeight 200 -DeckOpen $true | Should -Be 0
+    It 'sizes the deck body from the full window and clamps expanded height' {
+        Get-SlopDeckBodyHeight -WindowHeight 760 -DeckOpen $true | Should -Be 656
+        Get-SlopDeckBodyHeight -WindowHeight 1200 -DeckOpen $true | Should -Be 1096
         Get-SlopDeckBodyHeight -WindowHeight 760 -DeckOpen $false | Should -Be 0
+        Get-SlopDeckBodyHeight -WindowHeight 80 -DeckOpen $true | Should -Be 0
+        Get-SlopDeckExpandedWindowHeight -WorkAreaHeight 1200 -CurrentHeight 700 | Should -Be 700
+        Get-SlopDeckExpandedWindowHeight -WorkAreaHeight 1200 -CurrentHeight 400 | Should -Be 620
+        Get-SlopDeckExpandedWindowHeight -WorkAreaHeight 500 -CurrentHeight 900 | Should -Be 500
     }
 
     It 'builds a safe deck settings snapshot from a config' {
@@ -175,6 +178,7 @@ Describe 'Slop control deck' {
         $modelSave = [regex]::Match($script:ShellSrc,
             'function Save-SlopDeckModel[\s\S]{0,2400}(?=\r?\nfunction )').Value
         $voiceSave | Should -Not -Match 'Show-SlopDestination|Open-SlopChatWindow'
+        $modelSave | Should -Match 'Set-SlopTierConfig'
         $modelSave | Should -Not -Match 'Show-SlopDestination|Open-SlopChatWindow'
     }
 }
