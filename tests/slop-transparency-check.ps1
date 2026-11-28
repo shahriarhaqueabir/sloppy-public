@@ -178,7 +178,8 @@ Describe 'Slop transparent chat window contract' {
         $xaml = Get-SlopChatWindowXaml
         $xaml | Should -Match '<RowDefinition Height="34"/>\s*<RowDefinition Height="Auto"/>\s*<RowDefinition Height="\*"/>\s*<RowDefinition Height="Auto"/>'
         $xaml | Should -Match 'x:Name="ChatBackplate" Grid.RowSpan="4"'
-        $xaml | Should -Match 'x:Name="ChatDeckPanel" Grid.Row="1" Visibility="Visible"'
+        $xaml | Should -Match 'x:Name="ChatDeckPanel"[^>]*Grid.Row="1"[^>]*Grid.RowSpan="3"'
+        $xaml | Should -Match 'x:Name="ChatDeckPanel"[^>]*Visibility="Visible"'
         $xaml | Should -Not -Match 'x:Name="ChatDeckPanel"[^>]*Visibility="Collapsed"'
         $xaml | Should -Match '<Grid Grid.Row="2" Margin="12,6,12,6">\s*<ScrollViewer x:Name="ChatScroll"'
         $xaml | Should -Match 'x:Name="ChatInputChrome" Grid.Row="3"'
@@ -189,7 +190,11 @@ Describe 'Slop transparent chat window contract' {
         $xaml = Get-SlopChatWindowXaml
         $xaml | Should -Match 'x:Name="DeckStrip"'
         $xaml | Should -Match 'x:Name="DeckCollapseButton"'
-        $xaml | Should -Match 'x:Name="DeckBody"[^>]*Height="220"'
+        $xaml | Should -Match 'x:Name="DeckBody"'
+        $xaml | Should -Not -Match 'x:Name="DeckBody"[^>]*Height="220"'
+        $body = [regex]::Match($xaml, 'x:Name="DeckBody"[\s\S]*?x:Name="DeckSettingsSection"').Value
+        $body | Should -Match 'x:Name="DeckSettingsSection"'
+        $body | Should -Not -Match '<ScrollViewer'
         $xaml | Should -Match 'x:Name="DeckStatusText"'
         foreach ($name in @('DeckOverviewButton','DeckSettingsButton','DeckDataButton','DeckToolsButton','DeckUnderHoodButton','DeckExitButton')) {
             $xaml | Should -Match ([regex]::Escape($name + '"'))
@@ -199,11 +204,15 @@ Describe 'Slop transparent chat window contract' {
     It 'exposes Voice, Model and read-only Data cards in the deck Settings section' {
         $xaml = Get-SlopChatWindowXaml
         foreach ($name in @('DeckVoiceEnabledCheck','DeckVoiceLanguageCombo','DeckVoiceMaxSecondsBox',
-                            'DeckVoiceReadyText','DeckVoiceSaveButton','DeckModelRouteText',
-                            'DeckModelBox','DeckModelSaveButton','DeckDataPathText')) {
+                            'DeckVoiceReadyText','DeckVoiceSaveButton','DeckTierCombo',
+                            'DeckModelCombo','DeckModelRefreshButton','DeckModelRouteText',
+                            'DeckModelSaveButton','DeckDataPathText')) {
             $xaml | Should -Match ([regex]::Escape('x:Name="' + $name + '"'))
         }
+        $xaml | Should -Not -Match 'x:Name="DeckModelBox"'
         $xaml | Should -Not -Match 'DeckCopyButton|DeckOpenFolderButton|DeckMoveDataButton'
+        $script:AppSrc | Should -Match 'x:Name="BrainTypeCombo"'
+        $script:AppSrc | Should -Match 'x:Name="BrainModelBox"'
     }
 }
 
