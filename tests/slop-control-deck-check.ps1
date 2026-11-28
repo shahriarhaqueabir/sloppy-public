@@ -181,4 +181,73 @@ Describe 'Slop control deck' {
         $modelSave | Should -Match 'Set-SlopTierConfig'
         $modelSave | Should -Not -Match 'Show-SlopDestination|Open-SlopChatWindow'
     }
+
+    It 'loads the catalog module and captures the tier model controls' {
+        $script:ShellSrc | Should -Match "'Slop\.ModelCatalog\.ps1'"
+        $controls = [regex]::Match($script:ShellSrc,
+            'function Use-SlopChatControls[\s\S]{0,3000}(?=\r?\nfunction )').Value
+        $controls | Should -Match "FindName\('DeckTierCombo'\)"
+        $controls | Should -Match "FindName\('DeckModelCombo'\)"
+        $controls | Should -Match "FindName\('DeckModelRefreshButton'\)"
+        $restore = [regex]::Match($script:ShellSrc,
+            'function Restore-SlopMainChatControls[\s\S]{0,3000}(?=\r?\nfunction )').Value
+        $restore | Should -Match '\$script:DeckTierCombo\s*=\s*\$null'
+        $restore | Should -Match '\$script:DeckModelCombo\s*=\s*\$null'
+        $restore | Should -Match '\$script:DeckModelRefreshButton\s*=\s*\$null'
+    }
+
+    It 'selects the saved tier and model while preserving an unsaved model' {
+        $settings = [regex]::Match($script:ShellSrc,
+            'function Update-SlopDeckSettingsUi[\s\S]{0,3000}(?=\r?\nfunction )').Value
+        $settings | Should -Match 'Update-SlopDeckModelUi'
+        $ui = [regex]::Match($script:ShellSrc,
+            'function Update-SlopDeckModelUi[\s\S]{0,4000}(?=\r?\nfunction )').Value
+        $ui | Should -Match 'Resolve-SlopTierFromConfig'
+        $ui | Should -Match 'Get-SlopTierCatalog'
+        $ui | Should -Match 'Get-SlopTierDefaultModel'
+        $ui | Should -Match 'Set-SlopComboItems'
+        $ui | Should -Match 'IsEnabled\s*=\s*\$false'
+        $ui | Should -Not -Match '\$script:DeckModelBox'
+    }
+
+    It 'saves the deck model through the tier contract' {
+        $modelSave = [regex]::Match($script:ShellSrc,
+            'function Save-SlopDeckModel[\s\S]{0,3000}(?=\r?\nfunction )').Value
+        $modelSave | Should -Match 'Set-SlopTierConfig'
+        $modelSave | Should -Match 'Write-SlopConfig'
+        $modelSave | Should -Match 'Get-SlopEffectiveOpenCodeBaseUrl'
+        $modelSave | Should -Match 'Update-SlopDeckSettingsUi'
+        $modelSave | Should -Not -Match 'Get-SlopDeckModelEditArguments'
+        $modelSave | Should -Not -Match '\$script:DeckModelBox'
+    }
+
+    It 'reads Tier 2 models only through the authenticated loopback catalog helper' {
+        $refresh = [regex]::Match($script:ShellSrc,
+            'function Invoke-SlopModelCatalogRefresh[\s\S]{0,4000}(?=\r?\nfunction )').Value
+        $refresh | Should -Match 'Get-SlopEffectiveOpenCodeBaseUrl'
+        $refresh | Should -Match 'New-SlopOpenCodeAuthHeader'
+        $refresh | Should -Match 'ServiceConfigPath'
+        $refresh | Should -Match 'Get-SlopModelCatalogResult'
+        $refresh | Should -Match 'Get-SlopModelCatalogStatusText'
+        $refresh | Should -Match 'try\s*\{'
+        $refresh | Should -Match 'catch\s*\{'
+        $refresh | Should -Not -Match 'Invoke-WebRequest'
+        $refresh | Should -Not -Match '\.Content'
+        $refresh | Should -Not -Match 'Authorization'
+    }
+
+    It 'wires the tier, catalog refresh and save controls in the shared handler' {
+        $handlers = [regex]::Match($script:ShellSrc,
+            'function Initialize-SlopChatControlHandlers[\s\S]{0,3000}(?=\r?\nfunction )').Value
+        foreach ($name in @('DeckTierCombo','DeckModelRefreshButton','DeckModelSaveButton')) {
+            $handlers | Should -Match ([regex]::Escape($name))
+        }
+    }
+
+    It 'keeps main Settings on the static brain model helper' {
+        $brainHandler = [regex]::Match($script:ShellSrc,
+            '\$BrainTypeCombo\.Add_SelectionChanged\(\{[\s\S]{0,1600}\}\)').Value
+        $brainHandler | Should -Match 'Get-SlopBrainModelOptions'
+        $brainHandler | Should -Not -Match 'Invoke-SlopModelCatalogRefresh'
+    }
 }
