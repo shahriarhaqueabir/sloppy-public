@@ -134,9 +134,9 @@ function Get-SlopChatWindowXaml {
         </StackPanel>
       </Grid>
     </Border>
-    <Border x:Name="ChatDeckPanel" Grid.Row="1" Visibility="Visible" Margin="12,4,12,0" CornerRadius="10"
+    <Border x:Name="ChatDeckPanel" Grid.Row="1" Grid.RowSpan="3" Visibility="Visible" Margin="12,4,12,0" CornerRadius="10"
             Background="#F212141C" BorderBrush="#8893A4BD" BorderThickness="2"
-            Padding="8" SnapsToDevicePixels="True">
+            Padding="8" VerticalAlignment="Top" SnapsToDevicePixels="True">
       <Grid>
         <Grid.RowDefinitions>
           <RowDefinition Height="Auto"/>
@@ -173,15 +173,14 @@ function Get-SlopChatWindowXaml {
                   BorderThickness="1" Cursor="Hand" FontSize="11"
                   AutomationProperties.Name="Collapse or expand the deck body"/>
         </WrapPanel>
-        <Border x:Name="DeckBody" Grid.Row="1" Height="220" CornerRadius="8"
+        <Border x:Name="DeckBody" Grid.Row="1" CornerRadius="8"
                 Background="#F212141C" BorderBrush="#44FFFFFF" BorderThickness="1" Padding="8">
           <Grid>
             <Grid.RowDefinitions>
               <RowDefinition Height="*"/>
               <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
-            <ScrollViewer Grid.Row="0" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
-              <StackPanel>
+            <StackPanel Grid.Row="0">
                 <StackPanel x:Name="DeckOverviewSection">
                   <TextBlock Text="Overview" FontSize="13" FontWeight="SemiBold" Foreground="#EAEAEA" Margin="0,0,0,6"/>
                   <TextBlock x:Name="DeckOverviewText" Text="Route, brain, session and signal state appear here."
@@ -193,7 +192,7 @@ function Get-SlopChatWindowXaml {
                 <StackPanel x:Name="DeckSettingsSection" Visibility="Collapsed">
                   <TextBlock Text="Settings" FontSize="13" FontWeight="SemiBold" Foreground="#EAEAEA" Margin="0,0,0,6"/>
                   <Border CornerRadius="6" Background="#F2263348" BorderBrush="#44FFFFFF" BorderThickness="1"
-                          Padding="8" Margin="0,0,0,8">
+                          Padding="6" Margin="0,0,0,6">
                     <StackPanel>
                       <TextBlock Text="Voice" FontSize="11" FontWeight="SemiBold" Foreground="#A5B4FC" Margin="0,0,0,4"/>
                       <CheckBox x:Name="DeckVoiceEnabledCheck" Content="Voice input (local transcription)"
@@ -216,14 +215,23 @@ function Get-SlopChatWindowXaml {
                     </StackPanel>
                   </Border>
                   <Border CornerRadius="6" Background="#F2263348" BorderBrush="#44FFFFFF" BorderThickness="1"
-                          Padding="8" Margin="0,0,0,8">
+                          Padding="6" Margin="0,0,0,6">
                     <StackPanel>
                       <TextBlock Text="Model" FontSize="11" FontWeight="SemiBold" Foreground="#A5B4FC" Margin="0,0,0,4"/>
                       <TextBlock x:Name="DeckModelRouteText" Text="Route: unset" Foreground="#DADAE2"
                                  FontSize="10" TextWrapping="Wrap" Margin="0,0,0,4" IsHitTestVisible="False"/>
-                      <TextBlock Text="Brain tier and model" Foreground="#B8B8C0" FontSize="10" Margin="0,0,0,2"/>
-                      <TextBox x:Name="DeckModelBox" Height="24" FontSize="11" Padding="6,3"
-                               VerticalContentAlignment="Center" Margin="0,0,0,4"/>
+                      <TextBlock Text="Brain tier" Foreground="#B8B8C0" FontSize="10" Margin="0,0,0,2"/>
+                      <ComboBox x:Name="DeckTierCombo" Height="24" FontSize="11" Width="200"
+                                HorizontalAlignment="Left" Margin="0,0,0,4"
+                                ItemContainerStyle="{StaticResource SlopChatComboBoxItem}"/>
+                      <TextBlock Text="Model" Foreground="#B8B8C0" FontSize="10" Margin="0,0,0,2"/>
+                      <ComboBox x:Name="DeckModelCombo" Height="24" FontSize="11" Width="220"
+                                HorizontalAlignment="Left" Margin="0,0,0,4"
+                                ItemContainerStyle="{StaticResource SlopChatComboBoxItem}"/>
+                      <Button x:Name="DeckModelRefreshButton" Content="Refresh models" Width="120" Height="24"
+                              FontSize="10" Background="#F2263348" Foreground="#EAEAEA"
+                              BorderBrush="#55FFFFFF" BorderThickness="1" Cursor="Hand"
+                              AutomationProperties.Name="Refresh model catalog" Margin="0,0,0,4"/>
                       <Button x:Name="DeckModelSaveButton" Content="Save model" Width="100" Height="24"
                               FontSize="10" Background="#F24F46E5" Foreground="#FFFFFF"
                               BorderBrush="#55FFFFFF" BorderThickness="1" Cursor="Hand"
@@ -231,7 +239,7 @@ function Get-SlopChatWindowXaml {
                     </StackPanel>
                   </Border>
                   <Border CornerRadius="6" Background="#F2263348" BorderBrush="#44FFFFFF" BorderThickness="1"
-                          Padding="8" Margin="0,0,0,8">
+                          Padding="6" Margin="0,0,0,6">
                     <StackPanel>
                       <TextBlock Text="Data" FontSize="11" FontWeight="SemiBold" Foreground="#A5B4FC" Margin="0,0,0,4"/>
                       <TextBlock Text="Config location (read-only)" Foreground="#B8B8C0" FontSize="10" Margin="0,0,0,2"/>
@@ -292,8 +300,7 @@ function Get-SlopChatWindowXaml {
                           BorderBrush="#55FFFFFF" BorderThickness="1" Cursor="Hand"
                           AutomationProperties.Name="Sloppy shutdown"/>
                 </StackPanel>
-              </StackPanel>
-            </ScrollViewer>
+            </StackPanel>
             <TextBlock x:Name="DeckStatusText" Grid.Row="1" Text="" Foreground="#93A4BD" FontSize="10"
                        TextWrapping="Wrap" Margin="0,6,0,0" IsHitTestVisible="False"/>
           </Grid>
