@@ -69,6 +69,19 @@ if (Test-Path $tourPath) {
     Assert-True ($tour.steps[1].description -notmatch 'pure math/state') 'module map no longer calls the impure modules pure'
     Assert-True ($tour.steps[5].title -match '48-point' -and $tour.steps[5].description -match 'N=48') 'membrane step states the current N=48 ring'
     Assert-True ($tour.steps[6].description -match 'not used at runtime') 'silhouette data is not claimed as a runtime anchor'
+    Assert-True ($tour.steps[14].description -match 'full chat height' -and $tour.steps[14].description -match 'hide chat' -and $tour.steps[14].description -match 'exact pane height') 'window step describes the full-height deck contract'
+
+    $uiFacing = @(
+        'src/Slop.ps1', 'src/Slop.ChatWindow.ps1', 'src/Slop.Onboarding.ps1',
+        'docs/architecture.md', 'docs/brand-audit.md'
+    )
+    $sensitive = 'providerID|modelID|x-opencode-org-id|orgId|Authorization|OPENCODE_PASSWORD|C:\\Users\\'
+    foreach ($relative in $uiFacing) {
+        $path = Join-Path $root $relative
+        if (-not (Test-Path $path)) { continue }
+        $text = Get-Content $path -Raw
+        Assert-True ($text -notmatch $sensitive) "no raw catalog, header, credential or user-path detail in $relative"
+    }
 }
 
 Describe 'Slop architecture tour anchors' {
