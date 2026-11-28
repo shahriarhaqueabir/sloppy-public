@@ -27,17 +27,23 @@ function Get-SlopDeckBodyHeight {
     param(
         [Parameter(Mandatory)][double]$WindowHeight,
         [Parameter(Mandatory)][bool]$DeckOpen,
-        [double]$FixedHeight = 88.0
+        [double]$FixedHeight = 88.0,
+        [double]$OuterMargin = 16.0
     )
-    # 88 = 34px chrome row + ~54px deck strip with padding/border. 220/140/90 are the accepted
-    # body cap, transcript minimum and composer minimum.
-    $maxBody = 220.0
-    $transcriptMin = 140.0
-    $composerMin = 90.0
     if (-not $DeckOpen) { return 0 }
-    $available = $WindowHeight - $FixedHeight - $transcriptMin - $composerMin
-    if ($available -le 0) { return 0 }
-    return [int][Math]::Floor([Math]::Min($maxBody, $available))
+    $height = $WindowHeight - $FixedHeight - $OuterMargin
+    if ($height -le 0) { return 0 }
+    return [int][Math]::Floor($height)
+}
+
+function Get-SlopDeckExpandedWindowHeight {
+    param(
+        [Parameter(Mandatory)][double]$WorkAreaHeight,
+        [Parameter(Mandatory)][double]$CurrentHeight,
+        [double]$PreferredHeight = 620.0
+    )
+    $wanted = [Math]::Max($PreferredHeight, $CurrentHeight)
+    return [int][Math]::Floor([Math]::Min($WorkAreaHeight, $wanted))
 }
 
 function Get-SlopDeckSettingsSnapshot {
