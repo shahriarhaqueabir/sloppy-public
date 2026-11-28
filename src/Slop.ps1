@@ -17,6 +17,7 @@ Add-Type -AssemblyName PresentationFramework, PresentationCore, WindowsBase, Sys
 # Config; Route also needs OpenCodeProfile, LocalModel and the OpenCode bridge.
 # Config owns paths and identity; AgentPack resolves the tracked persona pack.
 . (Join-Path $PSScriptRoot 'Slop.Config.ps1')
+. (Join-Path $PSScriptRoot 'Slop.ModelCatalog.ps1')
 . (Join-Path $PSScriptRoot 'Slop.AgentPack.ps1')
 . (Join-Path $PSScriptRoot 'Slop.Audio.ps1')
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'tools/slop-preflight.ps1')
@@ -583,6 +584,11 @@ $script:ChatStoredPetRect = $null
 $script:ChatDragLast = $null
 $script:ChatDeckOpen = $false
 $script:ChatDeckSection = 'Overview'
+# Only {Id, Name} pairs are cached here. Raw catalog payloads and auth headers
+# never leave the model catalog module.
+$script:DeckModelCatalog = @()
+$script:DeckExpandedHeight = $null
+$script:DeckExpandedMode = $null
 $script:PetControls = @{}
 
 function Get-SlopCurrentPetRect {
@@ -657,7 +663,9 @@ function Use-SlopChatControls {
     $script:DeckVoiceReadyText = $Target.FindName('DeckVoiceReadyText')
     $script:DeckVoiceSaveButton = $Target.FindName('DeckVoiceSaveButton')
     $script:DeckModelRouteText = $Target.FindName('DeckModelRouteText')
-    $script:DeckModelBox = $Target.FindName('DeckModelBox')
+    $script:DeckTierCombo = $Target.FindName('DeckTierCombo')
+    $script:DeckModelCombo = $Target.FindName('DeckModelCombo')
+    $script:DeckModelRefreshButton = $Target.FindName('DeckModelRefreshButton')
     $script:DeckModelSaveButton = $Target.FindName('DeckModelSaveButton')
     $script:DeckDataPathText = $Target.FindName('DeckDataPathText')
     foreach ($language in Get-SlopWhisperLanguages) {
@@ -689,7 +697,9 @@ function Restore-SlopMainChatControls {
     $script:DeckVoiceReadyText = $null
     $script:DeckVoiceSaveButton = $null
     $script:DeckModelRouteText = $null
-    $script:DeckModelBox = $null
+    $script:DeckTierCombo = $null
+    $script:DeckModelCombo = $null
+    $script:DeckModelRefreshButton = $null
     $script:DeckModelSaveButton = $null
     $script:DeckDataPathText = $null
     Move-SlopChatBubbles -From $previousStack -To $script:ChatStack
@@ -730,8 +740,102 @@ function Update-SlopDeckSettingsUi {
     if ($script:DeckVoiceMaxSecondsBox) { $script:DeckVoiceMaxSecondsBox.Text = [string]$snapshot.VoiceMaxSeconds }
     if ($script:DeckVoiceReadyText) { $script:DeckVoiceReadyText.Text = 'Whisper readiness: ' + $snapshot.VoiceReadyText }
     if ($script:DeckModelRouteText) { $script:DeckModelRouteText.Text = 'Route: ' + $snapshot.RouteText }
-    if ($script:DeckModelBox) { $script:DeckModelBox.Text = $snapshot.Model }
+    Update-SlopDeckModelUi
     if ($script:DeckDataPathText) { $script:DeckDataPathText.Text = $snapshot.DataPath }
+}
+
+function Get-SlopDeckTierIdFromUi {
+    if (-not $script:DeckTierCombo) { return '' }
+    $selected = [string]$script:DeckTierCombo.SelectedItem
+    foreach ($tier in @(Get-SlopTierCatalog)) {
+        if ([string]$tier.Label -ceq $selected) { return [string]$tier.Id }
+    }
+    return ''
+}
+
+function Update-SlopDeckModelUi {
+    $cfg = $script:SlopConfigResult.Config
+    $tiers = @(Get-SlopTierCatalog)
+    $labels = @($tiers | ForEach-Object { [string]$_.Label })
+    $tierId = Resolve-SlopTierFromConfig -Config $cfg
+    $selectedTier = ''
+    foreach ($tier in $tiers) {
+        if ([string]$tier.Id -ceq $tierId) { $selectedTier = [string]$tier.Label }
+    }
+    if ($script:DeckTierCombo) {
+        Set-SlopComboItems -Combo $script:DeckTierCombo -Items $labels -Selected $selectedTier
+    }
+    if ($null -eq $cfg) {
+        if ($script:DeckModelCombo) {
+            Set-SlopComboItems -Combo $script:DeckModelCombo -Items @() -Selected ''
+            $script:DeckModelCombo.IsEnabled = $false
+        }
+        if ($script:DeckModelRefreshButton) { $script:DeckModelRefreshButton.IsEnabled = $false }
+        return
+    }
+    $saved = [string]$cfg.model
+    if ([string]::IsNullOrWhiteSpace($saved)) { $saved = [string]$cfg.modelName }
+    $items = @()
+    $selected = $saved
+    $enabled = $false
+    if ($tierId -ceq 'tier-1') {
+        $items = @(Get-SlopTierDefaultModel -TierId 'tier-1')
+        $selected = [string]$items[0]
+    } elseif ($tierId -ceq 'tier-2') {
+        foreach ($entry in @($script:DeckModelCatalog)) {
+            $name = [string]$entry.Name
+            if (-not [string]::IsNullOrWhiteSpace($name) -and $items -notcontains $name) { $items += $name }
+        }
+        if (-not [string]::IsNullOrWhiteSpace($selected) -and $items -notcontains $selected) {
+            $items = @($selected) + $items
+        }
+        if ([string]::IsNullOrWhiteSpace($selected) -and $items.Count -gt 0) { $selected = [string]$items[0] }
+        $enabled = $true
+    }
+    if ($script:DeckModelCombo) {
+        Set-SlopComboItems -Combo $script:DeckModelCombo -Items $items -Selected $selected
+        $script:DeckModelCombo.IsEnabled = $enabled
+    }
+    if ($script:DeckModelRefreshButton) { $script:DeckModelRefreshButton.IsEnabled = ($tierId -ceq 'tier-2') }
+    if ([string]::IsNullOrWhiteSpace($tierId)) {
+        Set-SlopDeckStatus -Text 'Custom brain: change it in Brain settings.'
+    }
+}
+
+function Invoke-SlopModelCatalogRefresh {
+    param([switch]$Force)
+    $cfg = $script:SlopConfigResult.Config
+    if ($null -eq $cfg) {
+        Set-SlopDeckStatus -Text 'Settings unavailable; model catalog not refreshed.'
+        return $false
+    }
+    # Tier 1 is the bundled GGUF served on loopback by llama.cpp. It performs
+    # no OpenCode call, so no catalog fetch and no credential are involved.
+    if ((Resolve-SlopTierFromConfig -Config $cfg) -cne 'tier-2') { return $false }
+    if (-not $Force -and @($script:DeckModelCatalog).Count -gt 0) { return $true }
+    try {
+        $baseUrl = Get-SlopEffectiveOpenCodeBaseUrl -Config $cfg
+        $headers = New-SlopOpenCodeAuthHeader -ServiceConfigPath ([string]$cfg.serviceConfigPath) -BaseUrl $baseUrl
+        $result = Get-SlopModelCatalogResult -BaseUrl $baseUrl -Headers $headers
+    } catch {
+        Set-SlopDeckStatus -Text 'Model catalog unavailable.'
+        return $false
+    }
+    if (-not [bool]$result.Ok) {
+        Set-SlopDeckStatus -Text (Get-SlopModelCatalogStatusText -Result $result)
+        return $false
+    }
+    $script:DeckModelCatalog = @($result.Models)
+    $status = Get-SlopModelCatalogStatusText -Result $result
+    $saved = [string]$cfg.model
+    if ([string]::IsNullOrWhiteSpace($saved)) { $saved = [string]$cfg.modelName }
+    $names = @($script:DeckModelCatalog | ForEach-Object { [string]$_.Name })
+    if (-not [string]::IsNullOrWhiteSpace($saved) -and $names -notcontains $saved) {
+        $status += ' Saved model kept.'
+    }
+    Update-SlopDeckModelUi
+    Set-SlopDeckStatus -Text $status
+    return $true
 }
 
 function Set-SlopDeckStatus {
@@ -770,30 +874,34 @@ function Save-SlopDeckVoice {
 }
 
 function Save-SlopDeckModel {
-    $edit = Get-SlopDeckModelEditArguments -Config $script:SlopConfigResult.Config `
-        -Model ([string]$script:DeckModelBox.Text)
-    if (-not $edit.Ok) {
-        Set-SlopDeckStatus -Text ($edit.Errors -join ' ')
+    $cfg = $script:SlopConfigResult.Config
+    if ($null -eq $cfg) {
+        Set-SlopDeckStatus -Text 'Model needs valid settings.'
         return $false
     }
-    $brainArgs = @{
-        Config            = $script:SlopConfigResult.Config
-        Brain             = $edit.Brain
-        Provider          = $edit.Provider
-        ProviderLocality  = $edit.ProviderLocality
-        EndpointUrl       = $edit.EndpointUrl
-        Model             = $edit.Model
-        AgentId           = $edit.AgentId
-        CapabilityProfile = $edit.CapabilityProfile
+    $tierId = Get-SlopDeckTierIdFromUi
+    if ([string]::IsNullOrWhiteSpace($tierId)) {
+        Set-SlopDeckStatus -Text 'Choose a tier before saving.'
+        return $false
     }
-    $result = Set-SlopConfigBrain @brainArgs
+    $model = if ($tierId -ceq 'tier-1') {
+        Get-SlopTierDefaultModel -TierId 'tier-1'
+    } else {
+        [string]$script:DeckModelCombo.SelectedItem
+    }
+    if ([string]::IsNullOrWhiteSpace($model)) {
+        Set-SlopDeckStatus -Text 'Choose a model before saving.'
+        return $false
+    }
+    $baseUrl = Get-SlopEffectiveOpenCodeBaseUrl -Config $cfg
+    $result = Set-SlopTierConfig -Config $cfg -TierId $tierId -Model $model -BaseUrl $baseUrl
     if (-not $result.Ok) {
         Set-SlopDeckStatus -Text ("Model invalid: " + ($result.Errors -join '; '))
         return $false
     }
     try { Write-SlopConfig -Config $result.Config }
     catch {
-        Set-SlopDeckStatus -Text "Model could not be saved: $($_.Exception.Message)"
+        Set-SlopDeckStatus -Text 'Model could not be saved.'
         return $false
     }
     $script:SlopConfigResult.Config = $result.Config
@@ -843,6 +951,7 @@ function Set-SlopControlDeckSection {
         $button.Background = if ($entry.Key -eq $Name) { $selectedBrush } else { $idleBrush }
     }
     Update-SlopControlDeckState
+    if ($Name -eq 'Settings') { Invoke-SlopModelCatalogRefresh | Out-Null }
 }
 
 function Update-SlopControlDeckVisibility {
@@ -1253,7 +1362,6 @@ function Open-SlopChatWindow {
         })
     }
     $chat.FindName('DeckVoiceSaveButton').Add_Click({ Save-SlopDeckVoice | Out-Null })
-    $chat.FindName('DeckModelSaveButton').Add_Click({ Save-SlopDeckModel | Out-Null })
     foreach ($name in @('WorkspaceFilesToggle','WebAccessToggle','ShellCommandsToggle','SkillsPluginsToggle','SubagentsTasksToggle','ExternalFoldersToggle')) {
         $toggle = $chat.FindName($name)
         if ($null -ne $toggle) { $toggle.Add_Click({ Save-SlopControlDeckToggles | Out-Null }) }
@@ -2498,6 +2606,18 @@ function Initialize-SlopChatControlHandlers {
     $Target.FindName('StopBtn').Add_Click($script:SlopStopAction)
     $Target.FindName('InputBox').Add_TextChanged($script:SlopInputChangedAction)
     $Target.FindName('InputBox').Add_KeyDown($script:SlopInputKeyDownAction)
+    $tierCombo = $Target.FindName('DeckTierCombo')
+    if ($tierCombo) {
+        $tierCombo.Add_SelectionChanged({
+            param($s, $e)
+            Update-SlopDeckModelUi
+            Invoke-SlopModelCatalogRefresh
+        })
+    }
+    $refreshButton = $Target.FindName('DeckModelRefreshButton')
+    if ($refreshButton) { $refreshButton.Add_Click({ Invoke-SlopModelCatalogRefresh -Force | Out-Null }) }
+    $saveButton = $Target.FindName('DeckModelSaveButton')
+    if ($saveButton) { $saveButton.Add_Click({ Save-SlopDeckModel | Out-Null }) }
 }
 
 $script:MicRecording = $false
